@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KlickKrawall</title>
+    <style>
+        body {
+            background-color: #262626;
+            color: white;
+            font-family: "Roboto", sans-serif;
+            text-align: center;
+        }
+        
+        div {
+            margin-top: 200px;
+        }
+        
+        h1 {
+            font-size: 5vmax;
+        }
+        
+        button {
+            padding: 35px;
+        }
+        
+        #bottone1 {
+            padding-left: 33px;
+            padding-right: 33px;
+            padding-bottom: 16px;
+            padding-top: 16px;
+            border-radius: 9px;
+            background: #d5f365;
+            border: none;
+            font-family: inherit;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+        
+        #bottone1:hover {
+            box-shadow: 7px 5px 56px -14px #C3D900;
+        }
+        
+        #bottone1:active {
+            transform: scale(0.97);
+            box-shadow: 7px 5px 56px -10px #C3D900;
+        }
+        
+        .bottone1 {
+            padding-left: 33px;
+            padding-right: 33px;
+            padding-bottom: 16px;
+            padding-top: 16px;
+            border-radius: 9px;
+            background: #d5f365;
+            border: none;
+            font-family: inherit;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+        
+        .bottone1:hover {
+            box-shadow: 7px 5px 56px -14px #C3D900;
+        }
+        
+        .bottone1:active {
+            transform: scale(0.97);
+            box-shadow: 7px 5px 56px -10px #C3D900;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="margin-top: 100px;">
+        <h1>KlickKrawall</h1>
+    </div>
+    <div>
+        <p>Bitte gib hier deinen Nutzernamen ein:</p>
+        <input type="text" name="name" id="namenseingabe" class="namenseingabe bottone1">
+        <div style="margin-top: 100px;"><button onclick="joinLobby()" id="bottone1">Der Lobby beitreten</button></div>
+</body>
+
+</html>
+<script>
+    localStorage.setItem("uic_status", "auswahl")
+    localStorage.setItem("uic_username", undefined)
+    localStorage.setItem("uic_gamepin", undefined)
+    localStorage.setItem("uic_task1done", undefined)
+    localStorage.setItem("uic_task2done", undefined)
+    localStorage.setItem("uic_task3done", undefined)
+    localStorage.setItem("uic_task4done", undefined)
+    localStorage.setItem("uic_task5done", undefined)
+    localStorage.setItem("uic_task6done", undefined)
+    localStorage.setItem("uic_task7done", undefined)
+
+    function joinLobby() {
+        if (document.getElementById("namenseingabe").value != "" && document.getElementById("namenseingabe").value != "reset") {
+            localStorage.setItem("uic_username", document.getElementById("namenseingabe").value)
+                //localStorage.setItem("uic_gamepin", document.getElementById("lobbyeingabe").value)
+                //checkForLobby()
+            localStorage.setItem("uic_status", "lobby")
+            checkForPlayer()
+        } else {
+            if (document.getElementById("namenseingabe").value == "reset") {
+                fetch("https://kk-backend.vercel.app/reset")
+                alert("Reset durchgeführt.")
+            } else {
+                alert("Bist du dir sicher, dass du Name eingegeben hast?")
+            }
+
+        }
+
+        async function checkForPlayer() {
+            const antwort = fetch('https://kk-backend.vercel.app/checkForPlayer', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "username": localStorage.getItem("uic_username")
+                })
+            })
+            let data = await (await antwort).json()
+            let endergebnis = JSON.stringify(data);
+            console.log(endergebnis)
+
+            if (endergebnis == true) {
+                alert("Diesen Nutzernamen gibt es schon.")
+            } else {
+                gehtsLos()
+            }
+        }
+
+        async function gehtsLos() {
+            var antwort3 = fetch('https://kk-backend.vercel.app/gehtsLos')
+            let data = await (await antwort3).json()
+            let endergebnis = JSON.stringify(data);
+
+            if (endergebnis == "true") {
+                alert('Das Spiel hat bereits gestartet! Wenn du es zurücksetzen willst, dann logge dich bitte als Spieler "reset" ein.')
+            } else {
+                window.location.assign("lobby.html")
+            }
+        }
+    }
+</script>

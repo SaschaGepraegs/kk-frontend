@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #262626;
+            text-align: center;
+            color: white;
+            font-family: "Roboto", sans-serif;
+        }
+        
+        div {
+            margin-top: 100px;
+        }
+        
+        button {
+            margin-bottom: 15px;
+            padding-left: 33px;
+            padding-right: 33px;
+            padding-bottom: 16px;
+            padding-top: 16px;
+            border-radius: 9px;
+            background: #d5f365;
+            border: none;
+            font-family: inherit;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+        
+        button:hover {
+            box-shadow: 7px 5px 56px -14px #C3D900;
+        }
+        
+        button:active {
+            transform: scale(0.97);
+            box-shadow: 7px 5px 56px -10px #C3D900;
+        }
+        
+        .malsehen {
+            -webkit-box-shadow: 0px 0px 80px 10px rgba(45, 255, 196, 0.9);
+            -moz-box-shadow: 0px 0px 80px 10px rgba(45, 255, 196, 0.9);
+            box-shadow: 0px 0px 80px 10px rgba(45, 255, 196, 0.9);
+            background-color: rgb(13, 177, 141);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="malsehen">
+        <h1>Fertig!</h1>
+        <p>Du hast es geschafft!</p>
+    </div>
+    <div>
+        <h2>Hier kannst du die Spieler sehen, die auch schon fertig sind:</h2>
+        <p id="ersterplatz">Spieler die fertig sind, werden hier angezeigt.</p><br>
+        <p id="zweiterplatz"></p><br>
+        <p id="dritterplatz"></p><br>
+    </div>
+    <div>
+        <button id="thecoolbtn" style="padding: 15px;" onclick="reset()">Spiel verlassen</button>
+    </div>
+</body>
+
+<script>
+    document.getElementById("thecoolbtn").style.visibility = "visible";
+    async function getFinishedPlayers() {
+        var antwort = fetch('https://kk-backend.vercel.app/getFinishedPlayers')
+        let data = await (await antwort).json()
+        console.log(data.length)
+        console.log(data)
+
+        const list = data
+        const half = Math.ceil(list.length / 2);
+
+        const firstHalf = list.slice(0, half)
+        const secondHalf = list.slice(half)
+
+        console.log(firstHalf, secondHalf)
+
+        if (firstHalf[0][0] == undefined || firstHalf[0][0] == "undefined") {
+            document.getElementById("ersterplatz").innerHTML = "";
+        } else {
+            document.getElementById("ersterplatz").innerHTML = "🥇 Erster Platz geht an " + firstHalf[0][0] + ", fertiggeworden um " + inZeitUmwandlen(secondHalf[0][0]) + " Uhr.";
+        }
+
+        if (firstHalf[0][1] == undefined || firstHalf[0][1] == "undefined") {
+            document.getElementById("zweiterplatz").innerHTML = "";
+        } else {
+            document.getElementById("zweiterplatz").innerHTML = "🥈 Zweiter Platz geht an " + firstHalf[0][1] + ", fertiggeworden um " + inZeitUmwandlen(secondHalf[0][1]) + " Uhr.";
+        }
+
+        if (firstHalf[0][2] == undefined || firstHalf[0][2] == "undefined") {
+            document.getElementById("dritterplatz").innerHTML = ""
+            document.getElementById("thecoolbtn").style.visibility = "visible"
+        } else {
+            document.getElementById("dritterplatz").innerHTML = "🥉 Dritter Platz geht an " + firstHalf[0][2] + ", fertiggeworden um " + inZeitUmwandlen(secondHalf[0][2]) + " Uhr."
+        }
+
+
+
+
+    }
+
+    setInterval(getFinishedPlayers, 1500);
+
+    function reset() {
+        window.location.assign("index.html")
+    }
+
+    function inZeitUmwandlen(unix_timestamp) {
+        var date = new Date(unix_timestamp * 1000);
+        // Hours part from the timestamp
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+        // Seconds part from the timestamp
+        var seconds = "0" + date.getSeconds();
+
+        // Will display time in 10:30:23 format
+        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+        console.log(formattedTime);
+
+        return formattedTime
+    }
+</script>

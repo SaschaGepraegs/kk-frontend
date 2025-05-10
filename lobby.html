@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #262626;
+            color: white;
+            font-family: "Roboto", sans-serif;
+            text-align: center;
+        }
+        
+        div {
+            margin-top: 100px;
+        }
+        
+        button {
+            padding: 20px;
+        }
+        
+        #bottone1 {
+            padding-left: 33px;
+            padding-right: 33px;
+            padding-bottom: 16px;
+            padding-top: 16px;
+            border-radius: 9px;
+            background: #d5f365;
+            border: none;
+            font-family: inherit;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+        
+        #bottone1:hover {
+            box-shadow: 7px 5px 56px -14px #C3D900;
+        }
+        
+        #bottone1:active {
+            transform: scale(0.97);
+            box-shadow: 7px 5px 56px -10px #C3D900;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Wilkommen in der Lobby!</h1>
+        <p id="usernameangabe">Nutzername: username</p>
+    </div>
+    <div id="unrunderunde">
+        <p>Aktuell in der Runde:</p>
+        <p id="runderunde">Wird geladen...</p>
+    </div>
+    <div><button onclick="losgehts()" id="bottone1" style="margin-bottom: 5vh; margin-right: 5vw;">Spiel starten (Erst drücken wenn alle in der Runde sind!)</button><button onclick="window.location.assign('/index.html')" id="bottone1">Lobby verlassen</button></div>
+</body>
+
+</html>
+<script>
+    async function binda() {
+        const antwort = fetch('https://kk-backend.vercel.app/binDa', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "username": localStorage.getItem("uic_username")
+            })
+        })
+        let data = await (await antwort).json()
+        let endergebnis = data;
+        console.log(endergebnis)
+        document.getElementById("runderunde").innerHTML = endergebnis;
+    }
+    document.getElementById("usernameangabe").innerHTML = "Nutzername: " + localStorage.getItem("uic_username")
+
+    var t = setInterval(runFunction, 1500);
+
+    async function runFunction() {
+        var antwort3 = fetch('https://kk-backend.vercel.app/gehtsLos')
+        let data = await (await antwort3).json()
+        let endergebnis = JSON.stringify(data);
+        if (endergebnis == "true") {
+            localStorage.setItem("uic_status", "ingame")
+            window.location.assign("/game.html")
+        } else {
+            document.getElementById("runderunde").innerHTML = data;
+            console.log(data)
+        }
+    }
+
+    function losgehts() {
+        document.getElementById("bottone1").style.visibility = "hidden"
+        document.getElementById("usernameangabe").style.color = "green"
+        document.getElementById("usernameangabe").innerHTML = "Die Runde startet demnächst!"
+        fetch("https://kk-backend.vercel.app/losGehts")
+    }
+
+    checkForPlayer()
+    async function checkForPlayer() {
+        const antwort = fetch('https://kk-backend.vercel.app/checkForPlayer', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "username": localStorage.getItem("uic_username")
+            })
+        })
+        let data = await (await antwort).json()
+        let endergebnis = JSON.stringify(data);
+        console.log(endergebnis)
+
+        if (endergebnis == true) {
+            alert("Diesen Nutzernamen gibt es schon.")
+            window.location.assign("/index.html")
+        } else {
+            binda()
+        }
+    }
+</script>

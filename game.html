@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #262626;
+            font-family: "Roboto", sans-serif;
+            color: white;
+            text-align: center;
+        }
+        
+        button {
+            padding-left: 33px;
+            padding-right: 33px;
+            padding-bottom: 16px;
+            padding-top: 16px;
+            border-radius: 9px;
+            background: #d5f365;
+            border: none;
+            font-family: inherit;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+            margin-bottom: 2vh;
+            margin-top: 2vh;
+        }
+        
+        button:hover {
+            box-shadow: 7px 5px 56px -14px #C3D900;
+        }
+        
+        button:active {
+            transform: scale(0.97);
+            box-shadow: 7px 5px 56px -10px #C3D900;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="überschrift">SPIELE FÜR USERNAME</h1>
+    <p id="tasksmade">0/7 Spielen erledigt</p>
+    <meter max="7" value="3" id="meterio"></meter><br>
+    <button id="btn_t1" onclick="window.location.assign('game1.html')">Game 1</button><br>
+    <button id="btn_t2" onclick="window.location.assign('game2.html')">Game 2</button><br>
+    <button id="btn_t3" onclick="window.location.assign('game3.html')">Game 3</button><br>
+    <button id="btn_t4" onclick="window.location.assign('game4.html')">Game 4</button><br>
+    <button id="btn_t7" onclick="window.location.assign('game5.html')">Game 5</button><br>
+    <button id="btn_t5" onclick="window.location.assign('game6.html')">Game 6</button><br>
+    <button id="btn_t6" onclick="window.location.assign('game7.html')">Game 7</button>
+</body>
+
+</html>
+<script>
+    document.getElementById("überschrift").innerHTML = "AUFGABEN FÜR " + (localStorage.getItem("uic_username")).toUpperCase();
+
+    if (localStorage.getItem("uic_task1done") == "true") {
+        document.getElementById("btn_t1").style.backgroundColor = "#C3D900"
+    } else {
+        document.getElementById("btn_t1").style.backgroundColor = "#FF3131"
+    }
+
+    if (localStorage.getItem("uic_task2done") == "true") {
+        document.getElementById("btn_t2").style.backgroundColor = "#C3D900"
+    } else {
+        document.getElementById("btn_t2").style.backgroundColor = "#FF3131"
+    }
+
+    if (localStorage.getItem("uic_task3done") == "true") {
+        document.getElementById("btn_t3").style.backgroundColor = "#C3D900"
+    } else {
+        document.getElementById("btn_t3").style.backgroundColor = "#FF3131"
+    }
+
+    if (localStorage.getItem("uic_task4done") == "true") {
+        document.getElementById("btn_t4").style.backgroundColor = "#C3D900"
+    } else {
+        document.getElementById("btn_t4").style.backgroundColor = "#FF3131"
+    }
+
+    if (localStorage.getItem("uic_task5done") == "true") {
+        document.getElementById("btn_t5").style.backgroundColor = "#C3D900"
+    } else {
+        document.getElementById("btn_t5").style.backgroundColor = "#FF3131"
+    }
+
+    if (localStorage.getItem("uic_task6done") == "true") {
+        document.getElementById("btn_t6").style.backgroundColor = "#C3D900"
+    } else {
+        document.getElementById("btn_t6").style.backgroundColor = "#FF3131"
+    }
+
+    if (localStorage.getItem("uic_task7done") == "true") {
+        document.getElementById("btn_t7").style.backgroundColor = "#C3D900"
+    } else {
+        document.getElementById("btn_t7").style.backgroundColor = "#FF3131"
+    }
+
+    function getMadeTasks() {
+        let count = 0;
+        if (localStorage.getItem("uic_task1done") == "true") {
+            count++
+        }
+        if (localStorage.getItem("uic_task2done") == "true") {
+            count++
+        }
+        if (localStorage.getItem("uic_task3done") == "true") {
+            count++
+        }
+        if (localStorage.getItem("uic_task4done") == "true") {
+            count++
+        }
+        if (localStorage.getItem("uic_task5done") == "true") {
+            count++
+        }
+        if (localStorage.getItem("uic_task6done") == "true") {
+            count++
+        }
+        if (localStorage.getItem("uic_task7done") == "true") {
+            count++
+        }
+        if (count == 7) {
+            finishCall()
+        }
+        return count
+    }
+
+    async function finishCall() {
+        const antwort = fetch('https://kk-backend.vercel.app/finishCall', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "username": localStorage.getItem("uic_username"),
+            })
+        })
+        let data = await (await antwort).json()
+        let endergebnis = JSON.stringify(data);
+        console.log(endergebnis)
+        window.location.assign("fertig.html")
+    }
+
+    document.getElementById("tasksmade").innerHTML = getMadeTasks() + "/7 Aufgaben erledigt."
+    document.getElementById("meterio").value = getMadeTasks()
+</script>

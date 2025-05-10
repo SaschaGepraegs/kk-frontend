@@ -1,0 +1,9 @@
+<h1>Game 1</h1>
+<p>Game 1 Testseite. Unten Button drücken um abzuschließen!</p>
+<b onclick="fortfahren()">Fortfahren</b>
+<script>
+    function fortfahren() {
+        localStorage.setItem("uic_task1done", "true");
+        window.location.assign("game.html")
+    }
+</script>
