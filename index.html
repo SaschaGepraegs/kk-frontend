@@ -7,6 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KlickKrawall</title>
     <style>
+        mark {
+            background-color: rgb(196, 199, 0);
+            border-radius: 10px;
+            /* Abrundung */
+            padding: 2px 4px;
+            /* Etwas Innenabstand für bessere Optik */
+        }
+        
         body {
             background-color: #262626;
             color: white;
@@ -76,11 +84,14 @@
 
 <body>
     <div style="margin-top: 100px;">
-        <h1>KlickKrawall</h1>
+        <h1>KlickKrawall <mark> BETA </mark></h1>
     </div>
-    <div>
+    <div style="margin-top: 100px;">
         <p>Bitte gib hier deinen Nutzernamen ein:</p>
         <input type="text" name="name" id="namenseingabe" class="namenseingabe bottone1">
+        <p>Bitte gib hier deinen Lobby-Code ein:</p>
+        <input type="text" name="name2" id="lobbyeingabe" class="namenseingabe bottone1" maxlength="4" max="9999" pattern="\d{1,4}" inputmode="numeric">
+        <p>Klicke <a href="./openLobby.html" style="color:#C3D900">hier</a>, um zum eine Lobby zu hosten.</p>
         <div style="margin-top: 100px;"><button onclick="joinLobby()" id="bottone1">Der Lobby beitreten</button></div>
 </body>
 
@@ -144,7 +155,7 @@
             if (endergebnis == "true") {
                 alert('Das Spiel hat bereits gestartet! Wenn du es zurücksetzen willst, dann logge dich bitte als Spieler "reset" ein.')
             } else {
-                window.location.assign("lobby.html")
+                window.location.assign("./lobby.html")
             }
         }
     }

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lobby Übersicht</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+        
+        h1,
+        h2 {
+            text-align: center;
+        }
+        
+        #spielerListe {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #1e1e1e;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        
+        .spieler {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Lobby</h1>
+    <h2 id="pinAnzeige">PIN: </h2>
+    <div id="spielerListe">Spieler werden geladen...</div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const pin = urlParams.get('pin');
+        document.getElementById("pinAnzeige").textContent = `PIN: ${pin}`;
+
+        async function ladeSpieler() {
+            try {
+                const response = await fetch('https://kk-backend.vercel.app/gehtsLos');
+                const data = await response.json();
+
+                const liste = document.getElementById("spielerListe");
+                liste.innerHTML = "";
+
+                if (Array.isArray(data)) {
+                    data.forEach(spieler => {
+                        const el = document.createElement("div");
+                        el.className = "spieler";
+                        el.textContent = spieler;
+                        liste.appendChild(el);
+                    });
+                } else {
+                    liste.textContent = "Keine Spieler gefunden.";
+                }
+            } catch (err) {
+                console.error("Fehler beim Laden der Spieler:", err);
+                document.getElementById("spielerListe").textContent = "Fehler beim Laden.";
+            }
+        }
+
+        ladeSpieler();
+        setInterval(ladeSpieler, 5000); // alle 5 Sekunden neu laden
+    </script>
+</body>
+
+</html>
