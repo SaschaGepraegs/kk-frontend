@@ -3,43 +3,7 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-size: 16px;
-            /* Standardgröße */
-            background-color: #262626;
-            font-family: "Roboto", sans-serif;
-            color: white;
-        }
-        
-        h1 {
-            font-size: 2rem;
-            /* Dynamische Größe für Überschrift */
-            text-align: center;
-        }
-        
-        p {
-            font-size: 1.2rem;
-            /* Dynamische Größe für Absatz */
-            text-align: center;
-        }
-        
-        meter {
-            width: 50vw;
-            height: 5vh;
-            margin: 20px auto;
-            display: block;
-        }
-        
-        #fortfahren {
-            font-size: 1.5rem;
-            /* Sichtbarer Button für mobile Geräte */
-            display: block;
-            margin: 20px auto;
-            text-align: center;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="game1.css">
 </head>
 
 <body>
@@ -49,27 +13,7 @@
     <img id="pizza" src="https://png.pngtree.com/png-vector/20240730/ourmid/pngtree-pizza-with-cheese-on-a-white-background-top-viewvery-high-quality-png-image_13292309.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
         onclick="geklickt()">
     <b id="fortfahren" onclick="fortfahren()" style="visibility: hidden;">Fortfahren</b>
-    <script>
-        function fortfahren() {
-            localStorage.setItem("uic_task1done", "true");
-            window.location.assign("game.html")
-        }
-        var clicks = 0;
-
-        function geklickt() {
-            clicks++;
-            if (clicks >= 100) {
-                document.getElementById("pizza").style.visibility = "hidden";
-                document.getElementById("fortfahren").style.visibility = "visible";
-            }
-        }
-        var meter = document.querySelector("meter");
-        meter.value = clicks;
-        meter.max = 100;
-        setInterval(function() {
-            meter.value = clicks;
-        }, 100);
-    </script>
+    <script src="game1.js"></script>
 </body>
 
 </html>

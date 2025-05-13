@@ -56,7 +56,7 @@
         <p>Aktuell in der Runde:</p>
         <p id="runderunde">Wird geladen...</p>
     </div>
-    <div><button onclick="losgehts()" id="bottone1" style="margin-bottom: 5vh; margin-right: 5vw;">Spiel starten (Erst drücken wenn alle in der Runde sind!)</button><button onclick="window.location.assign('/index.html')" id="bottone1">Lobby verlassen</button></div>
+    <div><button onclick="losgehts()" id="bottone1" style="margin-bottom: 5vh; margin-right: 5vw;">Spiel starten (Erst drücken wenn alle in der Runde sind!)</button><button onclick="window.location.assign('index.html')" id="bottone1">Lobby verlassen</button></div>
 </body>
 
 </html>
@@ -87,7 +87,7 @@
         let endergebnis = JSON.stringify(data);
         if (endergebnis == "true") {
             localStorage.setItem("uic_status", "ingame")
-            window.location.assign("/game.html")
+            window.location.assign("game.html")
         } else {
             document.getElementById("runderunde").innerHTML = data;
             console.log(data)

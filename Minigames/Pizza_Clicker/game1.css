@@ -1,0 +1,35 @@
+body {
+    font-size: 16px;
+    /* Standardgröße */
+    background-color: #262626;
+    font-family: "Roboto", sans-serif;
+    color: white;
+}
+
+h1 {
+    font-size: 2rem;
+    /* Dynamische Größe für Überschrift */
+    text-align: center;
+}
+
+p {
+    font-size: 1.2rem;
+    /* Dynamische Größe für Absatz */
+    text-align: center;
+}
+
+meter {
+    width: 50vw;
+    height: 5vh;
+    margin: 20px auto;
+    display: block;
+}
+
+#fortfahren {
+    font-size: 1.5rem;
+    /* Sichtbarer Button für mobile Geräte */
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    cursor: pointer;
+}
