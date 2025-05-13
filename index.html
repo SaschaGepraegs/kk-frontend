@@ -91,7 +91,7 @@
         <input type="text" name="name" id="namenseingabe" class="namenseingabe bottone1">
         <p>Bitte gib hier deinen Lobby-Code ein:</p>
         <input type="text" name="name2" id="lobbyeingabe" class="namenseingabe bottone1" maxlength="4" max="9999" pattern="\d{1,4}" inputmode="numeric">
-        <p>Klicke <a href="Mainscreen/openLobby.html" style="color:#C3D900">hier</a>, um zum eine Lobby zu hosten.</p>
+        <p>Klicke <a href="./Mainscreen/openLobby.html" style="color:#C3D900">hier</a>, um zum eine Lobby zu hosten.</p>
         <div style="margin-top: 100px;"><button onclick="joinLobby()" id="bottone1">Der Lobby beitreten</button></div>
 </body>
 
@@ -166,7 +166,7 @@
             if (endergebnis == "true") {
                 alert('Das Spiel hat bereits gestartet! Wenn du es zurücksetzen willst, dann logge dich bitte als Spieler "reset" ein.')
             } else {
-                window.location.assign("System\lobby.html")
+                window.location.assign("./System/lobby.html")
             }
         }
     }
