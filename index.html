@@ -111,10 +111,9 @@
     function joinLobby() {
         if (document.getElementById("namenseingabe").value != "" && document.getElementById("namenseingabe").value != "reset") {
             localStorage.setItem("uic_username", document.getElementById("namenseingabe").value)
-                //localStorage.setItem("uic_gamepin", document.getElementById("lobbyeingabe").value)
-                //checkForLobby()
+            localStorage.setItem("uic_gamepin", document.getElementById("lobbyeingabe").value)
             localStorage.setItem("uic_status", "lobby")
-            checkForPlayer()
+            checkForLobby()
         } else {
             if (document.getElementById("namenseingabe").value == "reset") {
                 fetch("https://kk-backend.vercel.app/reset")
@@ -144,6 +143,18 @@
                 alert("Diesen Nutzernamen gibt es schon.")
             } else {
                 gehtsLos()
+            }
+        }
+
+        async function checkForLobby() {
+            const antwort = fetch('https://kk-backend.vercel.app/getOpenLobbyList')
+            let data = await (await antwort).json()
+            let endergebnis = JSON.stringify(data);
+            console.log(endergebnis)
+            if (endergebnis.includes(localStorage.getItem("uic_gamepin"))) {
+                checkForPlayer();
+            } else {
+                alert("Diese Lobby existiert nicht.")
             }
         }
 
