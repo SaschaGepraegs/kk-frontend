@@ -39,16 +39,77 @@
             text-align: center;
             cursor: pointer;
         }
+        background-color: #262626;
+            font-family: "Roboto", sans-serif;
+            color: white;
+            text-align: center;
+        }
+        
+        button {
+            padding-left: 33px;
+            padding-right: 33px;
+            padding-bottom: 16px;
+            padding-top: 16px;
+            border-radius: 9px;
+            background: #d5f365;
+            border: none;
+            font-family: inherit;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+            margin-bottom: 2vh;
+            margin-top: 2vh;
+        }
+        
+        button:hover {
+            box-shadow: 7px 5px 56px -14px #C3D900;
+        }
+        
+        button:active {
+            transform: scale(0.97);
+            box-shadow: 7px 5px 56px -10px #C3D900;
+        }
     </style>
 </head>
 
+<body>
+    <h1 id="überschrift">SCHERE STEIN PAPIER</h1>
+    <p id="tasksmade">0/3 Gewonnen</p>
+    <meter max="3" value="3" id="meterio"></meter><br>
+    <button id="btn_t1" onclick="window.location.assign(Schere())">">Schere</button><br>
+    <button id="btn_t2" onclick="window.location.assign('Stein')">">Stein 2</button><br>
+    <button id="btn_t3" onclick="window.location.assign('Papier')">">Papier 2</button><br>
 
-<h1>Game 2</h1>
-<p>Game-Testseite. Unten Button drücken um abzuschließen!</p>
-<b onclick="fortfahren()">Fortfahren</b>
-<script>
-    function fortfahren() {
-        localStorage.setItem("uic_task2done", "true");
-        window.location.assign("game.html")
-    }
-</script>
+    <h1>Schere Stein Papier!</h1>
+    <p>Gewinne 3 Mal in a Row um zu Gewinnen</p>
+    <meter value="0" max="100"></meter>
+    <img id="https://static.vecteezy.com/system/resources/thumbnails/047/433/679/small/collection-of-holding-fists-up-hand-gesture-isolated-on-a-transparent-background-cutout-or-clipping-path-png.png>
+    <b id="fortfahren" onclick="fortfahren()"</b>
+    <script>
+        function fortfahren() {
+            localStorage.setItem("uic_task1done", "true");
+            window.location.assign("game.html")
+        }
+        var clicks = 0;
+
+        function geklickt() {
+            clicks++;
+            if (clicks >= 100) {
+                document.getElementById("pizza").style.visibility = "hidden";
+                document.getElementById("fortfahren").style.visibility = "visible";
+            }
+        }
+
+        function Schere() {
+            
+
+
+            
+        var meter = document.querySelector("meter");
+        meter.value = clicks;
+        meter.max = 100;
+        setInterval(function() {
+            meter.value = clicks;
+        }, 100);
+    </script>
+</body>
