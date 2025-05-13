@@ -1,6 +1,6 @@
 function fortfahren() {
     localStorage.setItem("uic_task1done", "true");
-    window.location.assign("game.html")
+    window.location.assign("./System/game.html");
 }
 var clicks = 0;
 
