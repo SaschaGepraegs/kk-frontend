@@ -31,3 +31,16 @@ td {
     box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.3);
     transition: transform 0.6s ease-in-out, box-shadow 0.3s;
 }
+
+#playerList {
+    margin: 20px;
+    padding: 10px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    color: white;
+}
+
+.player {
+    padding: 5px;
+    border-bottom: 1px solid #333;
+}
