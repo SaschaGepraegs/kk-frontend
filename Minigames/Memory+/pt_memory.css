@@ -1,10 +1,24 @@
+#gameTable {
+    border-spacing: 0; /* Entfernt den Abstand zwischen den Zellen */
+    border-collapse: collapse; /* Sorgt dafür, dass keine Lücken zwischen den Zellrändern entstehen */
+    margin: 0 auto; /* Zentriert die Tabelle */
+}
+
+td {
+    padding: 0; /* Entfernt die Auffüllung innerhalb der Zellen */
+    margin: 0; /* Entfernt jegliche Ränder */
+}
+
 .cards {
-    width: 30%;
-    height: 30%;
+    width: 100%; /* Füllt die gesamte Tabellenzelle aus */
+    height: auto; /* Beibehaltung des Seitenverhältnisses */
+    margin: 0; /* Entfernt jegliche zusätzlichen Abstände */
+    display: block; /* Entfernt Inline-Abstände */
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: transform 0.3s, box-shadow 0.3s;
-    transform-style: preserve-3d; /* 3D Transformator*/
-    cursor: pointer;
+    transform-style: preserve-3d; /* 3D Transformator */
+    cursor: grab;
+    margin-top: 10%;
 }
 
 .cards:hover {
@@ -13,7 +27,7 @@
 }
 
 .cards.clicked {
-    transform: rotateY(180deg); /* Umdreh Effekt*/
+    transform: rotateY(180deg); /* Umdreh Effekt */
     box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.3);
     transition: transform 0.6s ease-in-out, box-shadow 0.3s;
 }
