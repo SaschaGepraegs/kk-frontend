@@ -36,11 +36,13 @@
 </head>
 
 <body>
-    <h1>Spiel Lobby</h1>
-    <button onclick="createLobby()">Lobby erstellen</button>
+    <h1>Willkommen im Mainscreen! :)</h1>
+    <button onclick="createLobby()" id="einzigerbutton">Lobby erstellen</button>
 
     <script>
         async function createLobby() {
+            document.getElementById("einzigerbutton").innerHTML = "Erstelle Lobby...";
+            document.getElementById("einzigerbutton").disabled = true;
             const pin = Math.floor(1000 + Math.random() * 9000);
             const response = await fetch('https://kk-backend.vercel.app/registerLobby?gamepin=' + pin, {
                 method: 'POST',
