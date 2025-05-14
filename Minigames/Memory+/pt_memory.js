@@ -18,7 +18,7 @@ for (let i = 0; i < cards.length; i++) {
         } else {
             this.src = "Prototyp_Images/Bc.jpg"; // Wechsel zu Bc.jpg (erste Karte)
         }
-    };
+    }; 
 }
 
 async function displayName() {
