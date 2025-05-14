@@ -71,14 +71,16 @@
 
         async function ladeSpieler() {
             try {
-                const response = await fetch('https://kk-backend.vercel.app/gehtsLos?lobby=' + pin);
+                // Spieler abrufen
+                const response = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${pin}`);
                 const data = await response.json();
-
+                console.log(data)
                 const liste = document.getElementById("spielerListe");
+                console.log(liste)
                 liste.innerHTML = "";
 
-                if (Array.isArray(data.spieler)) {
-                    data.spieler.forEach(spieler => {
+                if (Array.isArray(data)) {
+                    data.forEach(spieler => {
                         const el = document.createElement("div");
                         el.className = "spieler";
                         el.textContent = spieler;
@@ -87,15 +89,24 @@
                 } else {
                     liste.textContent = "Keine Spieler gefunden.";
                 }
+            } catch (err) {
+                console.error("Fehler beim Laden der Spieler:", err);
+                document.getElementById("spielerListe").textContent = "Fehler beim Laden.";
+            }
+        }
 
-                // Überprüfen, ob das Spiel bereits gestartet ist
-                if (data.spielGestartet) {
+        async function pruefeSpielGestartet() {
+            try {
+                // Prüfen, ob das Spiel gestartet ist
+                const response = await fetch(`https://kk-backend.vercel.app/gehtsLos?lobby=${pin}`);
+                const spielGestartet = await response.json();
+
+                if (spielGestartet) {
                     document.getElementById("startButton").disabled = true;
                     document.getElementById("startButton").textContent = "Spiel läuft bereits";
                 }
             } catch (err) {
-                console.error("Fehler beim Laden der Spieler:", err);
-                document.getElementById("spielerListe").textContent = "Fehler beim Laden.";
+                console.error("Fehler beim Prüfen des Spielstatus:", err);
             }
         }
 
@@ -117,8 +128,15 @@
 
         document.getElementById("startButton").addEventListener("click", starteSpiel);
 
+        // Initiale Daten laden
         ladeSpieler();
-        setInterval(ladeSpieler, 1000); // alle 5 Sekunden neu laden
+        pruefeSpielGestartet();
+
+        // Spieler und Status regelmäßig aktualisieren
+        setInterval(() => {
+            ladeSpieler();
+            pruefeSpielGestartet();
+        }, 5000); // Alle 5 Sekunden
     </script>
 </body>
 
