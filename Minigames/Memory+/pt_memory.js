@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     displayName();
 });
 
+
 // Loop durch jede Karte
 // und füge einen Klick-Event-Listener hinzu
 for (let i = 0; i < cards.length; i++) {
@@ -23,24 +24,23 @@ for (let i = 0; i < cards.length; i++) {
 
 async function displayName() {
     try {
-        // Fetch the list of players from the backend
-        const response = await fetch('https://kk-backend.vercel.app/getPlayers?lobby=' + localStorage.getItem("uic_gamepin"));
+        const response = await fetch('https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=' + localStorage.getItem("uic_gamepin"));
         const players = await response.json();
 
-        // Find the container where player names will be displayed
+        
         const playerListContainer = document.getElementById("playerList");
 
-        // Clear any existing content
+        
         playerListContainer.innerHTML = "";
 
-        // Loop through the players and add them to the container
+       
         players.forEach(player => {
             const playerElement = document.createElement("div");
-            playerElement.textContent = player; // Set the player's name
-            playerElement.className = "player"; // Optional: Add a class for styling
+            playerElement.textContent = player; 
+            playerElement.className = "player"; 
             playerListContainer.appendChild(playerElement);
         });
     } catch (error) {
         console.error("Error fetching players:", error);
     }
-}
+};
