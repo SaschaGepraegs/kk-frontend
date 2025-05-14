@@ -17,7 +17,7 @@
           checkForLobby()
       } else {
           if (document.getElementById("namenseingabe").value == "reset") {
-              fetch("https://kk-backend.vercel.app/reset")
+              fetch("https://kk-backend.vercel.app/reset?lobby=" + localStorage.getItem("uic_gamepin"));
               alert("Reset durchgeführt.")
           } else {
               alert("Bist du dir sicher, dass du Name eingegeben hast?")
@@ -33,6 +33,7 @@
                   'Content-Type': 'application/json'
               },
               body: JSON.stringify({
+                  "lobby": localStorage.getItem("uic_gamepin"),
                   "username": localStorage.getItem("uic_username")
               })
           })
@@ -60,7 +61,7 @@
       }
 
       async function gehtsLos() {
-          var antwort3 = fetch('https://kk-backend.vercel.app/gehtsLos')
+          var antwort3 = fetch('https://kk-backend.vercel.app/gehtsLos?lobby=' + localStorage.getItem("uic_gamepin"));
           let data = await (await antwort3).json()
           let endergebnis = JSON.stringify(data);
 

@@ -70,7 +70,7 @@
 <script>
     document.getElementById("thecoolbtn").style.visibility = "visible";
     async function getFinishedPlayers() {
-        var antwort = fetch('https://kk-backend.vercel.app/getFinishedPlayers')
+        var antwort = fetch('https://kk-backend.vercel.app/getFinishedPlayers?lobby=' + localStorage.getItem("uic_lobby"));
         let data = await (await antwort).json()
         console.log(data.length)
         console.log(data)

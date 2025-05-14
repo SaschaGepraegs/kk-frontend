@@ -137,6 +137,7 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                "lobby": localStorage.getItem("uic_lobby"),
                 "username": localStorage.getItem("uic_username"),
             })
         })
