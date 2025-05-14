@@ -52,10 +52,6 @@
         <h1>Willkommen in der Lobby!</h1>
         <p id="usernameangabe">Nutzername: username</p>
     </div>
-    <div id="unrunderunde">
-        <p>Aktuell in der Runde:</p>
-        <p id="runderunde">Wird geladen...</p>
-    </div>
     <div><button onclick="window.location.assign('./index.html')" id="bottone1">Lobby verlassen</button></div>
 </body>
 
@@ -76,7 +72,6 @@
         let data = await (await antwort).json()
         let endergebnis = data;
         console.log(endergebnis)
-        document.getElementById("runderunde").innerHTML = endergebnis;
     }
     document.getElementById("usernameangabe").innerHTML = "Nutzername: " + localStorage.getItem("uic_username")
 
@@ -90,7 +85,6 @@
             localStorage.setItem("uic_status", "ingame")
             window.location.assign("game.html")
         } else {
-            document.getElementById("runderunde").innerHTML = data;
             console.log(data)
         }
     }
