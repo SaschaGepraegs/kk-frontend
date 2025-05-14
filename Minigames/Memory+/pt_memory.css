@@ -1,4 +1,19 @@
-img {
+.cards {
     width: 30%;
     height: 30%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    transform-style: preserve-3d; /* 3D Transformator*/
+    cursor: pointer;
+}
+
+.cards:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+.cards.clicked {
+    transform: rotateY(180deg); /* Umdreh Effekt*/
+    box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.3);
+    transition: transform 0.6s ease-in-out, box-shadow 0.3s;
 }
