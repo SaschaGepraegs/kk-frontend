@@ -69,7 +69,7 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "lobby": localStorage.getItem("uic_lobby"),
+                "lobby": localStorage.getItem("uic_gamepin"),
                 "username": localStorage.getItem("uic_username")
             })
         })
@@ -83,7 +83,7 @@
     var t = setInterval(runFunction, 1500);
 
     async function runFunction() {
-        var antwort3 = fetch('https://kk-backend.vercel.app/gehtsLos?lobby=' + localStorage.getItem("uic_lobby"));
+        var antwort3 = fetch('https://kk-backend.vercel.app/gehtsLos?lobby=' + localStorage.getItem("uic_gamepin"));
         let data = await (await antwort3).json()
         let endergebnis = JSON.stringify(data);
         if (endergebnis == "true") {
