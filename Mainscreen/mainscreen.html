@@ -114,7 +114,6 @@
             try {
                 const response = await fetch(`https://kk-backend.vercel.app/losGehts?lobby=${pin}`);
                 if (response.ok) {
-                    alert("Das Spiel wurde gestartet!");
                     document.getElementById("startButton").disabled = true;
                     document.getElementById("startButton").textContent = "Spiel läuft bereits";
                 } else {
