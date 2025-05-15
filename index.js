@@ -20,7 +20,7 @@
               fetch("https://kk-backend.vercel.app/reset?lobby=" + localStorage.getItem("uic_gamepin"));
               alert("Reset durchgeführt.")
           } else {
-              alert("Bist du dir sicher, dass du Name eingegeben hast?")
+              alert("Bist du dir sicher, dass du deinen Nutzernamen eingegeben hast?")
           }
 
       }

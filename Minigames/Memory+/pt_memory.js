@@ -1,5 +1,6 @@
 const cards = document.getElementsByClassName("cards");
 
+// Listener um die Namen der Spieler zu laden
 document.addEventListener("DOMContentLoaded", function () {
     displayName();
 });
@@ -22,12 +23,14 @@ for (let i = 0; i < cards.length; i++) {
     }; 
 }
 
+// Funktion um die Namen der Spieler zu speichern
 async function displayName() {
     try {
+        // Hole den Namen des Spielers aus der API
         const response = await fetch('https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=' + localStorage.getItem("uic_gamepin"));
         const players = await response.json();
 
-        
+        //Liste für die Spieler
         const playerListContainer = document.getElementById("playerList");
 
         
@@ -41,6 +44,6 @@ async function displayName() {
             playerListContainer.appendChild(playerElement);
         });
     } catch (error) {
-        console.error("Error fetching players:", error);
+        console.error("Fehler die Spieler zu speichern:", error);
     }
 };
