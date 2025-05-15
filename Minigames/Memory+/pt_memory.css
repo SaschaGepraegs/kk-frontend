@@ -1,3 +1,16 @@
+body {
+    background-color: #1c1c1c; /* Dunkler Hintergrund */
+    color: #ffffff; /* Weißer Text */
+    font-family: 'Arial', sans-serif; /* Schriftart */
+}
+
+h1{
+    color: #ffffff; /* Weißer Text */
+    text-align: center; /* Zentrierter Text */
+    font-size: 2.5em;
+    margin-top: 20px;
+}
+
 #gameTable {
     border-spacing: 0; /* Entfernt den Abstand zwischen den Zellen */
     border-collapse: collapse; /* Sorgt dafür, dass keine Lücken zwischen den Zellrändern entstehen */
