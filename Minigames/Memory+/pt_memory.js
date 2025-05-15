@@ -1,46 +1,41 @@
 const cards = document.getElementsByClassName("cards");
 window.onload = function(){
-    KartenMischen(); // Karten werden zu Beginn gemischt
-}
-
-// Loop durch jede Karte
-// und füge einen Klick-Event-Listener hinzu
-for (let i = 0; i < cards.length; i++) {
-    cards[i].onclick = function () {
-        // Hingefügte Klasse "clicked" für Animation
-        // und um die Karte zu markieren
-        this.classList.toggle("clicked");
-
-        // Checken ob die Karte bereits aufgedeckt ist
-        if (this.src.includes("Prototyp_Images/Bc.jpg")) {
-            this.src = "Prototyp_Images/Vc.png"; // Wechsel zu Vc.png (zweite Karte)
+    const KartenInfos = [
+        {wert: 1, bild: "Prototyp_Images/Karte_König.jpg"},
+        {wert: 2, bild: "Prototyp_Images/Karte_Dame.jpg"},
+        {wert: 3, bild: "Prototyp_Images/Karte_Bube.jpg"},
+        {wert: 1, bild: "Prototyp_Images/Karte_König.jpg"},
+        {wert: 2, bild: "Prototyp_Images/Karte_Dame.jpg"},
+        {wert: 3, bild: "Prototyp_Images/Karte_Bube.jpg"},  
+    ];
+    shuffleArray(KartenInfos); // Karten Mischen
+    for (let i = 0; i < cards.length; i++) {
+        cards[i].KartenWert = KartenInfos[i].wert; // Kartenwert zuweisen
+        cards[i].KartenBild = KartenInfos[i].bild; // Bild der Karte zuweisen
+        cards[i].src = "Prototyp_Images/Karte_Rückseite.jpg"; // Karten werden umgedreht (Rückseite)
+        cards[i].aufgedeckt = false; // Karten sind nicht aufgedeckt
+        
+        cards[i].onclick = function () { // Loop durch jede Karte und füge einen Klick-Event-Listener hinzu
+            this.classList.toggle("clicked"); // Hingefügte Klasse "clicked" für Animation
+        if (this.aufgedeckt == false) { // Überprüfen, ob die Karte aufgedeckt ist
+            KarteAufdecken.call(this); // Funktion aufrufen, um die Karte aufzudecken
         } else {
-            this.src = "Prototyp_Images/Bc.jpg"; // Wechsel zu Bc.jpg (erste Karte)
+            KarteZudecken.call(this); // Funktion aufrufen, um die Karte zuzudecken
         }
-    }; 
+    };
+    }
+}
+//Funktionen "KarteAufdecken" und "Karte Zudecken" sind ausgelagert, um späteren Spielmechanismus zu vereinfachen
+// Funktion, um die Karte aufzudecken
+function KarteAufdecken(){
+    this.src = this.KartenBild; // Bild der Karte anzeigen
+    this.aufgedeckt = true; // Karte ist aufgedeckt
 }
 
-// Funktion um die Karten zu mischen
-function KartenMischen(){
-    let Tabelle = document.getElementById("gameTable");
-    const cardElements = Array.from(Tabelle.getElementsByClassName("cards")); // Alle Karten sammeln
-    shuffleArray(cardElements); // Karten mischen
-    const kartenProZeile = 3; // Anzahl der Karten pro Zeile
-    const zeilenAnzahl = Math.ceil(cardElements.length / kartenProZeile); // Anzahl der Zeilen
-    Tabelle.innerHTML = ""; // Tabelle leeren
-    for (let i = 0; i < zeilenAnzahl; i++) {
-        const zeile = document.createElement("tr"); // Neue Zeile erstellen
-        for (let j = 0; j < kartenProZeile; j++) {
-            const index = i * kartenProZeile + j; // Index der Karte
-            if (index < cardElements.length) {
-                const zelle = document.createElement("td"); // Neue Zelle erstellen
-                zelle.appendChild(cardElements[index]); // Karte zur Zelle hinzufügen
-                zeile.appendChild(zelle); // Zelle zur Zeile hinzufügen
-            }
-        }
-        Tabelle.appendChild(zeile); // Zeile zur Tabelle hinzufügen
-    }
-
+// Funktion, um die Karte zuzudecken
+function KarteZudecken(){
+    this.src = "Prototyp_Images/Karte_Rückseite.jpg"; // Rückseite anzeigen
+    this.aufgedeckt = false; // Karte ist zugedeckt
 }
 
 // Funktion um ein Array zu mischen
