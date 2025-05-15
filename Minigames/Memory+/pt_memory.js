@@ -30,20 +30,39 @@ async function displayName() {
         const response = await fetch('https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=' + localStorage.getItem("uic_gamepin"));
         const players = await response.json();
 
-        //Liste für die Spieler
+        // Liste für die Spieler
         const playerListContainer = document.getElementById("playerList");
-
-        
         playerListContainer.innerHTML = "";
 
-       
-        players.forEach(player => {
+        // Spieler mit Werten beginnend bei 1 zuweisen
+        players.forEach((player, index) => {
             const playerElement = document.createElement("div");
-            playerElement.textContent = player; 
-            playerElement.className = "player"; 
+            playerElement.textContent = `${index + 1}. ${player}`; // Nummerierung hinzufügen
+            playerElement.className = "player";
             playerListContainer.appendChild(playerElement);
         });
     } catch (error) {
         console.error("Fehler die Spieler zu speichern:", error);
+    }
+};
+
+async function proPlayerTurn() {
+    try {
+        const response = await fetch('https://kk-backend.vercel.app/getAllPlayersofLobby?lobby=' + localStorage.getItem("uic_gamepin"));
+        const playerTurn = await response.json();
+
+        const randomPlayerTurn = JSON.parse(playerTurn);
+        randomPlayerTurn.forEach(player => {
+            
+        )
+
+        console.log(playerTurn);
+        if (playerTurn == localStorage.getItem("uic_username")) {
+            alert("Dein Zug ist dran!");
+        } else {
+            alert("Es ist nicht dein Zug!");
+        }
+    } catch (error) {
+        console.error("Fehler beim Abrufen des Spielerzugs:", error);
     }
 };
