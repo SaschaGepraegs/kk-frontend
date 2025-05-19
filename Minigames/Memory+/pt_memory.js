@@ -2,6 +2,7 @@ const cards = document.getElementsByClassName("cards");
 let aktuellAufgedeckteKarten = []; // Array für aktuell aufgedeckte Karten; array.length ist Zähler für aufgedeckte Karten
 let punkte = 0; // Punktezähler
 let timer = 10; // Timer für die Spielzeit
+let richtigInFolge = 0; // Zählt richtige Paare in Folge
 
 window.onload = function(){ // Funktion wird beim Laden der Seite aufgerufen
     Timer(); // Timer starten
@@ -41,7 +42,18 @@ function kartenVergleichen(){
         if(aktuellAufgedeckteKarten[0].KartenWert == aktuellAufgedeckteKarten[1].KartenWert){ // Wenn die Karten gleich sind
             aktuellAufgedeckteKarten[0].onclick = null; // Klick-Event-Listener entfernen
             aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener entfernen
-            punkte++; // Punkte erhöhen
+            richtigInFolge++; // Zähler für richtige Paare erhöhen
+            let punkteErhoehen = 1;
+            if(richtigInFolge >= 2){
+                punkteErhoehen += 1; // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
+                // "+1 Punkt" anzeigen
+                const bonuspunkteDiv = document.getElementById("bonuspunkte");
+                bonuspunkteDiv.textContent = "+1 Bonuspunkt";
+                setTimeout(() => {
+                    bonuspunkteDiv.textContent = "";
+                }, 800); // Nach 0,8 Sekunden wieder ausblenden
+            }
+            punkte += punkteErhoehen; // Punkte erhöhen
             document.getElementById("punkte").innerHTML = "Punkte: " + punkte; // Punkte anzeigen
             timer += 1; // Timer um 1 Sekunde erhöhen
             document.getElementById("timer").innerHTML = "00:" + (timer < 10 ? "0" : "") + timer; // Timer-Anzeige aktualisieren
@@ -57,7 +69,9 @@ function kartenVergleichen(){
             KarteZudecken.call(aktuellAufgedeckteKarten[1]); // Karte zudecken
             aktuellAufgedeckteKarten[0].classList.toggle("clicked"); // Animation für Umdrehen
             aktuellAufgedeckteKarten[1].classList.toggle("clicked"); // Animation für Umdrehen
+            richtigInFolge = 0; // Bei Fehler den Zähler zurücksetzen
         }
+        document.getElementById("streak").innerHTML = "Streak: " + richtigInFolge; // Streak anzeigen
         aktuellAufgedeckteKarten = []; // Array der aktuell aufgedeckten Karten zurücksetzen
     }, 1000); // Timeout von 1 Sekunde
 }
