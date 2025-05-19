@@ -302,10 +302,26 @@
         function showNextGameScreen(spielId) {
             // Mapping Spiel-IDs zu Namen
             const gameNames = {
-                1: "Pizza-Clicker"
-                // Weitere Spiele können hier ergänzt werden, z.B. 2: "Name2"
+                1: "Pizza-Clicker",
+                2: "Schere Stein Papier",
+                3: "Memory+",
+                4: "Make it Meme",
+                5: "Zitate zuordnen",
+                6: "Game 6",
+                7: "Game 7",
+            };
+            // Mapping Spiel-IDs zu URLs
+            const gameUrls = {
+                1: "./Minigames/Pizza_Clicker/game1.html",
+                2: "./Minigames/Schere_Stein_Papier/game2.html",
+                3: "./Minigames/Memory+/pt_memory.html",
+                4: "meme.html",
+                5: "zitate.html",
+                6: "game6.html",
+                7: "game7.html",
             };
             const spielName = gameNames[spielId] || `Spiel ${spielId}`;
+            const spielUrl = gameUrls[spielId] || `spiel${spielId}.html`;
 
             document.getElementById("mainContent").style.display = "none";
             const overlay = document.getElementById("nextgame");
@@ -313,7 +329,7 @@
             // Dummy-Bild und Dummy-Link, kann angepasst werden
             document.getElementById("nextgame-img").src = `https://dummyimage.com/120x120/7873f5/fff.png&text=Game+${spielId}`;
             // Spielname im Titel anzeigen
-            document.getElementById("nextgame-title").innerHTML = `Es geht weiter mit <b>${spielName}</b> (Spiel <span id="spielid">${spielId}</span>)!`;
+            document.getElementById("nextgame-title").innerHTML = `Es geht weiter mit <b>${spielName}</b>!`;
             overlay.style.display = "flex";
             let counter = 5;
             document.getElementById("nextgame-counter").textContent = counter;
@@ -322,8 +338,8 @@
                 document.getElementById("nextgame-counter").textContent = counter;
                 if (counter <= 0) {
                     clearInterval(countdownInterval);
-                    // Dummy-Weiterleitung, anpassen auf echte Spiel-URL
-                    window.location.href = `spiel${spielId}.html`;
+                    // Weiterleitung auf die passende Spiel-URL
+                    window.location.href = spielUrl;
                 }
             }, 1000);
         }
