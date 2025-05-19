@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bitte warten...</title>
+    <title>KlickKrawall</title>
     <style>
         html { box-sizing: border-box; }
         *, *:before, *:after { box-sizing: inherit; }
@@ -288,7 +288,7 @@
         async function checkNextGame() {
             if (!polling) return;
             try {
-                const response = await fetch("https://kk-backend.vercel.app/naechstesSpiel");
+                const response = await fetch("https://kk-backend.vercel.app/naechstesSpiel?lobby="+ localStorage.getItem("uic_gamepin"));
                 const result = await response.json();
                 if (result !== false && result !== null && typeof result === "number") {
                     showNextGameScreen(result);
@@ -300,11 +300,20 @@
         }
 
         function showNextGameScreen(spielId) {
+            // Mapping Spiel-IDs zu Namen
+            const gameNames = {
+                1: "Pizza-Clicker"
+                // Weitere Spiele können hier ergänzt werden, z.B. 2: "Name2"
+            };
+            const spielName = gameNames[spielId] || `Spiel ${spielId}`;
+
             document.getElementById("mainContent").style.display = "none";
             const overlay = document.getElementById("nextgame");
             document.getElementById("spielid").textContent = spielId;
             // Dummy-Bild und Dummy-Link, kann angepasst werden
             document.getElementById("nextgame-img").src = `https://dummyimage.com/120x120/7873f5/fff.png&text=Game+${spielId}`;
+            // Spielname im Titel anzeigen
+            document.getElementById("nextgame-title").innerHTML = `Es geht weiter mit <b>${spielName}</b> (Spiel <span id="spielid">${spielId}</span>)!`;
             overlay.style.display = "flex";
             let counter = 5;
             document.getElementById("nextgame-counter").textContent = counter;
