@@ -83,7 +83,7 @@
         let endergebnis = JSON.stringify(data);
         if (endergebnis == "true") {
             localStorage.setItem("uic_status", "ingame")
-            window.location.assign("game.html")
+            window.location.assign("pause.html")
         } else {
             console.log(data)
         }
@@ -115,7 +115,7 @@
 
         if (endergebnis == true) {
             alert("Diesen Nutzernamen gibt es schon.")
-            window.location.assign("pause.html")
+            window.location.assign("index.html")
         } else {
             binda()
         }
