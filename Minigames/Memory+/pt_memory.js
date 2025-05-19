@@ -43,6 +43,15 @@ function kartenVergleichen(){
             aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener entfernen
             punkte++; // Punkte erhöhen
             document.getElementById("punkte").innerHTML = "Punkte: " + punkte; // Punkte anzeigen
+            timer += 1; // Timer um 1 Sekunde erhöhen
+            document.getElementById("timer").innerHTML = "00:" + (timer < 10 ? "0" : "") + timer; // Timer-Anzeige aktualisieren
+
+            // "+1s" anzeigen
+            const timerPlus = document.getElementById("timerPlus");
+            timerPlus.textContent = "+1s";
+            setTimeout(() => {
+                timerPlus.textContent = "";
+            }, 800); // Nach 0,8 Sekunden wieder ausblenden
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]); // Karte zudecken
             KarteZudecken.call(aktuellAufgedeckteKarten[1]); // Karte zudecken

@@ -30,6 +30,16 @@ h1{
     
 }
 
+#timerPlus {
+    font-size: 1.2em; /* Schriftgröße */
+    text-align: center; /* Zentrierter Text */
+    margin-top: 5px;
+    color: green;
+    font-weight: bold;
+    height: 20px;
+    
+}
+
 #gameTable {
     border-spacing: 0; /* Entfernt den Abstand zwischen den Zellen */
     border-collapse: collapse; /* Sorgt dafür, dass keine Lücken zwischen den Zellrändern entstehen */
