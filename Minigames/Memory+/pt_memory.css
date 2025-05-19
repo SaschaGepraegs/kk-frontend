@@ -11,6 +11,25 @@ h1{
     margin-top: 20px;
 }
 
+#punkte {
+    font-size: 1.5em; /* Schriftgröße */
+    text-align: center; /* Zentrierter Text */
+    margin-top: 20px;
+    color: #690ae6; /* Weißer Text */
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+
+#timer {
+    font-size: 1.5em; /* Schriftgröße */
+    text-align: center; /* Zentrierter Text */
+    margin-top: 20px;
+    color: #eb0d0d; /* Weißer Text */
+    background-color: #ffffff;
+    border-radius: 5px;
+    
+}
+
 #gameTable {
     border-spacing: 0; /* Entfernt den Abstand zwischen den Zellen */
     border-collapse: collapse; /* Sorgt dafür, dass keine Lücken zwischen den Zellrändern entstehen */
