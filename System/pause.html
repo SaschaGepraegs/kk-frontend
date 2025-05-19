@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitte warten...</title>
+    <style>
+        html {
+            box-sizing: border-box;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        body {
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: #fff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        .blur-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 340px;
+            height: 340px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.7;
+            animation: fadein 1.2s;
+        }
+        .blur-orbit-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            filter: blur(32px);
+            background: conic-gradient(
+                #ff6ec4 0deg 90deg,
+                #7873f5 90deg 180deg,
+                #42e695 180deg 270deg,
+                #ff6ec4 270deg 360deg
+            );
+            animation: orbit 3s linear infinite;
+        }
+        @keyframes orbit {
+            100% { transform: rotate(360deg);}
+        }
+        @keyframes fadein {
+            from { opacity: 0; }
+            to { opacity: 0.7; }
+        }
+        .pause-container {
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 30, 30, 0.85);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 3rem 2rem;
+            text-align: center;
+            max-width: 90vw;
+            min-width: 320px;
+            width: 50%;
+            animation: slidein 1s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        @keyframes slidein {
+            from { transform: translateY(60px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .pause-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: pulse 1.5s infinite;
+            display: inline-block;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.7; transform: scale(1);}
+            50% { opacity: 1; transform: scale(1.1);}
+            100% { opacity: 0.7; transform: scale(1);}
+        }
+        h1 {
+            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            animation: fadeintext 1.2s;
+        }
+        @keyframes fadeintext {
+            from { opacity: 0; transform: translateY(-20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadein 1.2s;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            outline: none;
+            box-shadow: 0 2px 8px 0 rgba(127, 127, 255, 0.08);
+        }
+        .tab-btn.active {
+            background: #232526;
+            color: #ff6ec4;
+            font-weight: bold;
+            box-shadow: 0 4px 16px 0 rgba(255, 110, 196, 0.12);
+        }
+        .tab-content {
+            display: none;
+            margin-top: 1rem;
+            animation: fadeintext 1.2s;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .score-list {
+            margin: 0 auto;
+            max-width: 300px;
+            text-align: left;
+            padding: 0;
+            list-style: none;
+        }
+        .score-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            animation: fadeintext 1.2s;
+        }
+        /* --- Mobile Ansicht --- */
+        @media (max-width: 600px) {
+            .blur-orbit {
+                width: 160px;
+                height: 160px;
+                opacity: 0.5;
+            }
+            .pause-container {
+                background: none;
+                box-shadow: none;
+                border-radius: 0;
+                padding: 1.2rem 0.5rem 0.5rem 0.5rem;
+                min-width: unset;
+                max-width: 100vw;
+                width: 100vw;
+                animation: none;
+            }
+            .pause-icon {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+            .tab-btn {
+                font-size: 1rem;
+                padding: 0.5rem 0.8rem;
+            }
+            .score-list {
+                max-width: 95vw;
+                font-size: 1rem;
+            }
+            .tabs {
+                margin-top: 1rem;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blur-orbit">
+        <div class="blur-orbit-inner"></div>
+    </div>
+    <div class="pause-container">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="pause">Pause</button>
+            <button class="tab-btn" data-tab="score">Punktestand</button>
+        </div>
+        <div id="pause" class="tab-content active">
+            <div class="pause-icon">⏸️</div>
+            <h1>Bitte warten...</h1>
+            <p style="animation: fadeintext 1.2s;">Das Spiel ist pausiert.<br>Bitte bleib auf dieser Seite, bis es weitergeht.</p>
+        </div>
+        <div id="score" class="tab-content">
+            <h1>Punktestand</h1>
+            <ul class="score-list">
+                <li><span>Spieler 1</span><span>12</span></li>
+                <li><span>Spieler 2</span><span>9</span></li>
+                <li><span>Spieler 3</span><span>7</span></li>
+                <li><span>Spieler 4</span><span>5</span></li>
+            </ul>
+            <p style="color:#bdbdbd; text-align:center; margin-top:1rem;">(Dummy-Daten)</p>
+        </div>
+    </div>
+    <script>
+        // Tab-Wechsel-Logik
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
