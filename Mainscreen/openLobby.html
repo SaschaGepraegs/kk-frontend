@@ -45,7 +45,7 @@
             document.getElementById("einzigerbutton").innerHTML = "Erstelle Lobby...";
             document.getElementById("einzigerbutton").disabled = true;
             const pin = Math.floor(1000 + Math.random() * 9000);
-            const registerLobbyPromise = fetch('https://kk-backend.vercel.app/registerLobby?gamepin=' + pin, {
+            const response = await fetch('https://kk-backend.vercel.app/registerLobby?gamepin=' + pin, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -54,20 +54,11 @@
                     gamepin: pin
                 })
             });
-            const changeGamePromise = fetch(`https://kk-backend.vercel.app/changeNaechstesGame?lobby=${pin}&spielid=1`);
 
-            const [registerLobbyResponse, changeGameResponse] = await Promise.all([registerLobbyPromise, changeGamePromise]);
-
-            if (registerLobbyResponse.ok && changeGameResponse.ok) {
+            if (response.ok) {
                 window.location.href = `./mainscreen.html?pin=${pin}`;
             } else {
-                if (!registerLobbyResponse.ok) {
-                    alert("Fehler beim Erstellen der Lobby.");
-                } else {
-                    alert("Fehler beim Setzen des nächsten Spiels.");
-                }
-                document.getElementById("einzigerbutton").innerHTML = "Lobby erstellen";
-                document.getElementById("einzigerbutton").disabled = false;
+                alert("Fehler beim Erstellen der Lobby.");
             }
         }
     </script>

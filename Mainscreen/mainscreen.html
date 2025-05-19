@@ -112,6 +112,8 @@
 
         async function starteSpiel() {
             try {
+                // Neuer Request für changeNaechstesSpiel
+                await fetch(`https://kk-backend.vercel.app/changeNaechstesSpiel?lobby=${pin}&spielid=1`);
                 const response = await fetch(`https://kk-backend.vercel.app/losGehts?lobby=${pin}`);
                 if (response.ok) {
                     document.getElementById("startButton").disabled = true;
