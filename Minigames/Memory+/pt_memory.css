@@ -20,6 +20,26 @@ h1{
     border-radius: 5px;
 }
 
+#bonuspunkte{
+    font-size: 1.2em; /* Schriftgröße */
+    text-align: center; /* Zentrierter Text */
+    margin-top: 5px;
+    color: green;
+    font-weight: bold; /* fett */
+    height: 20px;
+}
+
+#streak {
+    font-size: 1.2em; /* Schriftgröße */
+
+    text-align: right;
+    color:darkorange;
+    border-radius: 5px;
+    padding: 4px 12px;
+    position:static;
+    font-style: italic; /* kursiv */
+}
+
 #timer {
     font-size: 1.5em; /* Schriftgröße */
     text-align: center; /* Zentrierter Text */
