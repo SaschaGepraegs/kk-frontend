@@ -1,14 +1,13 @@
 function fortfahren() {
     localStorage.setItem("uic_task1done", "true");
-    window.location.assign("./System/game.html");
+    window.location.assign("/System/pause.html");
 }
 var clicks = 0;
 
 function geklickt() {
     clicks++;
     if (clicks >= 100) {
-        document.getElementById("pizza").style.visibility = "hidden";
-        document.getElementById("fortfahren").style.visibility = "visible";
+        fortfahren();
     }
 }
 var meter = document.querySelector("meter");
