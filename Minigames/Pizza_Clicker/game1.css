@@ -24,3 +24,8 @@ meter {
     margin: 20px auto;
     display: block;
 }
+
+img:hover{ 
+    width: 10%;
+}
+    
