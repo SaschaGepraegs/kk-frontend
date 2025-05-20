@@ -12,13 +12,31 @@
             }
         }
 
+
         function Schere() {
             x = Math.random(1, 3);
-            if (x = 1) {
-                meter.value = clicks;
-                meter.max = 100;
-                setInterval(function() {
-                    meter.value = clicks;
-                }, 100);
-            }
+            if(AnzahlGewonnen <= 2)
+                
+                if (x = 1) {
+                    document.getElementById("Schere").style.visibility = "visible ";
+                    document.getElementById("Papier1").style.visibility = "visible ";
+                }
+                if (x = 2) {
+                    document.getElementById("Schere").style.visibility = "visible ";
+                    document.getElementById("Schere1").style.visibility = "visible ";
+                }
+                 if (x = 2) {
+                    document.getElementById("Schere").style.visibility = "visible ";
+                    document.getElementById("Stein1").style.visibility = "visible ";
         }
+                 document.getElementById("Schere1").style.visibility = "hidden ";
+                 document.getElementById("Schere").style.visibility = "hidden ";
+                 document.getElementById("Papier1").style.visibility = "hidden ";
+                 document.getElementById("Stein1").style.visibility = "visible ";
+                 document.getElementById("Stein").style.visibility = "visible ";
+    }
+
+
+
+
+        
