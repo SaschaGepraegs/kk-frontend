@@ -54,13 +54,8 @@ function kartenVergleichen(){
         if(aktuellAufgedeckteKarten[0].KartenWert == aktuellAufgedeckteKarten[1].KartenWert){ // Wenn die Karten gleich sind
             aktuellAufgedeckteKarten[0].onclick = null; // Klick-Event-Listener entfernen
             aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener entfernen
-            streak++; // Zähler für richtige Paare erhöhen
             punkte++; // Punkte erhöhen
-            if(streak >= 2){
-                punkte++;; // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
-                document.getElementById("bonuspunkte").textContent = "+1 Bonuspunkt"; // "+1 Punkt" anzeigen
-                setTimeout(() => {document.getElementById("bonuspunkte").textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
-            }
+            Streak(); // Streak erhöhen
             //playersData[1].punkte += punkteErhoehen; // Punkte des Spielers erhöhen
             //displayName(); // Namen der Spieler aktualisieren
             document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
@@ -128,6 +123,16 @@ function Timer(){
             spielBeenden(); // Spiel beenden
         }
     }, 1000); // Intervall von 1 Sekunde
+}
+
+// Funktion für den Streak
+function Streak(){
+    streak++; // Zähler für richtige Paare erhöhen
+    if(streak >= 2){
+        punkte++; // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
+        document.getElementById("bonuspunkte").textContent = "+1 Bonuspunkt"; // "+1 Bonuspunkt" anzeigen
+        setTimeout(() => {document.getElementById("bonuspunkte").textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
+    }
 }
 
 // Funktion um die Namen der Spieler zu speichern
