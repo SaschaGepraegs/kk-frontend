@@ -9,24 +9,27 @@
 <body>
     <h1 id="überschrift">SCHERE STEIN PAPIER</h1>
     <meter max="3" value="0" id="meterio1"></meter><br>
-    var x = value;
-    <p id="tasksmade">'x'/3 Gewonnen</p>
+    <p id="tasksmade">'<span id="Agewonnen">3</span>'/3 Gewonnen</p>
     <button id="btn_t1" onclick="window.location.assign(Schere())">Schere</button><br>
     <button id="btn_t2" onclick="window.location.assign(Stein())">Stein</button><br>
     <button id="btn_t3" onclick="window.location.assign(Papier())">Papier</button><br>
 
     <img id="Stein" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/1024px-Rock-paper-scissors_%28rock%29.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 70%; left: 70%; transform: translate(-70%, -70%);"
-         >
+        >
     <img id="Schere" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rock-paper-scissors_%28scissors%29.png/1024px-Rock-paper-scissors_%28scissors%29.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 70%; left: 70%; transform: translate(-70%, -70%);"
-         style="visibility: hidden">
+        style.display="visibility: hidden">
     <img id="Papier" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Rock-paper-scissors_%28paper%29.png/1024px-Rock-paper-scissors_%28paper%29.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 70%; left: 70%; transform: translate(-70%, -70%);"
-        style="visibility: hidden;">
-        <img id="Stein1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/1024px-Rock-paper-scissors_%28rock%29.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 70%; left: 30%; transform: translate(-70%, -30%); rotate: 180"
+        style.display="visibility: hidden">
+
+
+
+
+    <img id="Stein1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/1024px-Rock-paper-scissors_%28rock%29.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 70%; left: 30%; transform: translate(-70%, -30%); rotate: 180"
         >
     <img id="Schere1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rock-paper-scissors_%28scissors%29.png/1024px-Rock-paper-scissors_%28scissors%29.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 70%; left: 30%; transform: translate(-70%, -30%); rotate: 180"
-        style="visibility: hidden">
+        style.display="visibility: hidden">
     <img id="Papier1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Rock-paper-scissors_%28paper%29.png/1024px-Rock-paper-scissors_%28paper%29.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 70%; left: 30%; transform: translate(-70%, -30%); rotate: 180"
-        style="visibility: hidden;">
+        style.display="visibility: hidden">
     <b id="fortfahren" onclick="fortfahren()" style="visibility: hidden;">Fortfahren</b>
 
     <script src="game2.js"></script>
