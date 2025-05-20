@@ -251,13 +251,10 @@
         </div>
         <div id="score" class="tab-content">
             <h1>Punktestand</h1>
-            <ul class="score-list">
-                <li><span>Spieler 1</span><span>12</span></li>
-                <li><span>Spieler 2</span><span>9</span></li>
-                <li><span>Spieler 3</span><span>7</span></li>
-                <li><span>Spieler 4</span><span>5</span></li>
+            <ul class="score-list" id="scoreList">
+                <!-- Punktestände werden per JS eingefügt -->
             </ul>
-            <p style="color:#bdbdbd; text-align:center; margin-top:1rem;">(Dummy-Daten)</p>
+            <p style="color:#bdbdbd; text-align:center; margin-top:1rem;" id="scoreDummyHint"></p>
         </div>
     </div>
     <div id="nextgame" class="nextgame-overlay" style="display:none;">
@@ -344,7 +341,34 @@
             }, 1000);
         }
 
+        // Punktestand laden und anzeigen
+        async function ladePunktestand() {
+            const lobby = localStorage.getItem("uic_gamepin");
+            if (!lobby) return;
+            try {
+                const response = await fetch(`https://kk-backend.vercel.app/getPointsOfPlayer?lobby=${encodeURIComponent(lobby)}`);
+                const punkteArr = await response.json();
+                const scoreList = document.getElementById("scoreList");
+                scoreList.innerHTML = "";
+                if (Array.isArray(punkteArr) && punkteArr.length > 0) {
+                    punkteArr.forEach(eintrag => {
+                        const li = document.createElement("li");
+                        li.innerHTML = `<span>${eintrag.spieler}</span><span>${eintrag.punkte}</span>`;
+                        scoreList.appendChild(li);
+                    });
+                    document.getElementById("scoreDummyHint").textContent = "";
+                } else {
+                    document.getElementById("scoreDummyHint").textContent = "(Keine Punkte vorhanden)";
+                }
+            } catch (e) {
+                document.getElementById("scoreDummyHint").textContent = "(Fehler beim Laden der Punkte)";
+            }
+        }
+
         setInterval(checkNextGame, 1000);
+        // Initial laden und dann alle 3 Sekunden aktualisieren
+        ladePunktestand();
+        setInterval(ladePunktestand, 3000);
     </script>
 </body>
 </html>

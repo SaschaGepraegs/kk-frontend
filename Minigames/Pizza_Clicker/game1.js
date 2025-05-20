@@ -37,7 +37,7 @@ async function spielBeenden() {
     const lobby = localStorage.getItem("uic_gamepin") || "1111";
     const player = localStorage.getItem("uic_name") || "Name";
     try {
-        await fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${localStorage.getItem("uic_gamepin")}&player=${localStorage.getItem("uic_username")}&punkte=${clicks}`,);
+        await fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${localStorage.getItem("uic_gamepin")}&spieler=${localStorage.getItem("uic_username")}&punkte=${clicks}`,);
         window.location.assign("/System/pause.html");
     } catch (e) {
         alert("Fehler beim Übertragen der Punkte!");
