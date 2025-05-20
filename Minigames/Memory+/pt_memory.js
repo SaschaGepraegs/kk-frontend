@@ -22,6 +22,7 @@ window.onload = function(){ // Funktion wird beim Laden der Seite aufgerufen
         cards[i].aufgedeckt = false; // Karte ist nicht aufgedeckt
         KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
     }
+    displayName(); // Namen der Spieler anzeigen
 }
 
 // Funktion, um die Karte aufzudecken
