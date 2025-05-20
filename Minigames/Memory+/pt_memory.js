@@ -148,5 +148,6 @@ async function displayName() {
         });
     } catch (error) {
         console.error("Fehler die Spieler zu speichern:", error);
+        displayName(); // Bei Fehler erneut versuchen
     }
 };
