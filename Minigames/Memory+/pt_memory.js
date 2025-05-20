@@ -13,6 +13,8 @@ window.onload = function(){ // Funktion wird beim Laden der Seite aufgerufen
         {wert: 2, bild: "Prototyp_Images/Karte_Dame.jpg"},
         {wert: 3, bild: "Prototyp_Images/Karte_Bube.jpg"},
         {wert: 3, bild: "Prototyp_Images/Karte_Bube.jpg"},  
+        {wert: 4, bild: "Prototyp_Images/Karte_10.jpg"},
+        {wert: 4, bild: "Prototyp_Images/Karte_10.jpg"},
     ];
     shuffleArray(KartenInfos); // Karten Mischen
     for (let i = 0; i < cards.length; i++) {
