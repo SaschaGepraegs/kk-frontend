@@ -28,6 +28,6 @@ meter {
 img{
     width: 50vw; height: 50vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
-img:hover{
+img:active{
     width: 60vw; height: 60vh;
 }
