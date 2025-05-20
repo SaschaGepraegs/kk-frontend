@@ -2,11 +2,18 @@ const cards = document.getElementsByClassName("cards");
 let aktuellAufgedeckteKarten = []; // Array für aktuell aufgedeckte Karten; array.length ist Zähler für aufgedeckte Karten
 let punkte = 0; // Punktezähler
 let timer = 10; // Timer für die Spielzeit
-let richtigInFolge = 0; // Zählt richtige Paare in Folge
+let streak = 0; // Zählt richtige Paare in Folge
 let playersData = []; // Array für Spielerobjekte mit ID und Name
 let currentPlayerId = 1; // Startet bei Spieler 1
+/*playersData = playersData.map((name, idx, punkte) => ({
+    id: 0,
+    name: "test",
+    punkte: 0,
+}));*/
 
-window.onload = function(){ // Funktion wird beim Laden der Seite aufgerufen
+window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
+
+function spielStarten(){ // Funktion, die das Spiel startet
     Timer(); // Timer starten
     const KartenInfos = [ // Array mit Karteninformationen
         {wert: 1, bild: "Prototyp_Images/Karte_König.jpg"},
@@ -24,8 +31,8 @@ window.onload = function(){ // Funktion wird beim Laden der Seite aufgerufen
         cards[i].KartenBild = KartenInfos[i].bild; // Bild der Karte zuweisen
         cards[i].src = "Prototyp_Images/Karte_Rückseite.jpg"; // Karte wird umgedreht (Rückseite)
         cards[i].aufgedeckt = false; // Karte ist nicht aufgedeckt
-        KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
     }
+    KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
     displayName(); // Namen der Spieler anzeigen
 }
 
@@ -47,43 +54,28 @@ function kartenVergleichen(){
         if(aktuellAufgedeckteKarten[0].KartenWert == aktuellAufgedeckteKarten[1].KartenWert){ // Wenn die Karten gleich sind
             aktuellAufgedeckteKarten[0].onclick = null; // Klick-Event-Listener entfernen
             aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener entfernen
-            richtigInFolge++; // Zähler für richtige Paare erhöhen
-            let punkteErhoehen = 1;
-            if(richtigInFolge >= 2){
-                punkteErhoehen += 1; // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
-                // "+1 Punkt" anzeigen
-                const bonuspunkteDiv = document.getElementById("bonuspunkte");
-                bonuspunkteDiv.textContent = "+1 Bonuspunkt";
-                setTimeout(() => {
-                    bonuspunkteDiv.textContent = "";
-                }, 800); // Nach 0,8 Sekunden wieder ausblenden
+            streak++; // Zähler für richtige Paare erhöhen
+            punkte++; // Punkte erhöhen
+            if(streak >= 2){
+                punkte++;; // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
+                document.getElementById("bonuspunkte").textContent = "+1 Bonuspunkt"; // "+1 Punkt" anzeigen
+                setTimeout(() => {document.getElementById("bonuspunkte").textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
             }
-            punkte += punkteErhoehen; // Punkte erhöhen
-            /*
-
-
-Punkte müssen live angezeigt werden, also die punkte des spielers müssen aktualisiert werden
-
-
-            */
-            document.getElementById("punkte").innerHTML = "Punkte: " + punkte; // Punkte anzeigen
+            //playersData[1].punkte += punkteErhoehen; // Punkte des Spielers erhöhen
+            //displayName(); // Namen der Spieler aktualisieren
+            document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
             timer += 1; // Timer um 1 Sekunde erhöhen
-            document.getElementById("timer").innerHTML = "00:" + (timer < 10 ? "0" : "") + timer; // Timer-Anzeige aktualisieren
-
-            // "+1s" anzeigen
-            const timerPlus = document.getElementById("timerPlus");
-            timerPlus.textContent = "+1s";
-            setTimeout(() => {
-                timerPlus.textContent = "";
-            }, 800); // Nach 0,8 Sekunden wieder ausblenden
+            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer; // Timer-Anzeige aktualisieren
+            document.getElementById("timerPlus").textContent = "+1s"; // "+1s" anzeigen
+            setTimeout(() => {timerPlus.textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]); // Karte zudecken
             KarteZudecken.call(aktuellAufgedeckteKarten[1]); // Karte zudecken
             aktuellAufgedeckteKarten[0].classList.toggle("clicked"); // Animation für Umdrehen
             aktuellAufgedeckteKarten[1].classList.toggle("clicked"); // Animation für Umdrehen
-            richtigInFolge = 0; // Bei Fehler den Zähler zurücksetzen
+            streak = 0; // Bei Fehler den Zähler zurücksetzen
         }
-        document.getElementById("streak").innerHTML = "Streak: " + richtigInFolge; // Streak anzeigen
+        document.getElementById("streak").innerHTML = "Streak: " + streak; // Streak anzeigen
         aktuellAufgedeckteKarten = []; // Array der aktuell aufgedeckten Karten zurücksetzen
     }, 1000); // Timeout von 1 Sekunde
 }
@@ -99,11 +91,6 @@ function KartenSperren(){
 function KartenEntsperren(){
     for(let i =0; i<cards.length; i++){ // Loop durch alle Karten
         cards[i].onclick = function () { // Klick-Event-Listener hinzufügen
-            // Hier prüfen, ob der aktuelle Spieler an der Reihe ist
-            /*if (getMyPlayerId() !== currentPlayerId) {
-                alert("Du bist nicht an der Reihe!");
-                return;
-            }*/
             if(this.aufgedeckt == false && aktuellAufgedeckteKarten.length <2) { // Wenn die angeklickte Karte nicht aufgedeckt ist und weniger als 2 Karten aufgedeckt sind
                 KarteAufdecken.call(this); // Karte aufdecken
                 this.classList.toggle("clicked"); //Animation für Umdrehen
@@ -133,11 +120,12 @@ function Timer(){
     setInterval(function(){ // Intervall für den Timer
         if(timer > 0){ // Wenn der Timer größer als 0 ist
             timer--; // Timer um 1 Sekunde verringern
-            document.getElementById("timer").innerHTML = "00:0" + timer; // Zeit anzeigen
+            document.getElementById("timer").innerHTML = "00:" +(timer < 10? "0" : "") + timer; // Zeit anzeigen
         }else{
             clearInterval(this); // Intervall stoppen
             KartenSperren(); // Karten sperren
             document.getElementById("timer").innerHTML = "Zeit abgelaufen"; // Zeit abgelaufen anzeigen
+            spielBeenden(); // Spiel beenden
         }
     }, 1000); // Intervall von 1 Sekunde
 }
@@ -170,3 +158,8 @@ async function displayName() {
         displayName(); // Bei Fehler erneut versuchen
     }
 }
+
+// Wenn das Spiel beendet ist, wir nach 3s die Pause-Seite aufgerufen
+function spielBeenden() {
+    setTimeout(function(){window.location.assign("https://klickkrawall.netlify.app/system/pause.html");}, 3000);
+ }
