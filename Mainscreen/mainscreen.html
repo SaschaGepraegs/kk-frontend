@@ -175,6 +175,12 @@
         }
 
         async function starteSpiel() {
+            // Erstes Mal starten: losGehts-Request senden
+            try {
+                await fetch(`https://kk-backend.vercel.app/losGehts?lobby=${pin}`);
+            } catch (e) {
+                // Fehler ignorieren, trotzdem fortfahren
+            }
             // Ansicht wechseln
             startButton.style.display = "none";
             spielAuswahlDiv.style.display = "block";
