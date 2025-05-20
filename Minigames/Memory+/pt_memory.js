@@ -143,9 +143,10 @@ async function displayName() {
         const players = await response.json();
 
         // Spieler-Array mit IDs befüllen
-        playersData = players.map((name, idx) => ({
+        playersData = players.map((name, idx, punkte) => ({
             id: idx + 1,
             name: name,
+            punkte: 0,
         }));
 
         // Spieler im HTML anzeigen
@@ -153,7 +154,7 @@ async function displayName() {
         playerListContainer.innerHTML = "";
         playersData.forEach(player => {
             const playerElement = document.createElement("div");
-            playerElement.textContent = `${player.id}. ${player.name}`;
+            playerElement.textContent = `${player.name}: ${player.punkte}`;
             playerElement.className = "player";
             playerListContainer.appendChild(playerElement);
         });
