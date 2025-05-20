@@ -13,30 +13,75 @@
         }
 
 
-        function Schere() {
+           function Schere() {
             x = Math.random(1, 3);
+
             if(AnzahlGewonnen <= 2)
                 
                 if (x = 1) {
-                    document.getElementById("Schere").style.display = "visible ";
-                    document.getElementById("Papier1").style.display = "visible ";
+                    document.getElementById("Schere").style.visibility = "visible ";
+                    document.getElementById("Papier1").style.visibility = "visible ";
                     AnzahlGewonnen++;
                 }
                 if (x = 2) {
-                    document.getElementById("Schere").style.display = "visible ";
-                    document.getElementById("Schere1").style.display = "visible ";
+                    document.getElementById("Schere").style.visibility = "visible ";
+                    document.getElementById("Schere1").style.visibility = "visible ";
                 }
                  if (x = 2) {
-                    document.getElementById("Schere").style.display = "visible ";
-                    document.getElementById("Stein1").style.display = "visible ";
+                    document.getElementById("Schere").style.visibility = "visible ";
+                    document.getElementById("Stein1").style.visibility = "visible ";
         }
-                 document.getElementById("Schere1").style.visibility = "hidden ";
-                 document.getElementById("Schere").style.visibility = "hidden ";
-                 document.getElementById("Papier1").style.visibility = "hidden ";
-                 document.getElementById("Stein1").style.visibility = "visible ";
-                 document.getElementById("Stein").style.visibility = "visible ";
+    }
+    
+        function Papier() {
+            x = Math.random(1, 3);
+            
+            if(AnzahlGewonnen <= 2)
+                
+                if (x = 1) {
+                    document.getElementById("Papier").style.visibility = "visible ";
+                    document.getElementById("Stein1").style.visibility = "visible ";
+                    AnzahlGewonnen++;
+                }
+                if (x = 2) {
+                    document.getElementById("Papier").style.visibility = "visible ";
+                    document.getElementById("Papier1").style.visibility = "visible ";
+                }
+                 if (x = 2) {
+                    document.getElementById("Papier").style.visibility = "visible ";
+                    document.getElementById("Schere1").style.visibility = "visible ";
+        }
     }
 
+        function Stein(){
+            x = Math.random(1, 3);
+            
+            if(AnzahlGewonnen <= 2)
+                
+                if (x = 1) {
+                    document.getElementById("Stein").style.visibility = "visible ";
+                    document.getElementById("Schere1").style.visibility = "visible ";
+                    AnzahlGewonnen++;
+                }
+                if (x = 2) {
+                    document.getElementById("Stein").style.visibility = "visible ";
+                    document.getElementById("Stein1").style.visibility = "visible ";
+                }
+                 if (x = 2) {
+                    document.getElementById("Stein").style.visibility = "visible ";
+                    document.getElementById("Papier1").style.visibility = "visible ";
+        }
+    }
+
+
+    function MachAufAnfangJetztAlter(){
+        document.getElementById("Stein1").style.visibility = "visible ";
+        document.getElementById("Stein").style.visibility = "visible ";
+        document.getElementById("Stein").style.visibility = "hidden ";
+        document.getElementById("Stein").style.visibility = "hidden ";
+        document.getElementById("Stein").style.visibility = "hidden ";
+        document.getElementById("Stein").style.visibility = "hidden ";
+    }
 
 
 
