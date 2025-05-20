@@ -24,12 +24,3 @@ meter {
     margin: 20px auto;
     display: block;
 }
-
-#fortfahren {
-    font-size: 1.5rem;
-    /* Sichtbarer Button für mobile Geräte */
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-    cursor: pointer;
-}

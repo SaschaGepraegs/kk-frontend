@@ -8,12 +8,21 @@
 
 <body>
     <h1>Pizza-Clicker!</h1>
-    <p>Klicke 100-mal auf die Pizza, um fortzufahren!</p>
+    <p>Klicke so oft wie möglich in <span id="timer">30</span> Sekunden auf die Pizza!</p>
     <meter value="0" max="100"></meter>
     <img id="pizza" src="https://png.pngtree.com/png-vector/20240730/ourmid/pngtree-pizza-with-cheese-on-a-white-background-top-viewvery-high-quality-png-image_13292309.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
         onclick="geklickt()">
-    <b id="fortfahren" onclick="fortfahren()" style="visibility: hidden;">Fortfahren</b>
     <script src="game1.js"></script>
+    <script>
+        // Timer-Anzeige aktualisieren
+        let timerElem = document.getElementById("timer");
+        let timerValue = 30;
+        let timerInterval = setInterval(() => {
+            timerValue--;
+            if (timerValue >= 0) timerElem.textContent = timerValue;
+            if (timerValue <= 0) clearInterval(timerInterval);
+        }, 1000);
+    </script>
 </body>
 
 </html>
