@@ -25,7 +25,10 @@ meter {
     display: block;
 }
 
+img{
+    width: 100px;
+}
 img:hover{ 
-    width: 10%;
+    width: 500px;
 }
     
