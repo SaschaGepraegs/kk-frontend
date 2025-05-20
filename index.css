@@ -1,4 +1,4 @@
-        mark {
+mark {
             background-color: rgb(196, 199, 0);
             border-radius: 10px;
             /* Abrundung */
@@ -69,4 +69,9 @@
         .bottone1:active {
             transform: scale(0.97);
             box-shadow: 7px 5px 56px -10px #C3D900;
+        }
+        
+        #lobbySection, #nameSection {
+            margin-top: 100px;
+            transition: all 0.3s;
         }

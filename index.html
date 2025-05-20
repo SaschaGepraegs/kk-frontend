@@ -7,19 +7,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KlickKrawall</title>
     <link rel="stylesheet" href="index.css">
+    <style>
+        /* Apple-ähnlicher Ladekreis */
+        #loaderOverlay {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            inset: 0;
+            background: rgba(38, 38, 38, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .apple-spinner {
+            width: 60px;
+            height: 60px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .apple-spinner div {
+            transform-origin: 30px 30px;
+            animation: apple-spinner 1.2s linear infinite;
+            position: absolute;
+            left: 27px;
+            top: 6px;
+        }
+
+        .apple-spinner div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 18px;
+            border-radius: 3px;
+            background: #fff;
+            opacity: 0.8;
+        }
+
+        .apple-spinner div:nth-child(1) {
+            transform: rotate(0deg);
+            animation-delay: -1.1s;
+        }
+
+        .apple-spinner div:nth-child(2) {
+            transform: rotate(30deg);
+            animation-delay: -1s;
+        }
+
+        .apple-spinner div:nth-child(3) {
+            transform: rotate(60deg);
+            animation-delay: -0.9s;
+        }
+
+        .apple-spinner div:nth-child(4) {
+            transform: rotate(90deg);
+            animation-delay: -0.8s;
+        }
+
+        .apple-spinner div:nth-child(5) {
+            transform: rotate(120deg);
+            animation-delay: -0.7s;
+        }
+
+        .apple-spinner div:nth-child(6) {
+            transform: rotate(150deg);
+            animation-delay: -0.6s;
+        }
+
+        .apple-spinner div:nth-child(7) {
+            transform: rotate(180deg);
+            animation-delay: -0.5s;
+        }
+
+        .apple-spinner div:nth-child(8) {
+            transform: rotate(210deg);
+            animation-delay: -0.4s;
+        }
+
+        .apple-spinner div:nth-child(9) {
+            transform: rotate(240deg);
+            animation-delay: -0.3s;
+        }
+
+        .apple-spinner div:nth-child(10) {
+            transform: rotate(270deg);
+            animation-delay: -0.2s;
+        }
+
+        .apple-spinner div:nth-child(11) {
+            transform: rotate(300deg);
+            animation-delay: -0.1s;
+        }
+
+        .apple-spinner div:nth-child(12) {
+            transform: rotate(330deg);
+            animation-delay: 0s;
+        }
+
+        @keyframes apple-spinner {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.15;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div style="margin-top: 100px;">
         <h1>KlickKrawall <mark> BETA </mark></h1>
     </div>
-    <div style="margin-top: 100px;">
-        <p>Bitte gib hier deinen Nutzernamen ein:</p>
-        <input type="text" name="name" id="namenseingabe" class="namenseingabe bottone1">
+    <div id="lobbySection" style="margin-top: 100px;">
         <p>Bitte gib hier deinen Lobby-Code ein:</p>
-        <input type="text" name="name2" id="lobbyeingabe" class="namenseingabe bottone1" maxlength="4" max="9999" pattern="\d{1,4}" inputmode="numeric">
-        <p>Klicke <a href="./Mainscreen/openLobby.html" style="color:#C3D900">hier</a>, um zum eine Lobby zu hosten.</p>
-        <div style="margin-top: 100px;"><button onclick="joinLobby()" id="bottone1">Der Lobby beitreten</button></div>
+        <input type="text" id="lobbyeingabe" class="namenseingabe bottone1" maxlength="4" pattern="\d{1,4}"
+            inputmode="numeric" autocomplete="off">
+        <div style="margin-top: 30px;">
+            <button onclick="checkLobby()" id="bottone1">Weiter</button>
+        </div>
+    </div>
+    <div id="nameSection" style="display:none; margin-top: 100px;">
+        <p>Bitte gib hier deinen Nutzernamen ein:</p>
+        <input type="text" id="namenseingabe" class="namenseingabe bottone1" autocomplete="off">
+        <div style="margin-top: 30px;">
+            <button onclick="joinLobby()" id="bottone2" class="bottone1">Weiter</button>
+        </div>
+    </div>
+    <div id="loaderOverlay">
+        <div class="apple-spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <p style="margin-top: 60px;">Klicke <a href="./Mainscreen/openLobby.html" style="color:#C3D900">hier</a>, um
+        eine Lobby zu hosten.</p>
 </body>
 
 </html>
