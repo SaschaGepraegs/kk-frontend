@@ -18,16 +18,17 @@
             if(AnzahlGewonnen <= 2)
                 
                 if (x = 1) {
-                    document.getElementById("Schere").style.visibility = "visible ";
-                    document.getElementById("Papier1").style.visibility = "visible ";
+                    document.getElementById("Schere").style.display = "visible ";
+                    document.getElementById("Papier1").style.display = "visible ";
+                    AnzahlGewonnen++;
                 }
                 if (x = 2) {
-                    document.getElementById("Schere").style.visibility = "visible ";
-                    document.getElementById("Schere1").style.visibility = "visible ";
+                    document.getElementById("Schere").style.display = "visible ";
+                    document.getElementById("Schere1").style.display = "visible ";
                 }
                  if (x = 2) {
-                    document.getElementById("Schere").style.visibility = "visible ";
-                    document.getElementById("Stein1").style.visibility = "visible ";
+                    document.getElementById("Schere").style.display = "visible ";
+                    document.getElementById("Stein1").style.display = "visible ";
         }
                  document.getElementById("Schere1").style.visibility = "hidden ";
                  document.getElementById("Schere").style.visibility = "hidden ";
