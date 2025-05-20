@@ -161,16 +161,15 @@
             try {
                 const res = await fetch(`https://kk-backend.vercel.app/naechstesSpiel?lobby=${pin}`);
                 const val = await res.json();
-                // Wenn ein Spiel gesetzt wurde, Auswahl deaktivieren
+                // Ansicht je nach Status anpassen
                 if (val !== false && val !== null) {
                     spielAuswahlDiv.style.display = "none";
                     auswahlStatus.textContent = "";
-                    if (auswahlPolling) clearInterval(auswahlPolling);
                 } else {
                     spielAuswahlDiv.style.display = "block";
                 }
             } catch (e) {
-                // Fehler ignorieren lol
+                // Fehler ignorieren
             }
         }
 
@@ -185,9 +184,10 @@
             startButton.style.display = "none";
             spielAuswahlDiv.style.display = "block";
             auswahlStatus.textContent = "";
-            // Polling starten, um zu prüfen, ob schon ein Spiel gesetzt wurde
-            if (auswahlPolling) clearInterval(auswahlPolling);
-            auswahlPolling = setInterval(checkNaechstesSpiel, 1000);
+            // Polling dauerhaft aktiv lassen
+            if (!auswahlPolling) {
+                auswahlPolling = setInterval(checkNaechstesSpiel, 1000);
+            }
             // Initial prüfen
             checkNaechstesSpiel();
         }
