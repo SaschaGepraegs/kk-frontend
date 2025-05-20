@@ -59,6 +59,13 @@ function kartenVergleichen(){
                 }, 800); // Nach 0,8 Sekunden wieder ausblenden
             }
             punkte += punkteErhoehen; // Punkte erhöhen
+            /*
+
+
+Punkte müssen live angezeigt werden, also die punkte des spielers müssen aktualisiert werden
+
+
+            */
             document.getElementById("punkte").innerHTML = "Punkte: " + punkte; // Punkte anzeigen
             timer += 1; // Timer um 1 Sekunde erhöhen
             document.getElementById("timer").innerHTML = "00:" + (timer < 10 ? "0" : "") + timer; // Timer-Anzeige aktualisieren
@@ -93,11 +100,11 @@ function KartenEntsperren(){
     for(let i =0; i<cards.length; i++){ // Loop durch alle Karten
         cards[i].onclick = function () { // Klick-Event-Listener hinzufügen
             // Hier prüfen, ob der aktuelle Spieler an der Reihe ist
-            if (getMyPlayerId() !== currentPlayerId) {
+            /*if (getMyPlayerId() !== currentPlayerId) {
                 alert("Du bist nicht an der Reihe!");
                 return;
-            }
-            if (this.aufgedeckt == false && aktuellAufgedeckteKarten.length <2) { // Wenn die angeklickte Karte nicht aufgedeckt ist und weniger als 2 Karten aufgedeckt sind
+            }*/
+            if(this.aufgedeckt == false && aktuellAufgedeckteKarten.length <2) { // Wenn die angeklickte Karte nicht aufgedeckt ist und weniger als 2 Karten aufgedeckt sind
                 KarteAufdecken.call(this); // Karte aufdecken
                 this.classList.toggle("clicked"); //Animation für Umdrehen
                 aktuellAufgedeckteKarten.push(this); // Karte in das Array der aktuell aufgedeckten Karten hinzufügen
