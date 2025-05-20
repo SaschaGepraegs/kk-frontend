@@ -3,6 +3,8 @@ let aktuellAufgedeckteKarten = []; // Array für aktuell aufgedeckte Karten; arr
 let punkte = 0; // Punktezähler
 let timer = 10; // Timer für die Spielzeit
 let richtigInFolge = 0; // Zählt richtige Paare in Folge
+let playersData = []; // Array für Spielerobjekte mit ID und Name
+let currentPlayerId = 1; // Startet bei Spieler 1
 
 window.onload = function(){ // Funktion wird beim Laden der Seite aufgerufen
     Timer(); // Timer starten
@@ -90,6 +92,11 @@ function KartenSperren(){
 function KartenEntsperren(){
     for(let i =0; i<cards.length; i++){ // Loop durch alle Karten
         cards[i].onclick = function () { // Klick-Event-Listener hinzufügen
+            // Hier prüfen, ob der aktuelle Spieler an der Reihe ist
+            if (getMyPlayerId() !== currentPlayerId) {
+                alert("Du bist nicht an der Reihe!");
+                return;
+            }
             if (this.aufgedeckt == false && aktuellAufgedeckteKarten.length <2) { // Wenn die angeklickte Karte nicht aufgedeckt ist und weniger als 2 Karten aufgedeckt sind
                 KarteAufdecken.call(this); // Karte aufdecken
                 this.classList.toggle("clicked"); //Animation für Umdrehen
@@ -131,25 +138,27 @@ function Timer(){
 // Funktion um die Namen der Spieler zu speichern
 async function displayName() {
     try {
-        // Hole den Namen des Spielers aus der API
+        // Hole die Spielernamen aus der API
         const response = await fetch('https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=' + localStorage.getItem("uic_gamepin"));
         const players = await response.json();
 
-        //Liste für die Spieler
+        // Spieler-Array mit IDs befüllen
+        playersData = players.map((name, idx) => ({
+            id: idx + 1,
+            name: name,
+        }));
+
+        // Spieler im HTML anzeigen
         const playerListContainer = document.getElementById("playerList");
-
-        
         playerListContainer.innerHTML = "";
-
-       
-        players.forEach(player => {
+        playersData.forEach(player => {
             const playerElement = document.createElement("div");
-            playerElement.textContent = player; 
-            playerElement.className = "player"; 
+            playerElement.textContent = `${player.id}. ${player.name}`;
+            playerElement.className = "player";
             playerListContainer.appendChild(playerElement);
         });
     } catch (error) {
         console.error("Fehler die Spieler zu speichern:", error);
         displayName(); // Bei Fehler erneut versuchen
     }
-};
+}
