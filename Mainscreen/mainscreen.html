@@ -187,7 +187,7 @@
     <h2 id="pinAnzeige">PIN: </h2>
     <div id="spielerListe">Spieler werden geladen...</div>
     <button id="startButton">Spiel starten</button>
-    <button id="spielBeendenBtn" href="index.html">Spiel beenden</button>
+    <button id="spielBeendenBtn">Spiel beenden</button>
 
     <!-- Popup für Spielauswahl -->
     <div id="popupOverlay">
@@ -340,6 +340,7 @@
         spielBeendenBtn.addEventListener("click", async () => {
             fetch("https://kk-backend.vercel.app/reset?lobby=" + pin);
             alert("Spiel beendet.");
+            window.location.href = "index.html";
             return;
         });
 
