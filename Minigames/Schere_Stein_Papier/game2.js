@@ -64,6 +64,7 @@ window.onload = startGame;
                     document.getElementById("Schere").style.visibility = "visible ";
                     document.getElementById("Stein1").style.visibility = "visible ";
         }
+        setTimeout(MachAufAnfangJetztAlter(),1500);
     }
     
         function Papier() {
@@ -84,6 +85,7 @@ window.onload = startGame;
                     document.getElementById("Papier").style.visibility = "visible ";
                     document.getElementById("Schere1").style.visibility = "visible ";
         }
+        setTimeout(MachAufAnfangJetztAlter(),1500);
     }
 
         function Stein(){
@@ -104,16 +106,17 @@ window.onload = startGame;
                     document.getElementById("Stein").style.visibility = "visible ";
                     document.getElementById("Papier1").style.visibility = "visible ";
         }
+        setTimeout(MachAufAnfangJetztAlter(),1500);
     }
 
 
     function MachAufAnfangJetztAlter(){
         document.getElementById("Stein1").style.visibility = "visible ";
         document.getElementById("Stein").style.visibility = "visible ";
-        document.getElementById("Stein").style.visibility = "hidden ";
-        document.getElementById("Stein").style.visibility = "hidden ";
-        document.getElementById("Stein").style.visibility = "hidden ";
-        document.getElementById("Stein").style.visibility = "hidden ";
+        document.getElementById("Schere").style.visibility = "hidden ";
+        document.getElementById("Schere1").style.visibility = "hidden ";
+        document.getElementById("Papier").style.visibility = "hidden ";
+        document.getElementById("Papier1").style.visibility = "hidden ";
     }
 
 
