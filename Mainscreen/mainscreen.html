@@ -50,7 +50,6 @@
         }
 
         #spielBeendenBtn {
-            visibility: hidden;
             display: block;
             margin: auto;
             padding: 1rem 1.46rem;
@@ -188,7 +187,7 @@
     <h2 id="pinAnzeige">PIN: </h2>
     <div id="spielerListe">Spieler werden geladen...</div>
     <button id="startButton">Spiel starten</button>
-    <button id="spielBeendenBtn">Spiel beenden</button>
+    <button id="spielBeendenBtn" href="index.html">Spiel beenden</button>
 
     <!-- Popup für Spielauswahl -->
     <div id="popupOverlay">
@@ -234,7 +233,6 @@
                 const spielGestartet = await response.json();
                 if (spielGestartet) {
                     document.getElementById("startButton").disabled = true;
-                    document.getElementById("spielBeendenBtn").style.visibility = "visible";
                     document.getElementById("startButton").textContent = "Spiel läuft bereits";
                 }
             } catch (err) {}
@@ -341,7 +339,7 @@
 
         spielBeendenBtn.addEventListener("click", async () => {
             fetch("https://kk-backend.vercel.app/reset?lobby=" + pin);
-            alert("Reset durchgeführt.");
+            alert("Spiel beendet.");
             return;
         });
 
