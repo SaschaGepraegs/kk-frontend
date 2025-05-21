@@ -75,6 +75,7 @@ function Schere() {
     
         function Papier() {
             let x = Math.floor(Math.random() * 3) + 1;
+            Warte = 0;
                 
                 if (x === 1 && Warte === 0) {
                     document.getElementById("Stein").style.visibility = "hidden";
@@ -100,6 +101,7 @@ function Schere() {
 
         function Stein(){
             let x = Math.floor(Math.random() * 3) + 1;
+            Warte = 0;
                 
                 if (x === 1 && Warte === 0) {
                     document.getElementById("Stein1").style.visibility = "hidden";
