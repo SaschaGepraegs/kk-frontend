@@ -49,7 +49,6 @@ window.onload = startGame;
            function Schere() {
             x = Math.random(1, 3);
 
-            if(AnzahlGewonnen <= 2)
                 
                 if (x = 1) {
                     document.getElementById("Schere").style.visibility = "visible ";
@@ -62,15 +61,12 @@ window.onload = startGame;
                 }
                  if (x = 2) {
                     document.getElementById("Schere").style.visibility = "visible ";
-                    document.getElementById("Stein1").style.visibility = "visible ";
-        }
+                    document.getElementById("Stein1").style.visibility = "visible ";}
         setTimeout(MachAufAnfangJetztAlter(),1500);
     }
     
         function Papier() {
             x = Math.random(1, 3);
-            
-            if(AnzahlGewonnen <= 2)
                 
                 if (x = 1) {
                     document.getElementById("Papier").style.visibility = "visible ";
@@ -90,8 +86,6 @@ window.onload = startGame;
 
         function Stein(){
             x = Math.random(1, 3);
-            
-            if(AnzahlGewonnen <= 2)
                 
                 if (x = 1) {
                     document.getElementById("Stein").style.visibility = "visible ";
