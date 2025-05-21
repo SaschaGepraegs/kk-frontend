@@ -28,11 +28,8 @@ meter {
 img{
     width: 50vw; height: 50vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
-.img-wrapper {
-    display: inline-block;
-    postion: relative;
-}
-.img-wrapper:active img{
+
+img:active {
 animation: shake 0.3s;
 }
     @keyframes shake {
