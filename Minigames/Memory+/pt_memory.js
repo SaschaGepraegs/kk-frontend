@@ -3,17 +3,13 @@ let aktuellAufgedeckteKarten = []; // Array für aktuell aufgedeckte Karten; arr
 let punkte = 0; // Punktezähler
 let timer = 10; // Timer für die Spielzeit
 let streak = 0; // Zählt richtige Paare in Folge
-let playersData = []; // Array für Spielerobjekte mit ID und Name
-let currentPlayerId = 1; // Startet bei Spieler 1
-/*playersData = playersData.map((name, idx, punkte) => ({
-    id: 0,
-    name: "test",
-    punkte: 0,
-}));*/
 
 window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
 
 function spielStarten(){ // Funktion, die das Spiel startet
+    punkte = 0; // Punkte zurücksetzen
+    timer = 10; // Timer zurücksetzen
+    streak = 0; // Streak zurücksetzen
     Timer(); // Timer starten
     const KartenInfos = [ // Array mit Karteninformationen
         {wert: 1, bild: "Prototyp_Images/Karte_König.jpg"},
@@ -56,8 +52,6 @@ function kartenVergleichen(){
             aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener entfernen
             punkte++; // Punkte erhöhen
             Streak(); // Streak erhöhen
-            //playersData[1].punkte += punkteErhoehen; // Punkte des Spielers erhöhen
-            //displayName(); // Namen der Spieler aktualisieren
             document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
             timer += 1; // Timer um 1 Sekunde erhöhen
             document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer; // Timer-Anzeige aktualisieren
@@ -135,36 +129,16 @@ function Streak(){
     }
 }
 
-// Funktion um die Namen der Spieler zu speichern
-async function displayName() {
+//Funktion, die nach Ende des Spiels aufgerufen wird
+async function spielBeenden() {
+    // Lobby und Spielername aus localStorage holen
+    const lobby = localStorage.getItem("uic_gamepin") || "1111";
+    const player = localStorage.getItem("uic_name") || "Name";
     try {
-        // Hole die Spielernamen aus der API
-        const response = await fetch('https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=' + localStorage.getItem("uic_gamepin"));
-        const players = await response.json();
-
-        // Spieler-Array mit IDs befüllen
-        playersData = players.map((name, idx, punkte) => ({
-            id: idx + 1,
-            name: name,
-            punkte: 0,
-        }));
-
-        // Spieler im HTML anzeigen
-        const playerListContainer = document.getElementById("playerList");
-        playerListContainer.innerHTML = "";
-        playersData.forEach(player => {
-            const playerElement = document.createElement("div");
-            playerElement.textContent = `${player.name}: ${player.punkte}`;
-            playerElement.className = "player";
-            playerListContainer.appendChild(playerElement);
-        });
-    } catch (error) {
-        console.error("Fehler die Spieler zu speichern:", error);
-        displayName(); // Bei Fehler erneut versuchen
+        await fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${localStorage.getItem("uic_gamepin")}&spieler=${localStorage.getItem("uic_username")}&punkte=${punkte}`,);
+        setTimeout(() => {window.location.replace("/System/pause.html");}, 3000); // Nach 3 Sekunden auf die Pause-Seite weiterleiten
+    } catch (e) {
+        alert("Fehler beim Übertragen der Punkte!");
+        setTimeout(() => {window.location.replace("/System/pause.html");}, 3000); // Nach 3 Sekunden auf die Pause-Seite weiterleiten
     }
-}
-
-// Wenn das Spiel beendet ist, wir nach 3s die Pause-Seite aufgerufen
-function spielBeenden() {
-    setTimeout(function(){window.location.assign("https://klickkrawall.netlify.app/system/pause.html");}, 3000);
  }
