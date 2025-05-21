@@ -4,6 +4,7 @@ function fortfahren() {
 }
 var AnzahlGewonnen = 0;
 var timer = 30;
+var Warte = 1;
 var intervalId = null;
 var timerId = null;
 var meter = document.querySelector("meter");
@@ -48,8 +49,9 @@ window.onload = startGame;
 
 function Schere() {
     let x = Math.floor(Math.random() * 3) + 1;
+    Warte = 0;
               
-    if (x === 1) {
+    if (x === 1 && Warte === 0) {
         document.getElementById("Stein").style.visibility = "hidden";
         document.getElementById("Stein1").style.visibility = "hidden";
         document.getElementById("Schere").style.visibility = "visible";
@@ -57,63 +59,66 @@ function Schere() {
         
         AnzahlGewonnen++;
         }
-    else if (x === 2) {
+    else if (x === 2 && Warte === 0) {
         document.getElementById("Stein").style.visibility = "hidden";
         document.getElementById("Stein1").style.visibility = "hidden";
         document.getElementById("Schere").style.visibility = "visible";
         document.getElementById("Schere1").style.visibility = "visible";
         }
-    else if (x === 3) {
+    else if (x === 3 && Warte === 0) {
         document.getElementById("Stein").style.visibility = "hidden";
         document.getElementById("Schere").style.visibility = "visible";
         document.getElementById("Stein1").style.visibility = "visible";}
         setTimeout(MachAufAnfangJetztAlter,1500);
+        Warte = 1;
     }
     
         function Papier() {
             let x = Math.floor(Math.random() * 3) + 1;
                 
-                if (x === 1) {
+                if (x === 1 && Warte === 0) {
                     document.getElementById("Stein").style.visibility = "hidden";
                     document.getElementById("Papier").style.visibility = "visible";
                     document.getElementById("Stein1").style.visibility = "visible";
                     AnzahlGewonnen++;
                 }
-                if (x === 2) {
+                if (x === 2 && Warte === 0) {
                     document.getElementById("Stein").style.visibility = "hidden";
                     document.getElementById("Stein1").style.visibility = "hidden";
                     document.getElementById("Papier").style.visibility = "visible";
                     document.getElementById("Papier1").style.visibility = "visible";
                 }
-                 if (x === 2) {
+                 if (x === 3 && Warte === 0) {
                     document.getElementById("Stein").style.visibility = "hidden";
                     document.getElementById("Stein1").style.visibility = "hidden";
                     document.getElementById("Papier").style.visibility = "visible";
                     document.getElementById("Schere1").style.visibility = "visible";
         }
         setTimeout(MachAufAnfangJetztAlter,1500);
+        Warte = 1;
     }
 
         function Stein(){
             let x = Math.floor(Math.random() * 3) + 1;
                 
-                if (x === 1) {
+                if (x === 1 && Warte === 0) {
                     document.getElementById("Stein1").style.visibility = "hidden";
                     document.getElementById("Stein").style.visibility = "visible";
                     document.getElementById("Schere1").style.visibility = "visible";
                     
                     AnzahlGewonnen++;
                 }
-                if (x === 2) {
+                if (x === 2 && Warte === 0) {
                     document.getElementById("Stein").style.visibility = "visible";
                     document.getElementById("Stein1").style.visibility = "visible";
                 }
-                 if (x === 2) {
+                 if (x === 2 && Warte === 0) {
                     document.getElementById("Stein1").style.visibility = "hidden";
                     document.getElementById("Stein").style.visibility = "visible";
                     document.getElementById("Papier1").style.visibility = "visible";
         }
         setTimeout(MachAufAnfangJetztAlter,1500);
+        Warte = 1;
     }
 
 
