@@ -339,6 +339,12 @@
             }
         });
 
+        spielBeendenBtn.addEventListener("click", async () => {
+            fetch("https://kk-backend.vercel.app/reset?lobby=" + pin);
+            alert("Reset durchgeführt.");
+            return;
+        });
+
         startButton.addEventListener("click", starteSpiel);
 
         ladeSpieler();
