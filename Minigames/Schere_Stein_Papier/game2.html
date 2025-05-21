@@ -34,5 +34,15 @@
         >
     <b id="fortfahren" onclick="fortfahren()" style="visibility: hidden;">Fortfahren</b>
 
-    <script src="game2.js"></script>
+    <script>
+// Timer-Anzeige aktualisieren
+        let timerElem = document.getElementById("timer");
+        let timerValue = 30;
+        let timerInterval = setInterval(() => {
+            timerValue--;
+            if (timerValue >= 0) timerElem.textContent = timerValue;
+            if (timerValue <= 0) clearInterval(timerInterval);
+        }, 1000);
+        
+    </script>
 </body>
