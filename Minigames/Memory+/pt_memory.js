@@ -86,7 +86,7 @@ function kartenVergleichen(){
             }, 400); // Zeit für das Zudecken
         }
         document.getElementById("streak").innerHTML = "Streak: " + streak;
-    }, 400); // Zeit, wie lange beide Karten offen bleiben
+    }, 500); // Zeit, wie lange beide Karten offen bleiben
 }
 
 // Funktion um die Karten zu sperren
