@@ -188,7 +188,7 @@
     <div id="spielerListe">Spieler werden geladen...</div>
     <button id="startButton">Spiel starten</button>
     <button id="spielBeendenBtn">Spiel beenden</button>
-
+    <button id="gameAuswahlBtn" style="display:none; margin:2rem auto 0 auto; padding:1rem 2rem; font-size:1.1rem; background:#ff6ec4; color:#fff; border:none; border-radius:8px; cursor:pointer;">Nächstes Spiel auswählen</button>
     <!-- Popup für Spielauswahl -->
     <div id="popupOverlay">
         <div id="popupMenu">
@@ -244,6 +244,7 @@
         const gameGrid = document.getElementById("gameGrid");
         const spielSetzenBtn = document.getElementById("spielSetzenBtn");
         const auswahlStatus = document.getElementById("auswahlStatus");
+        const gameAuswahlBtn = document.getElementById("gameAuswahlBtn");
 
         // Spiele-Daten (Name + Dummy-Logo)
         const spiele = [
@@ -289,34 +290,42 @@
         }
         renderGameGrid();
 
-        let auswahlPolling = null;
-
+        // Polling für Button-Anzeige
         async function checkNaechstesSpiel() {
             try {
                 const res = await fetch(`https://kk-backend.vercel.app/naechstesSpiel?lobby=${pin}`);
                 const val = await res.json();
                 if (val !== false && val !== null) {
+                    // Spiel läuft, Button ausblenden, Popup schließen
+                    gameAuswahlBtn.style.display = "none";
                     popupOverlay.style.display = "none";
                     auswahlStatus.textContent = "";
                     selectedGameId = null;
                     spielSetzenBtn.disabled = true;
                     document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
                 } else {
-                    popupOverlay.style.display = "flex";
+                    // Kein Spiel läuft, Button einblenden
+                    gameAuswahlBtn.style.display = "block";
                 }
             } catch (e) {}
         }
+
+        // Popup nur öffnen, wenn Button gedrückt wird
+        gameAuswahlBtn.addEventListener("click", () => {
+            popupOverlay.style.display = "flex";
+            auswahlStatus.textContent = "";
+            selectedGameId = null;
+            spielSetzenBtn.disabled = true;
+            document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
+        });
 
         async function starteSpiel() {
             try {
                 await fetch(`https://kk-backend.vercel.app/losGehts?lobby=${pin}`);
             } catch (e) {}
             startButton.style.display = "none";
-            popupOverlay.style.display = "flex";
-            auswahlStatus.textContent = "";
-            selectedGameId = null;
-            spielSetzenBtn.disabled = true;
-            document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
+            // Kein automatisches Öffnen des Popups mehr!
+            // Button für Gameauswahl wird durch Polling angezeigt
             if (!auswahlPolling) {
                 auswahlPolling = setInterval(checkNaechstesSpiel, 1000);
             }
@@ -358,12 +367,14 @@
         popupOverlay.addEventListener("mousedown", function(e) {
             if (e.target === popupOverlay) {
                 popupOverlay.style.display = "none";
-                // Auswahl zurücksetzen, aber Polling läuft weiter
                 selectedGameId = null;
                 spielSetzenBtn.disabled = true;
                 document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
             }
         });
+
+        // Polling für Gameauswahl-Button dauerhaft aktivieren
+        let auswahlPolling = setInterval(checkNaechstesSpiel, 1000);
     </script>
 </body>
 </html>
