@@ -107,7 +107,7 @@ td {
 }
 
 .cards.found {
-    animation: fadeOut 0.7s forwards;
+    animation: fadeOut 0.4s forwards;
 }
 
 @keyframes fadeOut {

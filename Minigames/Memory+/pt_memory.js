@@ -66,7 +66,7 @@ function kartenVergleichen(){
                 aktuellAufgedeckteKarten[1].style.visibility = "hidden";
                 aktuellAufgedeckteKarten = [];
                 KartenEntsperren(); // Karten erst jetzt wieder entsperren!
-            }, 700); // Dauer der CSS-Animation (fadeOut)
+            }, 400); // Dauer der CSS-Animation (fadeOut)
             punkte+=25;
             Streak();
             document.getElementById("punkte").textContent = "Punkte: " + punkte;
