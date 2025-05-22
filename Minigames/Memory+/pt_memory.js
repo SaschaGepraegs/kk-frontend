@@ -54,33 +54,39 @@ function KarteZudecken(){
 
 // Funktion um die Karten zu vergleichen
 function kartenVergleichen(){
-    setTimeout(function(){ // Timeout für 1 Sekunde
-        if(aktuellAufgedeckteKarten[0].KartenWert == aktuellAufgedeckteKarten[1].KartenWert){ // Wenn die Karten gleich sind
-            aktuellAufgedeckteKarten[0].onclick = null; // Klick-Event-Listener entfernen
-            aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener entfernen
-            aktuellAufgedeckteKarten[0].classList.add("found"); // CSS-Klasse für gefundene Karten hinzufügen
-            aktuellAufgedeckteKarten[1].classList.add("found"); // CSS-Klasse für gefundene Karten hinzufügen
+    KartenSperren(); // Karten sperren, solange Animation läuft!
+    setTimeout(function(){
+        if(aktuellAufgedeckteKarten[0].KartenWert == aktuellAufgedeckteKarten[1].KartenWert){
+            aktuellAufgedeckteKarten[0].onclick = null;
+            aktuellAufgedeckteKarten[1].onclick = null;
+            aktuellAufgedeckteKarten[0].classList.add("found");
+            aktuellAufgedeckteKarten[1].classList.add("found");
             setTimeout(() => {
-                aktuellAufgedeckteKarten[0].style.visibility = "hidden"; // Karte ausblenden aber Raster beibehalten
-                aktuellAufgedeckteKarten[1].style.visibility = "hidden"; // Karte ausblenden aber Raster beibehalten
-            }, 700);
-            punkte+=25; // Punkte erhöhen
-            Streak(); // Streak erhöhen
-            document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
-            timer += 1; // Timer um 1 Sekunde erhöhen
-            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer; // Timer-Anzeige aktualisieren
-            document.getElementById("timerPlus").textContent = "+1s"; // "+1s" anzeigen
-            setTimeout(() => {timerPlus.textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
+                aktuellAufgedeckteKarten[0].style.visibility = "hidden";
+                aktuellAufgedeckteKarten[1].style.visibility = "hidden";
+                aktuellAufgedeckteKarten = [];
+                KartenEntsperren(); // Karten erst jetzt wieder entsperren!
+            }, 700); // Dauer der CSS-Animation (fadeOut)
+            punkte+=25;
+            Streak();
+            document.getElementById("punkte").textContent = "Punkte: " + punkte;
+            timer += 1;
+            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer;
+            document.getElementById("timerPlus").textContent = "+1s";
+            setTimeout(() => {timerPlus.textContent = "";}, 800);
         }else{
-            KarteZudecken.call(aktuellAufgedeckteKarten[0]); // Karte zudecken
-            KarteZudecken.call(aktuellAufgedeckteKarten[1]); // Karte zudecken
-            aktuellAufgedeckteKarten[0].classList.toggle("clicked"); // Animation für Umdrehen
-            aktuellAufgedeckteKarten[1].classList.toggle("clicked"); // Animation für Umdrehen
-            streak = 0; // Bei Fehler den Zähler zurücksetzen
+            KarteZudecken.call(aktuellAufgedeckteKarten[0]);
+            KarteZudecken.call(aktuellAufgedeckteKarten[1]);
+            aktuellAufgedeckteKarten[0].classList.toggle("clicked");
+            aktuellAufgedeckteKarten[1].classList.toggle("clicked");
+            streak = 0;
+            setTimeout(() => {
+                aktuellAufgedeckteKarten = [];
+                KartenEntsperren();
+            }, 400); // Zeit für das Zudecken
         }
-        document.getElementById("streak").innerHTML = "Streak: " + streak; // Streak anzeigen
-        aktuellAufgedeckteKarten = []; // Array der aktuell aufgedeckten Karten zurücksetzen
-    }, 1000); // Timeout von 1 Sekunde
+        document.getElementById("streak").innerHTML = "Streak: " + streak;
+    }, 400); // Zeit, wie lange beide Karten offen bleiben
 }
 
 // Funktion um die Karten zu sperren
