@@ -1,31 +1,39 @@
 const cards = document.getElementsByClassName("cards");
 let aktuellAufgedeckteKarten = []; // Array für aktuell aufgedeckte Karten; array.length ist Zähler für aufgedeckte Karten
 let punkte = 0; // Punktezähler
-let timer = 10; // Timer für die Spielzeit
+let timer = 25; // Timer für die Spielzeit
 let streak = 0; // Zählt richtige Paare in Folge
 
 window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
 
 function spielStarten(){ // Funktion, die das Spiel startet
     punkte = 0; // Punkte zurücksetzen
-    timer = 10; // Timer zurücksetzen
+    timer = 25; // Timer zurücksetzen
     streak = 0; // Streak zurücksetzen
     Timer(); // Timer starten
     const KartenInfos = [ // Array mit Karteninformationen
-        {wert: 1, bild: "Prototyp_Images/Karte_König.jpg"},
-        {wert: 1, bild: "Prototyp_Images/Karte_König.jpg"},
-        {wert: 2, bild: "Prototyp_Images/Karte_Dame.jpg"},
-        {wert: 2, bild: "Prototyp_Images/Karte_Dame.jpg"},
-        {wert: 3, bild: "Prototyp_Images/Karte_Bube.jpg"},
-        {wert: 3, bild: "Prototyp_Images/Karte_Bube.jpg"},  
-        {wert: 4, bild: "Prototyp_Images/Karte_10.jpg"},
-        {wert: 4, bild: "Prototyp_Images/Karte_10.jpg"},
+        {wert: 1, bild: "Prototyp_Images/Karte_Eule.jpg"},
+        {wert: 1, bild: "Prototyp_Images/Karte_Eule.jpg"},
+        {wert: 2, bild: "Prototyp_Images/Karte_Fisch.jpg"},
+        {wert: 2, bild: "Prototyp_Images/Karte_Fisch.jpg"},
+        {wert: 3, bild: "Prototyp_Images/Karte_Hase.jpg"},
+        {wert: 3, bild: "Prototyp_Images/Karte_Hase.jpg"},
+        {wert: 4, bild: "Prototyp_Images/Karte_Koala.jpg"},
+        {wert: 4, bild: "Prototyp_Images/Karte_Koala.jpg"},
+        {wert: 5, bild: "Prototyp_Images/Karte_Panda.jpg"},
+        {wert: 5, bild: "Prototyp_Images/Karte_Panda.jpg"},
+        {wert: 6, bild: "Prototyp_Images/Karte_Papagei.jpg"},
+        {wert: 6, bild: "Prototyp_Images/Karte_Papagei.jpg"},
+        {wert: 7, bild: "Prototyp_Images/Karte_Pinguin.jpg"},
+        {wert: 7, bild: "Prototyp_Images/Karte_Pinguin.jpg"},
+        {wert: 8, bild: "Prototyp_Images/Karte_Schildkröte.jpg"},
+        {wert: 8, bild: "Prototyp_Images/Karte_Schildkröte.jpg"},
     ];
     shuffleArray(KartenInfos); // Karten Mischen
     for (let i = 0; i < cards.length; i++) {
         cards[i].KartenWert = KartenInfos[i].wert; // Wert der Karte zuweisen
         cards[i].KartenBild = KartenInfos[i].bild; // Bild der Karte zuweisen
-        cards[i].src = "Prototyp_Images/Karte_Rückseite.jpg"; // Karte wird umgedreht (Rückseite)
+        cards[i].src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Karte wird umgedreht (Rückseite)
         cards[i].aufgedeckt = false; // Karte ist nicht aufgedeckt
     }
     KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
@@ -40,7 +48,7 @@ function KarteAufdecken(){
 
 // Funktion, um die Karte zuzudecken
 function KarteZudecken(){
-    this.src = "Prototyp_Images/Karte_Rückseite.jpg"; // Rückseite anzeigen
+    this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite anzeigen
     this.aufgedeckt = false; // Karte ist zugedeckt
 }
 
@@ -50,7 +58,7 @@ function kartenVergleichen(){
         if(aktuellAufgedeckteKarten[0].KartenWert == aktuellAufgedeckteKarten[1].KartenWert){ // Wenn die Karten gleich sind
             aktuellAufgedeckteKarten[0].onclick = null; // Klick-Event-Listener entfernen
             aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener entfernen
-            punkte++; // Punkte erhöhen
+            punkte+=25; // Punkte erhöhen
             Streak(); // Streak erhöhen
             document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
             timer += 1; // Timer um 1 Sekunde erhöhen
@@ -123,7 +131,7 @@ function Timer(){
 function Streak(){
     streak++; // Zähler für richtige Paare erhöhen
     if(streak >= 2){
-        punkte++; // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
+        punkte+=streak*5; // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
         document.getElementById("bonuspunkte").textContent = "+1 Bonuspunkt"; // "+1 Bonuspunkt" anzeigen
         setTimeout(() => {document.getElementById("bonuspunkte").textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
     }

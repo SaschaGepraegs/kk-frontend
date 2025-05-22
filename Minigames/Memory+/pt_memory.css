@@ -71,7 +71,7 @@ td {
 }
 
 .cards {
-    width: 50%; /* Füllt die gesamte Tabellenzelle aus */
+    width: 90%; /* Füllt die gesamte Tabellenzelle aus */
     height: auto; /* Beibehaltung des Seitenverhältnisses */
     margin: 0; /* Entfernt jegliche zusätzlichen Abstände */
     display: block; /* Entfernt Inline-Abstände */
