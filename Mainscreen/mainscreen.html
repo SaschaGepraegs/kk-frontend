@@ -49,6 +49,29 @@
             background-color: #3700b3;
         }
 
+        #spielBeendenBtn {
+            display: block;
+            margin: auto;
+            padding: 1rem 1.46rem;
+            font-size: 1.2rem;
+            color: #fff;
+            background-color: #d32f2f;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        #spielBeendenBtn:hover {
+            background-color: #a50101;
+        }
+
+        #spielBeendenBtn:disabled {
+            background-color: #444;
+            cursor: not-allowed;
+        }
+
         /* Popup Overlay */
         #popupOverlay {
             display: none;
@@ -164,6 +187,7 @@
     <h2 id="pinAnzeige">PIN: </h2>
     <div id="spielerListe">Spieler werden geladen...</div>
     <button id="startButton">Spiel starten</button>
+    <button id="spielBeendenBtn">Spiel beenden</button>
 
     <!-- Popup für Spielauswahl -->
     <div id="popupOverlay">
@@ -311,6 +335,13 @@
             } catch (e) {
                 auswahlStatus.textContent = "Fehler beim Setzen des Spiels.";
             }
+        });
+
+        spielBeendenBtn.addEventListener("click", async () => {
+            fetch("https://kk-backend.vercel.app/reset?lobby=" + pin);
+            alert("Spiel beendet.");
+            window.location.href = "../index.html";
+            return;
         });
 
         startButton.addEventListener("click", starteSpiel);
