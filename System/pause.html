@@ -57,6 +57,10 @@
             max-width: 90vw;
             min-width: 320px;
             width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             animation: slidein 1s cubic-bezier(.68,-0.55,.27,1.55);
         }
         @keyframes slidein {
@@ -84,43 +88,8 @@
             from { opacity: 0; transform: translateY(-20px);}
             to { opacity: 1; transform: translateY(0);}
         }
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            gap: 1rem;
-            flex-wrap: wrap;
-            animation: fadein 1.2s;
-        }
-        .tab-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.1rem;
-            padding: 0.7rem 1.5rem;
-            border-radius: 8px 8px 0 0;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-            outline: none;
-            box-shadow: 0 2px 8px 0 rgba(127, 127, 255, 0.08);
-        }
-        .tab-btn.active {
-            background: #232526;
-            color: #ff6ec4;
-            font-weight: bold;
-            box-shadow: 0 4px 16px 0 rgba(255, 110, 196, 0.12);
-        }
-        .tab-content {
-            display: none;
-            margin-top: 1rem;
-            animation: fadeintext 1.2s;
-        }
-        .tab-content.active {
-            display: block;
-        }
         .score-list {
-            margin: 0 auto;
+            margin: 2rem auto 0 auto;
             max-width: 300px;
             text-align: left;
             padding: 0;
@@ -157,17 +126,9 @@
             h1 {
                 font-size: 1.3rem;
             }
-            .tab-btn {
-                font-size: 1rem;
-                padding: 0.5rem 0.8rem;
-            }
             .score-list {
                 max-width: 95vw;
                 font-size: 1rem;
-            }
-            .tabs {
-                margin-top: 1rem;
-                margin-bottom: 0.5rem;
             }
         }
         /* --- Weiterleitungs-Screen --- */
@@ -240,22 +201,14 @@
         <div class="blur-orbit-inner"></div>
     </div>
     <div class="pause-container" id="mainContent">
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="pause">Pause</button>
-            <button class="tab-btn" data-tab="score">Punktestand</button>
-        </div>
-        <div id="pause" class="tab-content active">
-            <div class="pause-icon">⏸️</div>
-            <h1>Bitte warten...</h1>
-            <p style="animation: fadeintext 1.2s;">Das Spiel ist pausiert.<br>Bitte bleib auf dieser Seite, bis es weitergeht.</p>
-        </div>
-        <div id="score" class="tab-content">
-            <h1>Punktestand</h1>
-            <ul class="score-list" id="scoreList">
-                <!-- Punktestände werden per JS eingefügt -->
-            </ul>
-            <p style="color:#bdbdbd; text-align:center; margin-top:1rem;" id="scoreDummyHint"></p>
-        </div>
+        <div class="pause-icon">⏸️</div>
+        <h1>Bitte warten...</h1>
+        <p style="animation: fadeintext 1.2s;">Das Spiel ist pausiert.<br>Bitte bleib auf dieser Seite, bis es weitergeht.</p>
+        <h2 style="margin-top:2.5rem;">Punktestand</h2>
+        <ul class="score-list" id="scoreList">
+            <!-- Punktestände werden per JS eingefügt -->
+        </ul>
+        <p style="color:#bdbdbd; text-align:center; margin-top:1rem;" id="scoreDummyHint"></p>
     </div>
     <div id="nextgame" class="nextgame-overlay" style="display:none;">
         <div class="nextgame-content">
@@ -266,18 +219,6 @@
         </div>
     </div>
     <script>
-        // Tab-Wechsel-Logik
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                tabBtns.forEach(b => b.classList.remove('active'));
-                tabContents.forEach(tc => tc.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(btn.dataset.tab).classList.add('active');
-            });
-        });
-
         // Weiterleitungs-Logik
         let polling = true;
         let countdownInterval = null;
