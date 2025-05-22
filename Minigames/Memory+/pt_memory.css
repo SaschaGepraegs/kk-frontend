@@ -71,7 +71,7 @@ td {
 }
 
 .cards {
-    width: 50%; /* Füllt die gesamte Tabellenzelle aus */
+    width: 90%; /* Füllt die gesamte Tabellenzelle aus */
     height: auto; /* Beibehaltung des Seitenverhältnisses */
     margin: 0; /* Entfernt jegliche zusätzlichen Abstände */
     display: block; /* Entfernt Inline-Abstände */
@@ -104,4 +104,15 @@ td {
 .player {
     padding: 5px;
     border-bottom: 1px solid #333;
+}
+
+.cards.found {
+    animation: fadeOut 0.7s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: scale(1.2) rotateZ(10deg);
+    }
 }
