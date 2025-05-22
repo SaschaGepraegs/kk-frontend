@@ -58,8 +58,12 @@ function kartenVergleichen(){
         if(aktuellAufgedeckteKarten[0].KartenWert == aktuellAufgedeckteKarten[1].KartenWert){ // Wenn die Karten gleich sind
             aktuellAufgedeckteKarten[0].onclick = null; // Klick-Event-Listener entfernen
             aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener entfernen
-            aktuellAufgedeckteKarten[0].style.visibility = "hidden";
-            aktuellAufgedeckteKarten[1].style.visibility = "hidden";
+            aktuellAufgedeckteKarten[0].classList.add("found");
+            aktuellAufgedeckteKarten[1].classList.add("found");
+            setTimeout(() => {
+                aktuellAufgedeckteKarten[0].style.visibility = "hidden";
+                aktuellAufgedeckteKarten[1].style.visibility = "hidden";
+            }, 700);
             punkte+=25; // Punkte erhöhen
             Streak(); // Streak erhöhen
             document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen

@@ -105,3 +105,14 @@ td {
     padding: 5px;
     border-bottom: 1px solid #333;
 }
+
+.cards.found {
+    animation: fadeOut 0.7s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: scale(1.2) rotateZ(10deg);
+    }
+}
