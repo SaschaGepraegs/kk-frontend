@@ -27,6 +27,7 @@
     </div>
     <script>
         // Prüfe, ob das Spiel gestartet wurde und blende den Button ein/aus
+        // Diese Funktion muss im HTML stehen, damit sie im globalen Scope ist!
         async function pruefeObGameGestartetUndButton() {
             const pin = new URLSearchParams(window.location.search).get('pin');
             const gameAuswahlBtn = document.getElementById("gameAuswahlBtn");
@@ -44,8 +45,6 @@
         }
 
         setInterval(pruefeObGameGestartetUndButton, 1000);
-
-        // ...existing code...
     </script>
 </body>
 </html>
