@@ -1,15 +1,22 @@
 const cards = document.getElementsByClassName("cards");
 let aktuellAufgedeckteKarten = []; // Array für aktuell aufgedeckte Karten; array.length ist Zähler für aufgedeckte Karten
-let punkte = 0; // Punktezähler
-let timer = 25; // Timer für die Spielzeit
-let streak = 0; // Zählt richtige Paare in Folge
+let punkte; // Punktezähler
+let timer; // Timer für die Spielzeit
+let streak; // Zählt richtige Paare in Folge
+let aufgedeckteKarten; // Zählt die aufgedeckten Karten
 
 window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
 
-function spielStarten(){ // Funktion, die das Spiel startet
+// Funktion, um verschiedene Variablen zurückzusetzen
+function reset(){
     punkte = 0; // Punkte zurücksetzen
     timer = 25; // Timer zurücksetzen
     streak = 0; // Streak zurücksetzen
+    aufgedeckteKarten = 0; // Aufgedeckte Karten zurücksetzen
+}
+
+function spielStarten(){ // Funktion, die das Spiel startet
+    reset(); // Reset-Funktion aufrufen
     Timer(); // Timer starten
     const KartenInfos = [ // Array mit Karteninformationen
         {wert: 1, bild: "Prototyp_Images/Karte_Eule.jpg"},
@@ -74,6 +81,10 @@ function kartenVergleichen(){
             document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer;
             document.getElementById("timerPlus").textContent = "+1s";
             setTimeout(() => {timerPlus.textContent = "";}, 800);
+            aufgedeckteKarten += 2; // Zähler für aufgedeckte Karten erhöhen
+            if(aufgedeckteKarten == cards.length){ // Wenn alle Karten aufgedeckt sind
+                spielBeenden(); // Spiel beenden
+            }
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]);
             KarteZudecken.call(aktuellAufgedeckteKarten[1]);
@@ -133,8 +144,8 @@ function Timer(){
         }else{
             clearInterval(this); // Intervall stoppen
             KartenSperren(); // Karten sperren
-            document.getElementById("timer").innerHTML = "Zeit abgelaufen"; // Zeit abgelaufen anzeigen
             spielBeenden(); // Spiel beenden
+            document.getElementById("timer").innerHTML = "Zeit abgelaufen"; // Zeit abgelaufen anzeigen
         }
     }, 1000); // Intervall von 1 Sekunde
 }
@@ -161,4 +172,4 @@ async function spielBeenden() {
         alert("Fehler beim Übertragen der Punkte!");
         setTimeout(() => {window.location.replace("/System/pause.html");}, 3000); // Nach 3 Sekunden auf die Pause-Seite weiterleiten
     }
- }
+}
