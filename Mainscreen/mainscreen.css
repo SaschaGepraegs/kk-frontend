@@ -1,0 +1,173 @@
+body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        #spielerListe {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #1e1e1e;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+        .spieler {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+        #startButton {
+            display: block;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            color: #fff;
+            background-color: #6200ea;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        #startButton:disabled {
+            background-color: #444;
+            cursor: not-allowed;
+        }
+        #startButton:hover:not(:disabled) {
+            background-color: #3700b3;
+        }
+
+        #spielBeendenBtn {
+            display: block;
+            margin: auto;
+            padding: 1rem 1.46rem;
+            font-size: 1.2rem;
+            color: #fff;
+            background-color: #d32f2f;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        #spielBeendenBtn:hover {
+            background-color: #a50101;
+        }
+
+        #spielBeendenBtn:disabled {
+            background-color: #444;
+            cursor: not-allowed;
+        }
+
+        /* Popup Overlay */
+        #popupOverlay {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            inset: 0;
+            background: rgba(30,30,30,0.92);
+            justify-content: center;
+            align-items: center;
+        }
+        #popupMenu {
+            background: #232526;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+            padding: 2.5rem 2rem 2rem 2rem;
+            min-width: 260px;
+            max-width: 95vw;
+            width: 370px;
+            max-height: 95vh;
+            overflow-y: auto;
+            text-align: center;
+            animation: popupfadein 0.5s;
+        }
+        @keyframes popupfadein {
+            from { opacity: 0; transform: scale(0.95);}
+            to { opacity: 1; transform: scale(1);}
+        }
+        #popupMenu h2 {
+            margin-bottom: 1.5rem;
+            color: #ff6ec4;
+            font-size: 1.5rem;
+        }
+        .game-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            justify-content: center;
+        }
+        .game-card {
+            background: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px 0 rgba(127,127,255,0.08);
+            padding: 1rem 0.7rem 0.7rem 0.7rem;
+            width: 120px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid transparent;
+        }
+        .game-card.selected, .game-card:hover {
+            border: 2px solid #ff6ec4;
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px 0 rgba(255,110,196,0.12);
+        }
+        .game-card img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-bottom: 0.7rem;
+            border-radius: 8px;
+            background: #fff;
+        }
+        .game-card span {
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 500;
+            text-align: center;
+        }
+        #spielSetzenBtn {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            padding: 0.7rem 2.2rem;
+            border-radius: 8px;
+            border: none;
+            background: #6200ea;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #spielSetzenBtn:disabled {
+            background: #444;
+            cursor: not-allowed;
+        }
+        #auswahlStatus {
+            color: #bdbdbd;
+            margin-top: 1rem;
+            min-height: 1.5em;
+        }
+        @media (max-width: 600px) {
+            #popupMenu {
+                width: 97vw;
+                min-width: unset;
+                padding: 1.2rem 0.5rem 1rem 0.5rem;
+                max-width: 97vw;
+                max-height: 97vh;
+            }
+            .game-card {
+                width: 90px;
+                padding: 0.5rem 0.2rem 0.5rem 0.2rem;
+            }
+            .game-card img {
+                width: 40px;
+                height: 40px;
+            }
+        }

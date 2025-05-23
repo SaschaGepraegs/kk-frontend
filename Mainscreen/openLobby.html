@@ -5,63 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lobby erstellen</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        
-        button {
-            background-color: #1f1f1f;
-            border: 2px solid #333;
-            color: #fff;
-            padding: 1em 2em;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: background 0.3s ease;
-        }
-        
-        button:hover {
-            background-color: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="openLobby.css" />
+    <script src="openLobby.js" defer></script>
 </head>
-
 <body>
     <h1>Willkommen im Mainscreen! :)</h1>
     <p>Jetzt Lobby für KlickKrawall erstellen!</p>
     <button onclick="createLobby()" id="einzigerbutton">Lobby erstellen</button>
-
-    <script>
-        async function createLobby() {
-            document.getElementById("einzigerbutton").innerHTML = "Erstelle Lobby...";
-            document.getElementById("einzigerbutton").disabled = true;
-            const pin = Math.floor(1000 + Math.random() * 9000);
-            const response = await fetch('https://kk-backend.vercel.app/registerLobby?gamepin=' + pin, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    gamepin: pin
-                })
-            });
-
-            if (response.ok) {
-                window.location.href = `./mainscreen.html?pin=${pin}`;
-            } else {
-                alert("Fehler beim Erstellen der Lobby.");
-            }
-        }
-    </script>
 </body>
 
 </html>
