@@ -223,14 +223,30 @@
         let polling = true;
         let countdownInterval = null;
 
+        // Hilfsfunktion: Hole aktuellen Index aus localStorage
+        function getGameQueueIndex() {
+            const idx = parseInt(localStorage.getItem("uic_gamequeue_index"), 10);
+            return isNaN(idx) ? 0 : idx;
+        }
+        // Hilfsfunktion: Setze aktuellen Index im localStorage
+        function setGameQueueIndex(idx) {
+            localStorage.setItem("uic_gamequeue_index", idx);
+        }
+
         async function checkNextGame() {
             if (!polling) return;
             try {
-                const response = await fetch("https://kk-backend.vercel.app/naechstesSpiel?lobby="+ localStorage.getItem("uic_gamepin"));
+                const response = await fetch("https://kk-backend.vercel.app/naechstesSpiel?lobby=" + localStorage.getItem("uic_gamepin"));
                 const result = await response.json();
-                if (result !== false && result !== null && typeof result === "number") {
-                    showNextGameScreen(result);
-                    polling = false;
+                // result ist jetzt ein Array von Spiel-IDs oder false/null
+                if (Array.isArray(result) && result.length > 0) {
+                    let idx = getGameQueueIndex();
+                    // Wenn wir noch nicht am Ende der Queue sind
+                    if (idx < result.length) {
+                        showNextGameScreen(result[idx]);
+                        setGameQueueIndex(idx + 1);
+                        polling = false;
+                    }
                 }
             } catch (e) {
                 // Fehler ignorieren, einfach weiterpolling
