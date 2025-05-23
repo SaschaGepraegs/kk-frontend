@@ -25,5 +25,40 @@
             <div id="auswahlStatus"></div>
         </div>
     </div>
+    <script>
+        // ...existing code...
+        const gameAuswahlBtn = document.getElementById("gameAuswahlBtn");
+        const startButton = document.getElementById("startButton");
+        // ...existing code...
+
+        // Button nur anzeigen, wenn das Spiel gestartet wurde
+        async function pruefeObGameGestartetUndButton() {
+            try {
+                const response = await fetch(`https://kk-backend.vercel.app/gehtsLos?lobby=${pin}`);
+                const spielGestartet = await response.json();
+                if (spielGestartet) {
+                    gameAuswahlBtn.style.display = "block";
+                } else {
+                    gameAuswahlBtn.style.display = "none";
+                }
+            } catch (err) {
+                gameAuswahlBtn.style.display = "none";
+            }
+        }
+
+        // Popup immer öffnen können, wenn Button sichtbar
+        gameAuswahlBtn.addEventListener("click", () => {
+            popupOverlay.style.display = "flex";
+            auswahlStatus.textContent = "";
+            selectedGameId = null;
+            spielSetzenBtn.disabled = true;
+            document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
+        });
+
+        // Starte Polling für Button-Anzeige
+        setInterval(pruefeObGameGestartetUndButton, 1000);
+
+        // ...existing code...
+    </script>
 </body>
 </html>
