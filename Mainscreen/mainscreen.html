@@ -27,8 +27,12 @@
     </div>
     <script>
         // Prüfe, ob das Spiel gestartet wurde und blende den Button ein/aus
-        // Diese Funktion muss im HTML stehen, damit sie im globalen Scope ist!
+        let spielGestartetGlobal = false;
         async function pruefeObGameGestartetUndButton() {
+            if (spielGestartetGlobal) {
+                document.getElementById("gameAuswahlBtn").style.display = "block";
+                return;
+            }
             const pin = new URLSearchParams(window.location.search).get('pin');
             const gameAuswahlBtn = document.getElementById("gameAuswahlBtn");
             try {
@@ -36,6 +40,7 @@
                 const spielGestartet = await response.json();
                 if (spielGestartet) {
                     gameAuswahlBtn.style.display = "block";
+                    spielGestartetGlobal = true;
                 } else {
                     gameAuswahlBtn.style.display = "none";
                 }
