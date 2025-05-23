@@ -26,7 +26,23 @@
         </div>
     </div>
     <script>
-        // Starte Polling für Button-Anzeige
+        // Prüfe, ob das Spiel gestartet wurde und blende den Button ein/aus
+        async function pruefeObGameGestartetUndButton() {
+            const pin = new URLSearchParams(window.location.search).get('pin');
+            const gameAuswahlBtn = document.getElementById("gameAuswahlBtn");
+            try {
+                const response = await fetch(`https://kk-backend.vercel.app/gehtsLos?lobby=${pin}`);
+                const spielGestartet = await response.json();
+                if (spielGestartet) {
+                    gameAuswahlBtn.style.display = "block";
+                } else {
+                    gameAuswahlBtn.style.display = "none";
+                }
+            } catch (err) {
+                gameAuswahlBtn.style.display = "none";
+            }
+        }
+
         setInterval(pruefeObGameGestartetUndButton, 1000);
 
         // ...existing code...
