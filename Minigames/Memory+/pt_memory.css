@@ -111,6 +111,8 @@ td {
     animation-delay: 0.5s;
 }
 
+
+/* Animation für das Verschwinden der Karten */
 @keyframes fadeOut {
     to {
         opacity: 0;
