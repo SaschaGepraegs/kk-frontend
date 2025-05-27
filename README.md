@@ -16,3 +16,7 @@
 2. **Lobby erstellen oder beitreten**  
 3. **Minispiele zocken & Punkte sammeln**
 4. **Spaß haben 😉**
+
+## 🖼️ Eindrücke:
+
+![Hauptmenü](Bilder/hauptmenu.jpg)
