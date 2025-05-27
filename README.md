@@ -17,6 +17,10 @@
 3. **Minispiele zocken & Punkte sammeln**
 4. **Spaß haben 😉**
 
+## 👥 Team
+
+Unser **Team** besteht aktuell aus [Alpay](https://github.com/nillenia), [Felix](https://github.com/5Head-Felix), [Sascha](https://github.com/SaschaGepraegs), [Dominykas](https://github.com/dome2006), [Helena](https://github.com/Helena-8), [Francesco](https://github.com/FrancescoDM142) und [Tamas](https://github.com/Tomika07).
+
 ## 🖼️ Eindrücke:
 
 ![Hauptmenü](Bilder/hauptmenu.jpg)
