@@ -10,7 +10,7 @@
 - 🌍 **Plattformunabhängig:** Spielbar auf PC, Tablet oder Smartphone.
 - 🛠️ **Custom-Lobbies:** Starte private Runden mit Freunden.
 
-## 🎮 So spielst du
+## 🎮 So spielst du 
 
 1. **Spiel starten:** Gehe auf [klickkrawall.de](https://klickkrawall.netlify.app) *(URL komm noch)*  
 2. **Lobby erstellen oder beitreten**  
