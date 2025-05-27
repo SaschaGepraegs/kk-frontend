@@ -94,7 +94,7 @@ async function LobbyHosten() {
             });
 
             if (response.ok) {
-                window.location.href = `http://127.0.0.1:3002/Mainscreen/mainscreen.html?pin=${pin}`;
+                window.location.href = `./Mainscreen/mainscreen.html?pin=${pin}`;
             } else {
                 alert("Fehler beim Erstellen der Lobby.");
             }
