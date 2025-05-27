@@ -12,6 +12,27 @@ meter.value = timer;
 meter.max = 30; // Optional: max kann beliebig sein, dient nur der Anzeige
 
 
+//start jquery..
+$(function(){
+
+//get the the click of the button
+
+ $("#button").click(function(){
+   //disabled class toggle
+   $(".toggle").prop('disabled', true);
+
+  //enabled after 1 minute
+  setTimeout( function(){ 
+
+    //here you enabled all the html of class toggle.
+   $(".toggle").prop('disabled', false);
+
+  }
+ , 60000 );
+
+ });
+});
+
 function startGame() {
     intervalId = setInterval(function() {
         // Optional: Meter kann für Klicks genutzt werden
