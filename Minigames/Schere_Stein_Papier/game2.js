@@ -28,7 +28,7 @@ $(function(){
    $(".toggle").prop('disabled', false);
 
   }
- , 60000 );
+ , 2000 );
 
  });
 });
