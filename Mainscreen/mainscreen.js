@@ -86,26 +86,6 @@ const urlParams = new URLSearchParams(window.location.search);
         }
         renderGameGrid();
 
-        // Polling für Button-Anzeige
-        async function checkNaechstesSpiel() {
-            try {
-                const res = await fetch(`https://kk-backend.vercel.app/naechstesSpiel?lobby=${pin}`);
-                const val = await res.json();
-                if (val !== false && val !== null) {
-                    // Spiel läuft, Button ausblenden, Popup schließen
-                    gameAuswahlBtn.style.display = "none";
-                    popupOverlay.style.display = "none";
-                    auswahlStatus.textContent = "";
-                    selectedGameId = null;
-                    spielSetzenBtn.disabled = true;
-                    document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
-                } else {
-                    // Kein Spiel läuft, Button einblenden
-                    gameAuswahlBtn.style.display = "block";
-                }
-            } catch (e) {}
-        }
-
         // Popup nur öffnen, wenn Button gedrückt wird
         gameAuswahlBtn.addEventListener("click", () => {
             popupOverlay.style.display = "flex";
@@ -120,12 +100,6 @@ const urlParams = new URLSearchParams(window.location.search);
                 await fetch(`https://kk-backend.vercel.app/losGehts?lobby=${pin}`);
             } catch (e) {}
             startButton.style.display = "none";
-            // Kein automatisches Öffnen des Popups mehr!
-            // Button für Gameauswahl wird durch Polling angezeigt
-            if (!auswahlPolling) {
-                auswahlPolling = setInterval(checkNaechstesSpiel, 1000);
-            }
-            checkNaechstesSpiel();
         }
 
         spielSetzenBtn.addEventListener("click", async () => {
@@ -168,6 +142,3 @@ const urlParams = new URLSearchParams(window.location.search);
                 document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
             }
         });
-
-        // Polling für Gameauswahl-Button dauerhaft aktivieren
-        let auswahlPolling = setInterval(checkNaechstesSpiel, 1000);

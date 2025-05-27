@@ -59,6 +59,9 @@
         }
         
         button:active {
-            transform: scale(0.97);
-            box-shadow: 7px 5px 56px -10px #C3D900;
+            background: #cccc00;
+            -webkit-box-shadow: inset 0px 0px 5px #cccc00;
+            -moz-box-shadow: inset 0px 0px 5px #cccc00;
+            box-shadow: inset 0px 0px 5px #cccc00;
+            outline: none;
         }

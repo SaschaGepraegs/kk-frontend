@@ -33,7 +33,7 @@ function startGame() {
 }
 
 async function spielBeenden() {
-    // Lobby und Spielername aus localStorage holen
+    // Lobby und Spielername aus localStorage herholen
     const lobby = localStorage.getItem("uic_gamepin") || "1111";
     const player = localStorage.getItem("uic_name") || "Name";
     try {
@@ -47,3 +47,4 @@ async function spielBeenden() {
 
 // Spielstart nach Laden der Seite
 window.onload = startGame;
+

@@ -107,9 +107,12 @@ td {
 }
 
 .cards.found {
-    animation: fadeOut 0.4s forwards;
+    animation: fadeOut 0.7s forwards;
+    animation-delay: 0.5s;
 }
 
+
+/* Animation für das Verschwinden der Karten */
 @keyframes fadeOut {
     to {
         opacity: 0;

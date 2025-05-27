@@ -45,13 +45,11 @@ async function spielBeenden() {
 // Spielstart nach Laden der Seite
 window.onload = startGame;
 
-function Timerabwarten(){
-    Warte = 0;
-}
 
 
 function Schere() {
     let x = Math.floor(Math.random() * 3) + 1;
+    warte=0;
               
     if (x === 1 && Warte === 0) {
         document.getElementById("Stein").style.visibility = "hidden";
@@ -71,15 +69,13 @@ function Schere() {
         document.getElementById("Stein").style.visibility = "hidden";
         document.getElementById("Schere").style.visibility = "visible";
         document.getElementById("Stein1").style.visibility = "visible";}
-        Warte = 1;
-        setTimeout(MachAufAnfangJetztAlter,1500);
-        if(Warte = 1){
-            setTimeout(Timerabwarten,1500);
-        }
+        MachAufAnfangJetztAlter();
+
     }
     
         function Papier() {
             let x = Math.floor(Math.random() * 3) + 1;
+            warte=0;
                 
                 if (x === 1 && Warte === 0) {
                     document.getElementById("Stein").style.visibility = "hidden";
@@ -99,11 +95,7 @@ function Schere() {
                     document.getElementById("Papier").style.visibility = "visible";
                     document.getElementById("Schere1").style.visibility = "visible";
         }
-        Warte = 1;
-        setTimeout(MachAufAnfangJetztAlter,1500);
-        if(Warte = 1){
-            setTimeout(Timerabwarten,1500);
-        }
+                MachAufAnfangJetztAlter();
     }
 
         function Stein(){
@@ -126,9 +118,7 @@ function Schere() {
                     document.getElementById("Stein").style.visibility = "visible";
                     document.getElementById("Papier1").style.visibility = "visible";
         }
-        Warte = 1;
-        setTimeout(MachAufAnfangJetztAlter,1500);
-        Warte = 0;
+        MachAufAnfangJetztAlter();
         
     }
 

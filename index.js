@@ -1,13 +1,6 @@
-localStorage.setItem("uic_status", "auswahl");
 localStorage.setItem("uic_username", undefined);
 localStorage.setItem("uic_gamepin", undefined);
-localStorage.setItem("uic_task1done", undefined);
-localStorage.setItem("uic_task2done", undefined);
-localStorage.setItem("uic_task3done", undefined);
-localStorage.setItem("uic_task4done", undefined);
-localStorage.setItem("uic_task5done", undefined);
-localStorage.setItem("uic_task6done", undefined);
-localStorage.setItem("uic_task7done", undefined);
+localStorage.setItem("uic_gamequeue_index", 0);
 
 // Zeige Namensfeld erst nach erfolgreicher Lobbyprüfung
 async function checkLobby() {

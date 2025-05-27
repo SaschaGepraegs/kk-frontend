@@ -233,6 +233,11 @@
             localStorage.setItem("uic_gamequeue_index", idx);
         }
 
+        // Setze Index beim ersten Laden auf 0, falls noch nicht gesetzt
+        if (localStorage.getItem("uic_gamequeue_index") === null) {
+            setGameQueueIndex(0);
+        }
+
         async function checkNextGame() {
             if (!polling) return;
             try {
