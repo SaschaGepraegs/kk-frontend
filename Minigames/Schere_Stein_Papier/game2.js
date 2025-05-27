@@ -49,6 +49,7 @@ window.onload = startGame;
 
 function Schere() {
     let x = Math.floor(Math.random() * 3) + 1;
+    warte=0;
               
     if (x === 1 && Warte === 0) {
         document.getElementById("Stein").style.visibility = "hidden";
@@ -74,6 +75,7 @@ function Schere() {
     
         function Papier() {
             let x = Math.floor(Math.random() * 3) + 1;
+            warte=0;
                 
                 if (x === 1 && Warte === 0) {
                     document.getElementById("Stein").style.visibility = "hidden";
