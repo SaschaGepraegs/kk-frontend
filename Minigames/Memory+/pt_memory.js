@@ -4,6 +4,7 @@ let punkte; // Punktezähler
 let timer; // Timer für die Spielzeit
 let streak; // Zählt richtige Paare in Folge
 let aufgedeckteKarten; // Zählt die aufgedeckten Karten
+const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch für das Aufdecken der Karten
 
 window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
 
@@ -51,6 +52,8 @@ function spielStarten(){ // Funktion, die das Spiel startet
 function KarteAufdecken(){
     this.src = this.KartenBild; // Bild der Karte anzeigen
     this.aufgedeckt = true; // Karte ist aufgedeckt
+    KartenGeräusch.currentTime = 0.2; // Geräusch zurücksetzen
+    KartenGeräusch.play(); // Geräusch abspielen
 }
 
 // Funktion, um die Karte zuzudecken
