@@ -25,7 +25,7 @@ mark {
             padding: 35px;
         }
         
-        #bottone1 {
+        #Button1 {
             padding-left: 33px;
             padding-right: 33px;
             padding-bottom: 16px;
@@ -39,16 +39,16 @@ mark {
             transition: 0.4s;
         }
         
-        #bottone1:hover {
+        #Button1:hover {
             box-shadow: 7px 5px 56px -14px #C3D900;
         }
         
-        #bottone1:active {
+        #Button1:active {
             transform: scale(0.97);
             box-shadow: 7px 5px 56px -10px #C3D900;
         }
         
-        .bottone1 {
+        .Button1 {
             padding-left: 33px;
             padding-right: 33px;
             padding-bottom: 16px;
@@ -62,11 +62,11 @@ mark {
             transition: 0.4s;
         }
         
-        .bottone1:hover {
+        .Button1:hover {
             box-shadow: 7px 5px 56px -14px #C3D900;
         }
         
-        .bottone1:active {
+        .Button1:active {
             transform: scale(0.97);
             box-shadow: 7px 5px 56px -10px #C3D900;
         }

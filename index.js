@@ -78,3 +78,24 @@ async function gehtsLos() {
         window.location.assign("System/lobby.html");
     }
 }
+
+async function LobbyHosten() {
+            document.getElementById("Button3").innerHTML = "Erstelle Lobby...";
+            document.getElementById("Button3").disabled = true;
+            const pin = Math.floor(1000 + Math.random() * 9000);
+            const response = await fetch('https://kk-backend.vercel.app/registerLobby?gamepin=' + pin, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    gamepin: pin
+                })
+            });
+
+            if (response.ok) {
+                window.location.href = `http://127.0.0.1:3002/Mainscreen/mainscreen.html?pin=${pin}`;
+            } else {
+                alert("Fehler beim Erstellen der Lobby.");
+            }
+        }
