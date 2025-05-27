@@ -7,11 +7,12 @@
 </head>
 
 <body>
-    <p>Gewinne so oft wie möglich in <span id="timer">30</span> Sekunden in Schere Stein Papier!</p>
+    <p>Gewinne so oft wie möglich in <span id="timer">20</span> Sekunden in Schere Stein Papier!</p>
     <meter value="timer" max="30"></meter>
     <button id="btn_t1" onclick="Schere()">Schere</button><br>
     <button id="btn_t2" onclick="Stein()">Stein</button><br>
     <button id="btn_t3" onclick="Papier()">Papier</button><br>
+    <input class="toggle" type="text">
 
     
     <img id="Stein1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/1024px-Rock-paper-scissors_%28rock%29.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 50%; left: 50%; transform: rotateY(180deg);"
@@ -29,16 +30,29 @@
     <img id="Papier" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Rock-paper-scissors_%28paper%29.png/1024px-Rock-paper-scissors_%28paper%29.png" alt="" style="width: 50vw; height: 50vh; position: absolute; top: 50%; right: 50%; visibility: hidden" 
         >
 
-    <script src="game2.js">
+    <script src="game2.js", src="https://code.jquery.com/jquery-3.6.0.min.js">
 // Timer-Anzeige aktualisieren
         let timerElem = document.getElementById("timer");
-        let timerValue = 30;
+        let timerValue = 20;
         let timerInterval = setInterval(() => {
             timerValue--;
             if (timerValue >= 0) timerElem.textContent = timerValue;
             if (timerValue <= 0) clearInterval(timerInterval);
         }, 1000);
-        
+        <div id="Anzahl Gewonnen">Punkte: 0</div> <!-- Punktestand -->
+
+  $(function() {
+      $("#button").click(function() {
+        $(".toggle").prop('disabled', true);
+        setTimeout(function() {
+          $(".toggle").prop('disabled', false);
+        }, 2000);
+      });
+    });
+
+
+
+
     </script>
     
 </body>
