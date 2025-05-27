@@ -20,3 +20,7 @@
 ## 🖼️ Eindrücke:
 
 ![Hauptmenü](Bilder/hauptmenu.jpg)
+![Auswahl](Bilder/auswahl.jpg)
+![Los](Bilder/los.jpg)
+![Mainscreen](Bilder/mainscreen.jpg)
+![Pause](Bilder/pause.jpg)
