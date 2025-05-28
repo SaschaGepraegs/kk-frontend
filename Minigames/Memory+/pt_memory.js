@@ -5,12 +5,16 @@ let timer; // Timer für die Spielzeit
 let streak; // Zählt richtige Paare in Folge
 let aufgedeckteKarten; // Zählt die aufgedeckten Karten
 
-window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
 
+    window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
+ 
 // Funktion, um verschiedene Variablen zurückzusetzen
 function reset(){
     punkte = 0; // Punkte zurücksetzen
     timer = 25; // Timer zurücksetzen
+    if(localStorage.getItem("uic_status")== "test"){
+        timer = 99999999;
+    }
     streak = 0; // Streak zurücksetzen
     aufgedeckteKarten = 0; // Aufgedeckte Karten zurücksetzen
 }

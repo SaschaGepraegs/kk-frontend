@@ -1,20 +1,43 @@
 localStorage.setItem("uic_username", undefined);
 localStorage.setItem("uic_gamepin", undefined);
 localStorage.setItem("uic_gamequeue_index", 0);
+localStorage.setItem("uic_status", undefined)
 
 // Zeige Namensfeld erst nach erfolgreicher Lobbyprüfung
 async function checkLobby() {
     const lobbycode = document.getElementById("lobbyeingabe").value;
-    if (!lobbycode) {
+    if (!lobbycode && lobbycode!="test") {
         alert("Bitte gib zuerst einen Lobbycode ein.");
         return;
+    }else 
+    if (lobbycode == "test"){
+        var eingabeTest = window.prompt("Wähle ein Spiel aus");
+        switch(eingabeTest){
+            case "1":{
+            window.localStorage.setItem("uic_status", "test")
+            window.location.assign("./Minigames/Pizza_Clicker/game1.html")
+            }
+            break;
+            case "2":{
+            window.localStorage.setItem("uic_status", "test")
+            window.location.assign("./Minigames/Memory+/pt_memory.html")
+            }
+            break;
+            case "3":{
+            window.localStorage.setItem("uic_status", "test")
+            window.location.assign("./Minigames/Schere_Stein_Papier/game2.html")
+            }
+
+        }
+        return;
+        
     }
     // Loader anzeigen
     document.getElementById("loaderOverlay").style.display = "flex";
     try {
         const antwort = await fetch('https://kk-backend.vercel.app/getOpenLobbyList');
         const data = await antwort.json();
-        if (!JSON.stringify(data).includes(lobbycode)) {
+        if (!JSON.stringify(data).includes(lobbycode)&&lobbycode!="test") {
             alert("Diese Lobby existiert nicht.");
             document.getElementById("loaderOverlay").style.display = "none";
             return;
@@ -44,6 +67,7 @@ async function joinLobby() {
         alert("Reset durchgeführt.");
         return;
     }
+    
     // Spieler prüfen
     const playerRes = await fetch('https://kk-backend.vercel.app/checkForPlayer', {
         method: 'POST',
