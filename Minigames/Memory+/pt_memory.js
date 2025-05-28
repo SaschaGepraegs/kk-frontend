@@ -9,8 +9,7 @@ var LobbyStatus;
 let timerInterval; // NEU: Intervall-ID speichern
 let spielBeendet = false; // NEU: Flag für Spielende
 
-
-    window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
+window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
  
 // Funktion, um verschiedene Variablen zurückzusetzen
 function reset(){
@@ -89,7 +88,7 @@ function kartenVergleichen(){
                 aktuellAufgedeckteKarten[1].style.visibility = "hidden";
                 aktuellAufgedeckteKarten = [];
                 KartenEntsperren(); // Karten erst jetzt wieder entsperren!
-            }, 1200); // Dauer der CSS-Animation (fadeOut)
+            }, 200); // Dauer der CSS-Animation (fadeOut)
             punkte+=25;
             Streak();
             document.getElementById("punkte").textContent = "Punkte: " + punkte;
@@ -110,7 +109,7 @@ function kartenVergleichen(){
             setTimeout(() => {
                 aktuellAufgedeckteKarten = [];
                 KartenEntsperren();
-            }, 400); // Zeit für das Zudecken
+            }, 300); // Zeit für das Zudecken
         }
         document.getElementById("streak").innerHTML = "Streak: " + streak;
     }, 600); // Zeit, wie lange beide Karten offen bleiben
