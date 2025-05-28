@@ -196,6 +196,7 @@ async function spielBeenden() {
 async function checkLobby() {
     const status = await LobbyStatus();
     if (status == "off") {
+        console.log("Lobby ist geschlossen oder nicht gefunden");
         window.location.assign("./index.html");
     }
 }
@@ -208,11 +209,14 @@ async function LobbyStatus() {
         const response = await fetch(`https://kk-backend.vercel.app/getOpenLobbyList`);
         const data = await response.json();
         if (Array.isArray(data) && data.map(String).map(s => s.trim()).includes(lobby)) {
+            console.log("Lobby ist offen");
             return "on";
         } else {
+            console.log("Lobby ist geschlossen oder nicht gefunden");
             return "off";
         }
     } catch {
+        console.log("Lobby ist geschlossen oder nicht gefunden");
         return "off";
     }
 }
