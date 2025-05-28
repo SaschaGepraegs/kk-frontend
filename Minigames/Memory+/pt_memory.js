@@ -187,7 +187,7 @@ async function spielBeenden() {
 async function checkLobby() {
     const status = await LobbyStatus();
     if (status === "off") {
-        window.location.assign("index.html");
+        window.location.assign("../index.html");
     }
 }
 
