@@ -6,29 +6,65 @@
     <title>Lobby-Übersicht</title>
     <script src="mainscreen.js" defer></script>
     <link rel="stylesheet" href="mainscreen.css" />
+    <!-- Material Symbols (Google Fonts) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
-<body>
-    <h1>Lobby</h1>
-    <h2 id="pinAnzeige">PIN: </h2>
-    <div id="spielerListe">Spieler werden geladen...</div>
-    <div id="warteschlangeBox" style="max-width:600px;margin:1.5rem auto 0 auto;padding:1rem;background:#232526;border-radius:12px;box-shadow:0 0 10px rgba(255,255,255,0.07);color:#fff;text-align:center;">
-        <h3 style="margin-top:0;">Warteschlange</h3>
-        <div id="warteschlangeContent">Lade Warteschlange...</div>
-    </div>
-    <button id="startButton">Spiel starten</button>
-    <button id="spielBeendenBtn">Spiel beenden</button>
-    <button id="gameAuswahlBtn" style="display:block; margin:2rem auto 0 auto; padding:1rem 2rem; font-size:1.1rem; background:#ff6ec4; color:#fff; border:none; border-radius:8px; cursor:pointer;">Nächstes Spiel auswählen</button>
-    <!-- Popup für Spielauswahl -->
-    <div id="popupOverlay">
-        <div id="popupMenu">
-            <h2>Nächstes Spiel auswählen</h2>
-            <div class="game-grid" id="gameGrid">
-                <!-- Spielkarten werden per JS eingefügt -->
+<body class="md3-bg" id="bodyRoot">
+    <main class="md3-main-container">
+        <section class="md3-top-bar">
+            <h1>KlickKrawall-Mainscreen</h1>
+            <button id="darkModeToggle" class="md3-icon-btn" title="Darkmode umschalten" style="position:absolute;top:1.5rem;right:2.5rem;">
+                <span class="material-symbols-outlined" id="darkModeIcon">dark_mode</span>
+            </button>
+            <div class="md3-pin-card md3-elevated-card">
+                <div class="md3-pin-content">
+                    <span class="material-symbols-outlined md3-pin-icon">key</span>
+                    <span id="mainPinHeading" class="md3-pin-heading">Lobby</span>
+                    <span id="pinAnzeige" class="md3-pin-text">PIN: </span>
+                    <button id="copyPinBtn" class="md3-icon-btn" title="PIN kopieren">
+                        <span class="material-symbols-outlined">content_copy</span>
+                    </button>
+                </div>
             </div>
-            <button id="spielSetzenBtn" disabled>Spiel setzen</button>
-            <div id="auswahlStatus"></div>
+        </section>
+        <section class="md3-content-flex">
+            <div class="md3-card md3-elevated-card md3-player-card">
+                <h2 class="md3-card-title">Spieler</h2>
+                <div id="spielerListe" class="md3-list">Spieler werden geladen...</div>
+            </div>
+            <div class="md3-card md3-elevated-card md3-queue-card">
+                <h2 class="md3-card-title">Warteschlange</h2>
+                <div id="warteschlangeContent" class="md3-list">Lade Warteschlange...</div>
+            </div>
+            <div class="md3-card md3-elevated-card md3-actions-card">
+                <div class="md3-actions">
+                    <button id="startButton" class="md3-btn md3-btn-filled">
+                        <span class="material-symbols-outlined">play_arrow</span>
+                        Spiel starten
+                    </button>
+                    <button id="spielBeendenBtn" class="md3-btn md3-btn-tonal">
+                        <span class="material-symbols-outlined">stop_circle</span>
+                        Spiel beenden
+                    </button>
+                </div>
+                <button id="gameAuswahlBtn" class="md3-btn md3-btn-outlined" style="margin-top:2rem;">
+                    <span class="material-symbols-outlined">apps</span>
+                    Nächstes Spiel auswählen
+                </button>
+            </div>
+        </section>
+        <!-- Popup für Spielauswahl -->
+        <div id="popupOverlay" class="md3-popup-overlay">
+            <div id="popupMenu" class="md3-popup-card md3-elevated-card">
+                <h2 class="md3-card-title">Nächstes Spiel auswählen</h2>
+                <div class="game-grid" id="gameGrid">
+                    <!-- Spielkarten werden per JS eingefügt -->
+                </div>
+                <button id="spielSetzenBtn" class="md3-btn md3-btn-filled" disabled>Spiel setzen</button>
+                <div id="auswahlStatus" class="md3-status-text"></div>
+            </div>
         </div>
-    </div>
+    </main>
     <script>
         // Button-Logik für "Nächstes Spiel auswählen" anpassen:
         // Der Button soll IMMER sichtbar sein, daher alles entfernen:
@@ -64,6 +100,68 @@
                 document.getElementById("warteschlangeContent").textContent = "Fehler beim Laden der Warteschlange.";
             }
         }
+
+        // Copy-Button Funktionalität für die PIN
+        document.addEventListener("DOMContentLoaded", function() {
+            const pinAnzeige = document.getElementById("pinAnzeige");
+            const copyBtn = document.getElementById("copyPinBtn");
+            function getPin() {
+                // Extrahiere die PIN aus dem Text, z.B. "PIN: 1234"
+                const match = pinAnzeige.textContent.match(/\d+/);
+                return match ? match[0] : "";
+            }
+            copyBtn.onclick = function() {
+                const pin = getPin();
+                if (pin) {
+                    navigator.clipboard.writeText(pin);
+                    copyBtn.textContent = "✅";
+                    copyBtn.style.background = "linear-gradient(90deg,#11998e 0%,#38ef7d 100%)";
+                    setTimeout(() => {
+                        copyBtn.textContent = "📋";
+                        copyBtn.style.background = "linear-gradient(90deg,#43e97b 0%,#38f9d7 100%)";
+                    }, 1200);
+                }
+            };
+        });
+
+        // PIN als Hauptüberschrift anzeigen
+        document.addEventListener("DOMContentLoaded", function() {
+            const pinAnzeige = document.getElementById("pinAnzeige");
+            const mainPinHeading = document.getElementById("mainPinHeading");
+            const updateMainHeading = () => {
+                const match = pinAnzeige.textContent.match(/\d+/);
+                if (match) {
+                    mainPinHeading.textContent = match[0];
+                }
+            };
+            // Initial setzen
+            updateMainHeading();
+            // Bei jeder Änderung der PIN-Anzeige erneut setzen
+            const observer = new MutationObserver(updateMainHeading);
+            observer.observe(pinAnzeige, { childList: true, characterData: true, subtree: true });
+        });
+
+        // Darkmode Toggle
+        document.addEventListener("DOMContentLoaded", function() {
+            const body = document.getElementById("bodyRoot");
+            const toggle = document.getElementById("darkModeToggle");
+            const icon = document.getElementById("darkModeIcon");
+            const darkClass = "md3-dark";
+            function setMode(dark) {
+                if (dark) {
+                    body.classList.add(darkClass);
+                    icon.textContent = "light_mode";
+                    localStorage.setItem("md3_darkmode", "1");
+                } else {
+                    body.classList.remove(darkClass);
+                    icon.textContent = "dark_mode";
+                    localStorage.setItem("md3_darkmode", "0");
+                }
+            }
+            // Initial
+            setMode(localStorage.getItem("md3_darkmode") === "1");
+            toggle.onclick = () => setMode(!body.classList.contains(darkClass));
+        });
 
         // Initial laden und alle 3 Sekunden aktualisieren
         ladeWarteschlange();
