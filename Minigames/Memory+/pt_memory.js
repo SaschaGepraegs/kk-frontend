@@ -198,6 +198,7 @@ async function LobbyStatus() {
     try {
         const response = await fetch(`https://kk-backend.vercel.app/getOpenLobbyList`);
         const data = await response.json();
+        date = date.toString().trim();
         if (Array.isArray(data) && data.map(String).map(s => s.trim()).includes(lobby)) {
             return "on";
         } else {
