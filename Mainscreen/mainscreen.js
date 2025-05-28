@@ -118,7 +118,6 @@ const urlParams = new URLSearchParams(window.location.search);
 
         spielBeendenBtn.addEventListener("click", async () => {
             fetch("https://kk-backend.vercel.app/reset?lobby=" + pin);
-            alert("Spiel beendet.");
             window.location.href = "../index.html";
             return;
         });
