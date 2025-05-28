@@ -6,6 +6,8 @@ let streak; // Zählt richtige Paare in Folge
 let aufgedeckteKarten; // Zählt die aufgedeckten Karten
 const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch für das Aufdecken der Karten
 var LobbyStatus;
+let timerInterval; // NEU: Intervall-ID speichern
+let spielBeendet = false; // NEU: Flag für Spielende
 
 
     window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
@@ -14,14 +16,18 @@ var LobbyStatus;
 function reset(){
     punkte = 0; // Punkte zurücksetzen
     timer = 25; // Timer zurücksetzen
-    if(localStorage.getItem("uic_status")== "test"){
+    if(localStorage.getItem("uic_status")== "test"){ //Testoberfläche
         timer = 99999999;
     }
     streak = 0; // Streak zurücksetzen
     aufgedeckteKarten = 0; // Aufgedeckte Karten zurücksetzen
+    spielBeendet = false; // NEU: Flag zurücksetzen
+    if (timerInterval) {
+        clearInterval(timerInterval); // NEU: Vorherigen Timer stoppen
+    }
 }
 
-function spielStarten(){ // Funktion, die das Spiel startet
+async function spielStarten(){ // Funktion, die das Spiel startet
     reset(); // Reset-Funktion aufrufen
     Timer(); // Timer starten
     const KartenInfos = [ // Array mit Karteninformationen
@@ -147,17 +153,17 @@ function shuffleArray(array) {
 
 // Funktion für den Timer
 function Timer(){
-    setInterval(function(){ // Intervall für den Timer
-        if(timer > 0){ // Wenn der Timer größer als 0 ist
-            timer--; // Timer um 1 Sekunde verringern
-            document.getElementById("timer").innerHTML = "00:" +(timer < 10? "0" : "") + timer; // Zeit anzeigen
+    timerInterval = setInterval(function(){ // NEU: Intervall-ID speichern
+        if(timer > 0){
+            timer--;
+            document.getElementById("timer").innerHTML = "00:" +(timer < 10? "0" : "") + timer;
         }else{
-            clearInterval(this); // Intervall stoppen
-            KartenSperren(); // Karten sperren
-            spielBeenden(); // Spiel beenden
-            document.getElementById("timer").innerHTML = "Zeit abgelaufen"; // Zeit abgelaufen anzeigen
+            clearInterval(timerInterval); // NEU: Intervall korrekt stoppen
+            KartenSperren();
+            spielBeenden();
+            document.getElementById("timer").innerHTML = "Zeit abgelaufen";
         }
-    }, 1000); // Intervall von 1 Sekunde
+    }, 1000);
 }
 
 // Funktion für den Streak
@@ -172,6 +178,9 @@ function Streak(){
 
 //Funktion, die nach Ende des Spiels aufgerufen wird
 async function spielBeenden() {
+    if (spielBeendet) return; // NEU: Doppelte Ausführung verhindern
+    spielBeendet = true; // NEU: Flag setzen
+    clearInterval(timerInterval); // NEU: Timer sicher stoppen
     // Lobby und Spielername aus localStorage holen
     const lobby = localStorage.getItem("uic_gamepin") || "1111";
     const player = localStorage.getItem("uic_name") || "Name";
@@ -186,24 +195,28 @@ async function spielBeenden() {
 
 async function checkLobby() {
     const status = await LobbyStatus();
-    if (status === "off") {
-        window.location.assign("index.html");
+    if (status == "off") {
+        console.log("Lobby ist geschlossen oder nicht gefunden");
+        window.location.assign("./index.html");
     }
 }
 
 async function LobbyStatus() {
     let lobby = localStorage.getItem("uic_gamepin");
     if (!lobby) return "off";
-    lobby = lobby.toString().trim();
+    lobby = String(lobby);
     try {
         const response = await fetch(`https://kk-backend.vercel.app/getOpenLobbyList`);
         const data = await response.json();
         if (Array.isArray(data) && data.map(String).map(s => s.trim()).includes(lobby)) {
+            console.log("Lobby ist offen");
             return "on";
         } else {
+            console.log("Lobby ist geschlossen oder nicht gefunden");
             return "off";
         }
     } catch {
+        console.log("Lobby ist geschlossen oder nicht gefunden");
         return "off";
     }
 }
