@@ -51,8 +51,8 @@ function spielStarten(){ // Funktion, die das Spiel startet
     }
     KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
     displayName(); // Namen der Spieler anzeigen
-    checkLobby(); // Lobby-Status prüfen
-    setInterval(checkLobby, 5000);
+    checkLobby(); // Erster Check sofort
+    setInterval(checkLobby, 5000); // Alle 5 Sekunden erneut prüfen
 }
 
 // Funktion, um die Karte aufzudecken
@@ -188,8 +188,6 @@ async function checkLobby() {
     const status = await LobbyStatus();
     if (status === "off") {
         window.location.assign("index.html");
-    } else {
-        setTimeout(checkLobby, 5000); // Lobby-Status alle 5 Sekunden prüfen
     }
 }
 
