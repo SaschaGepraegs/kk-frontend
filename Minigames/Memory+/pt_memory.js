@@ -5,6 +5,7 @@ let timer; // Timer für die Spielzeit
 let streak; // Zählt richtige Paare in Folge
 let aufgedeckteKarten; // Zählt die aufgedeckten Karten
 const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch für das Aufdecken der Karten
+var LobbyStatus;
 
 window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
 
@@ -46,6 +47,8 @@ function spielStarten(){ // Funktion, die das Spiel startet
     }
     KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
     displayName(); // Namen der Spieler anzeigen
+    checkLobby(); // Lobby-Status prüfen
+    setInterval(checkLobby, 5000);
 }
 
 // Funktion, um die Karte aufzudecken
@@ -174,5 +177,31 @@ async function spielBeenden() {
     } catch (e) {
         alert("Fehler beim Übertragen der Punkte!");
         setTimeout(() => {window.location.replace("/System/pause.html");}, 3000); // Nach 3 Sekunden auf die Pause-Seite weiterleiten
+    }
+}
+
+async function checkLobby() {
+    const status = await LobbyStatus();
+    if (status === "off") {
+        window.location.assign("index.html");
+    } else {
+        setTimeout(checkLobby, 5000); // Lobby-Status alle 5 Sekunden prüfen
+    }
+}
+
+async function LobbyStatus() {
+    let lobby = localStorage.getItem("uic_gamepin");
+    if (!lobby) return "off";
+    lobby = lobby.toString().trim();
+    try {
+        const response = await fetch(`https://kk-backend.vercel.app/getOpenLobbyList`);
+        const data = await response.json();
+        if (Array.isArray(data) && data.map(String).map(s => s.trim()).includes(lobby)) {
+            return "on";
+        } else {
+            return "off";
+        }
+    } catch {
+        return "off";
     }
 }
