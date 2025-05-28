@@ -27,7 +27,7 @@ function reset(){
     }
 }
 
-function spielStarten(){ // Funktion, die das Spiel startet
+async function spielStarten(){ // Funktion, die das Spiel startet
     reset(); // Reset-Funktion aufrufen
     Timer(); // Timer starten
     const KartenInfos = [ // Array mit Karteninformationen
@@ -195,7 +195,7 @@ async function spielBeenden() {
 
 async function checkLobby() {
     const status = await LobbyStatus();
-    if (status === "off") {
+    if (status == "off") {
         window.location.assign("./index.html");
     }
 }
@@ -203,7 +203,7 @@ async function checkLobby() {
 async function LobbyStatus() {
     let lobby = localStorage.getItem("uic_gamepin");
     if (!lobby) return "off";
-    lobby = lobby.toString().trim();
+    lobby = String(lobby);
     try {
         const response = await fetch(`https://kk-backend.vercel.app/getOpenLobbyList`);
         const data = await response.json();
