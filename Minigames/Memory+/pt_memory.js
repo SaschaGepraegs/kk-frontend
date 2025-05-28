@@ -8,6 +8,7 @@ const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch f
 var LobbyStatus;
 let timerInterval; // NEU: Intervall-ID speichern
 let spielBeendet = false; // NEU: Flag für Spielende
+let lobbystatusvar
 
 
     window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
@@ -210,9 +211,11 @@ async function LobbyStatus() {
         const data = await response.json();
         if (Array.isArray(data) && data.map(String).map(s => s.trim()).includes(lobby)) {
             console.log("Lobby ist offen");
+            lobbystatusvar = "on";
             return "on";
         } else {
             console.log("Lobby ist geschlossen oder nicht gefunden");
+            lobbystatusvar = "off";
             return "off";
         }
     } catch {
