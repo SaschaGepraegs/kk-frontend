@@ -118,7 +118,7 @@ spielSetzenBtn.addEventListener("click", async () => {
 
 spielBeendenBtn.addEventListener("click", async () => {
     fetch("https://kk-backend.vercel.app/reset?lobby=" + pin);
-    window.location.href = "../index.html";
+    window.location.replace("../index.html");
     return;
 });
 
