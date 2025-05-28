@@ -164,7 +164,7 @@ function Timer(){
 function Streak(){
     streak++; // Zähler für richtige Paare erhöhen
     if(streak >= 2){
-        punkte+=streak*5; // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
+        punkte+=(streak*5); // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
         document.getElementById("bonuspunkte").textContent = "+1 Bonuspunkt"; // "+1 Bonuspunkt" anzeigen
         setTimeout(() => {document.getElementById("bonuspunkte").textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
     }

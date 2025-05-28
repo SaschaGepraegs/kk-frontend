@@ -101,6 +101,7 @@
             display: flex;
             justify-content: space-between;
             animation: fadeintext 1.2s;
+            gap: 1em;
         }
         /* --- Mobile Ansicht --- */
         @media (max-width: 600px) {
@@ -315,7 +316,7 @@
                 if (Array.isArray(punkteArr) && punkteArr.length > 0) {
                     punkteArr.forEach(eintrag => {
                         const li = document.createElement("li");
-                        li.innerHTML = `<span>${eintrag.spieler}</span><span>${eintrag.punkte}</span>`;
+                        li.innerHTML = `<span>${eintrag.spieler}</span> <span>${eintrag.punkte}</span>`;
                         scoreList.appendChild(li);
                     });
                     document.getElementById("scoreDummyHint").textContent = "";
