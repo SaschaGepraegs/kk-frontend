@@ -46,5 +46,8 @@ async function spielBeenden() {
 }
 
 // Spielstart nach Laden der Seite
+if(localStorage.getItem("uic_status")!= "test"){
 window.onload = startGame;
-
+}else{
+    alert("Testoberfläche")
+}
