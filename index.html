@@ -126,17 +126,17 @@
     </div>
     <div id="lobbySection" style="margin-top: 100px;">
         <p>Bitte gib hier deinen Lobby-Code ein:</p>
-        <input type="text" id="lobbyeingabe" class="namenseingabe bottone1" maxlength="4" pattern="\d{1,4}"
+        <input type="text" id="lobbyeingabe" class="namenseingabe Button1" maxlength="4" pattern="\d{1,4}"
             inputmode="numeric" autocomplete="off">
         <div style="margin-top: 30px;">
-            <button onclick="checkLobby()" id="bottone1">Weiter</button>
+            <button onclick="checkLobby()" id="Button1">Weiter</button>
         </div>
     </div>
     <div id="nameSection" style="display:none; margin-top: 100px;">
         <p>Bitte gib hier deinen Nutzernamen ein:</p>
-        <input type="text" id="namenseingabe" class="namenseingabe bottone1" autocomplete="off">
+        <input type="text" id="namenseingabe" class="namenseingabe Button1" autocomplete="off">
         <div style="margin-top: 30px;">
-            <button onclick="joinLobby()" id="bottone2" class="bottone1">Weiter</button>
+            <button onclick="joinLobby()" id="Button2" class="Button1">Weiter</button>
         </div>
     </div>
     <div id="loaderOverlay">
@@ -155,8 +155,9 @@
             <div></div>
         </div>
     </div>
-    <p style="margin-top: 60px;">Klicke <a href="./Mainscreen/openLobby.html" target="_blank" style="color:#C3D900">hier</a>, um
-        eine Lobby zu hosten.</p>
+    <div style="margin-top: 30px;">
+    <button onclick="LobbyHosten()" id ="Button3" class="Button1">Lobby Hosten</button>
+    </div>
 </body>
 
 </html>
