@@ -63,16 +63,23 @@ async function spielStarten(){ // Funktion, die das Spiel startet
 
 // Funktion, um die Karte aufzudecken
 function KarteAufdecken(){
-    this.src = this.KartenBild;// Bild der Karte anzeigen
     this.aufgedeckt = true; // Karte ist aufgedeckt
-    KartenGeräusch.currentTime = 0.2; // Geräusch zurücksetzen
+    aktuellAufgedeckteKarten.push(this); // Karte in das Array der aktuell aufgedeckten Karten hinzufügen
+    this.classList.toggle("clicked"); // Animation für das Aufdecken
+    setTimeout(() => {this.src = this.KartenBild; // Bild der Karte anzeigen
+    }, 250); // aber erst nach Hälfte der css-Animation (0,25s)    
+    KartenGeräusch.currentTime = 0.35; // Geräusch auf 0,35s setzen
     KartenGeräusch.play(); // Geräusch abspielen
 }
 
 // Funktion, um die Karte zuzudecken
 function KarteZudecken(){
-    this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite anzeigen
     this.aufgedeckt = false; // Karte ist zugedeckt
+    this.classList.toggle("clicked"); // Animation für das Zudecken
+    setTimeout(() => {this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite anzeigen
+    }, 100); // aber erst nach einem Drittel der css-Animation (0,1s)
+    KartenGeräusch.currentTime = 0.4; // Geräusch auf 0,35s setzen
+    KartenGeräusch.play(); // Geräusch abspielen
 }
 
 // Funktion um die Karten zu vergleichen
@@ -80,23 +87,23 @@ function kartenVergleichen(){
     KartenSperren(); // Karten sperren, solange Animation läuft!
     setTimeout(function(){
         if(aktuellAufgedeckteKarten[0].KartenWert == aktuellAufgedeckteKarten[1].KartenWert){
-            aktuellAufgedeckteKarten[0].onclick = null;
-            aktuellAufgedeckteKarten[1].onclick = null;
-            aktuellAufgedeckteKarten[0].classList.add("found");
-            aktuellAufgedeckteKarten[1].classList.add("found");
+            aktuellAufgedeckteKarten[0].onclick = null; // Klick-Event-Listener ausschalten
+            aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener ausschalten
+            aktuellAufgedeckteKarten[0].classList.add("found"); // css-Klasse "found" für die gefundene Karten hinzufügen,
+            aktuellAufgedeckteKarten[1].classList.add("found"); // dadurch wird css-Animation "found" aktiviert
             setTimeout(() => {
-                aktuellAufgedeckteKarten[0].style.visibility = "hidden";
-                aktuellAufgedeckteKarten[1].style.visibility = "hidden";
-                aktuellAufgedeckteKarten = [];
-                KartenEntsperren(); // Karten erst jetzt wieder entsperren!
-            }, 200); // Dauer der CSS-Animation (fadeOut)
-            punkte+=25;
-            Streak();
-            document.getElementById("punkte").textContent = "Punkte: " + punkte;
-            timer += 1;
-            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer;
-            document.getElementById("timerPlus").textContent = "+1s";
-            setTimeout(() => {timerPlus.textContent = "";}, 800);
+                aktuellAufgedeckteKarten[0].style.visibility = "hidden"; // Karte ausblenden
+                aktuellAufgedeckteKarten[1].style.visibility = "hidden"; // Karte ausblenden
+                aktuellAufgedeckteKarten = []; // Array der aktuell aufgedeckten Karten leeren
+                KartenEntsperren(); // Karten wieder entsperren
+            },  300); // aber erst nach der css-Animation (0,3 s) ausblenden
+            punkte+=25; // Punkte erhöhen
+            Streak(); // Streak erhöhen (und eventuell Bonuspunkte vergeben)
+            document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
+            timer += 1; // Timer um 1 Sekunde erhöhen
+            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer; // Timer anzeigen
+            document.getElementById("timerPlus").textContent = "+1s"; // "+1s" anzeigen
+            setTimeout(() => {timerPlus.textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
             aufgedeckteKarten += 2; // Zähler für aufgedeckte Karten erhöhen
             if(aufgedeckteKarten == cards.length){ // Wenn alle Karten aufgedeckt sind
                 spielBeenden(); // Spiel beenden
@@ -104,13 +111,11 @@ function kartenVergleichen(){
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]);
             KarteZudecken.call(aktuellAufgedeckteKarten[1]);
-            aktuellAufgedeckteKarten[0].classList.toggle("clicked");
-            aktuellAufgedeckteKarten[1].classList.toggle("clicked");
             streak = 0;
             setTimeout(() => {
                 aktuellAufgedeckteKarten = [];
                 KartenEntsperren();
-            }, 300); // Zeit für das Zudecken
+            }, 300); // Zeit für das Zudecken / css-Animation (0,3s)
         }
         document.getElementById("streak").innerHTML = "Streak: " + streak;
     }, 600); // Zeit, wie lange beide Karten offen bleiben
@@ -129,8 +134,6 @@ function KartenEntsperren(){
         cards[i].onclick = function () { // Klick-Event-Listener hinzufügen
             if(this.aufgedeckt == false && aktuellAufgedeckteKarten.length <2) { // Wenn die angeklickte Karte nicht aufgedeckt ist und weniger als 2 Karten aufgedeckt sind
                 KarteAufdecken.call(this); // Karte aufdecken
-                this.classList.toggle("clicked"); //Animation für Umdrehen
-                aktuellAufgedeckteKarten.push(this); // Karte in das Array der aktuell aufgedeckten Karten hinzufügen
                 if(aktuellAufgedeckteKarten.length == 2){ // Wenn 2 Karten aufgedeckt sind
                     kartenVergleichen(); // Karten vergleichen
                 }

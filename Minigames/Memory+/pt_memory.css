@@ -90,7 +90,7 @@ td {
 .cards.clicked {
     transform: rotateY(180deg); /* Umdreh Effekt */
     box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.3);
-    transition: transform 0.6s ease-in-out, box-shadow 0.3s;
+    transition: transform 0.5s ease-in-out, box-shadow 0.25s;
 }
 
 #playerList {
@@ -107,8 +107,7 @@ td {
 }
 
 .cards.found {
-    animation: fadeOut 0.7s forwards;
-    animation-delay: 0.5s;
+    animation: fadeOut 0.3s forwards;
 }
 
 
