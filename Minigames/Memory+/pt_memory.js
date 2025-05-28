@@ -16,7 +16,7 @@ let spielBeendet = false; // NEU: Flag für Spielende
 function reset(){
     punkte = 0; // Punkte zurücksetzen
     timer = 25; // Timer zurücksetzen
-    if(localStorage.getItem("uic_status")== "test"){
+    if(localStorage.getItem("uic_status")== "test"){ //Testoberfläche
         timer = 99999999;
     }
     streak = 0; // Streak zurücksetzen
