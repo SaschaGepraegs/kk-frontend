@@ -64,7 +64,7 @@ async function spielStarten(){ // Funktion, die das Spiel startet
 
 // Funktion, um die Karte aufzudecken
 function KarteAufdecken(){
-    this.src = this.KartenBild; // Bild der Karte anzeigen
+    this.src = this.KartenBild;// Bild der Karte anzeigen
     this.aufgedeckt = true; // Karte ist aufgedeckt
     KartenGeräusch.currentTime = 0.2; // Geräusch zurücksetzen
     KartenGeräusch.play(); // Geräusch abspielen
@@ -114,7 +114,7 @@ function kartenVergleichen(){
             }, 400); // Zeit für das Zudecken
         }
         document.getElementById("streak").innerHTML = "Streak: " + streak;
-    }, 500); // Zeit, wie lange beide Karten offen bleiben
+    }, 600); // Zeit, wie lange beide Karten offen bleiben
 }
 
 // Funktion um die Karten zu sperren
