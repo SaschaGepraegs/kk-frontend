@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imposter | KlickKrawall</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="imposter.css">
+    <script src="imposter.js" defer></script>
+</head>
+<body>
+    <main class="mdc-elevation--z4">
+        <h1>Imposter</h1>
+        <div id="infoText">
+            <p>Drücke auf den Button, um dein Wort zu sehen.<br>
+            <small>Nur du darfst auf deinen Bildschirm schauen!</small></p>
+        </div>
+        <button id="showWordBtn" class="mdc-button mdc-button--raised">
+            <span class="mdc-button__label">Wort anzeigen</span>
+        </button>
+        <div id="wordCard" class="mdc-card" style="display:none;">
+            <span id="wordText"></span>
+        </div>
+    </main>
+</body>
+</html>
