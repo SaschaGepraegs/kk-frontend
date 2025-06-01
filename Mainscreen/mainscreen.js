@@ -12,7 +12,31 @@ async function ladeSpieler() {
             data.forEach(spieler => {
                 const el = document.createElement("div");
                 el.className = "spieler";
+                el.style.display = "flex";
+                el.style.alignItems = "center";
+                el.style.justifyContent = "space-between";
+                el.style.gap = "0.5em";
                 el.textContent = spieler;
+                // Entfernen-Button (X)
+                const removeBtn = document.createElement("button");
+                removeBtn.title = "Spieler entfernen";
+                removeBtn.style.background = "none";
+                removeBtn.style.border = "none";
+                removeBtn.style.color = "#b3261e";
+                removeBtn.style.fontSize = "1.2em";
+                removeBtn.style.cursor = "pointer";
+                removeBtn.style.marginLeft = "0.5em";
+                removeBtn.style.display = "flex";
+                removeBtn.style.alignItems = "center";
+                removeBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1.2em;">close</span>';
+                removeBtn.onclick = async (e) => {
+                    e.stopPropagation();
+                    if (confirm(`Soll "${spieler}" wirklich entfernt werden?`)) {
+                        await fetch(`https://kk-backend.vercel.app/removePlayer?lobby=${pin}&spieler=${encodeURIComponent(spieler)}`);
+                        ladeSpieler();
+                    }
+                };
+                el.appendChild(removeBtn);
                 liste.appendChild(el);
             });
         } else {
@@ -48,7 +72,7 @@ const spiele = [
     { id: 2, name: "Schere Stein Papier", img: "https://dummyimage.com/64x64/90caf9/fff.png&text=SSP" },
     { id: 3, name: "Memory+", img: "https://dummyimage.com/64x64/ce93d8/fff.png&text=Memory+" },
     { id: 4, name: "Asteroids", img: "https://dummyimage.com/64x64/d95e0d/fff.png&text=Asteroids"},
-    //{ id: 5, name: "Zitate zuordnen", img: "https://dummyimage.com/64x64/a5d6a7/fff.png&text=Zz" },
+    { id: 5, name: "Imposter", img: "https://dummyimage.com/64x64/1976d2/fff.png&text=Imposter" }
     //{ id: 6, name: "Game 6", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=6" },
     //{ id: 7, name: "Game 7", img: "https://dummyimage.com/64x64/4fc3f7/fff.png&text=7" },
     //{ id: 8, name: "Game 8", img: "https://dummyimage.com/64x64/ba68c8/fff.png&text=8" },
