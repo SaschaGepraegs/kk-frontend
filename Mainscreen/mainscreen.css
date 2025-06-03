@@ -55,6 +55,7 @@ body.md3-bg {
     background: var(--md3-primary-container);
     color: var(--md3-on-primary-container);
     display: flex;
+    flex-direction: column;
     align-items: center;
     box-shadow: var(--md3-shadow);
     min-width: 340px;
@@ -67,7 +68,7 @@ body.md3-bg {
     align-items: center;
     gap: 1.1rem;
     width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .md3-pin-icon {

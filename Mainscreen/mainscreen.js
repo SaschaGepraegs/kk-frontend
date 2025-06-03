@@ -203,3 +203,21 @@ document.addEventListener("DOMContentLoaded", function() {
     const observer = new MutationObserver(updateMainHeading);
     observer.observe(pinAnzeige, { childList: true, characterData: true, subtree: true });
 });
+
+// Copy-Button Funktionalität für den Lobby-Link (Material Icon)
+document.addEventListener("DOMContentLoaded", function() {
+    const copyBtn = document.getElementById("copyLinkBtn");
+    const iconSpan = copyBtn.querySelector("span.material-symbols-outlined");
+    copyBtn.onclick = function() {
+        const link = window.location.href;
+        if (link) {
+            navigator.clipboard.writeText(link);
+            iconSpan.textContent = "check";
+            copyBtn.style.background = "var(--md3-primary-container)";
+            setTimeout(() => {
+                iconSpan.textContent = "content_copy";
+                copyBtn.style.background = "none";
+            }, 1200);
+        }
+    };
+});
