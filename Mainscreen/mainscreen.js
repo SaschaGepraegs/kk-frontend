@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const copyBtn = document.getElementById("copyLinkBtn");
     const iconSpan = copyBtn.querySelector("span.material-symbols-outlined");
     copyBtn.onclick = function() {
-        const link = window.location.href;
+        const link = window.location.origin + "/index.html";
         if (link) {
             navigator.clipboard.writeText(link);
             iconSpan.textContent = "check";
