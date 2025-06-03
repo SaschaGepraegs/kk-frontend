@@ -10,6 +10,18 @@ function disableAllInputs(disabled = true) {
     });
 }
 
+// Liest die PIN aus der URL (?pin=...) und trägt sie automatisch ins Eingabefeld ein, falls vorhanden.
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pin = urlParams.get('pin');
+    if (pin) {
+        const lobbyInput = document.getElementById('lobbyeingabe');
+        if (lobbyInput) {
+            lobbyInput.value = pin;
+        }
+    }
+});
+
 // Enter-Taste für Lobbycode und Name
 document.addEventListener('DOMContentLoaded', () => {
     const lobbyInput = document.getElementById('lobbyeingabe');

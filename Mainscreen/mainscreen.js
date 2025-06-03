@@ -166,15 +166,17 @@ popupOverlay.addEventListener("mousedown", function(e) {
     }
 });
 
+// Funktion zum Abrufen der PIN (ausgelager, da sie mehrfach benötigt wird)
+function getPin() {
+        const match = pinAnzeige.textContent.match(/\d+/);
+        return match ? match[0] : "";
+}
+
 // Copy-Button Funktionalität für die PIN (Material Icon)
 document.addEventListener("DOMContentLoaded", function() {
     const pinAnzeige = document.getElementById("pinAnzeige");
     const copyBtn = document.getElementById("copyPinBtn");
     const iconSpan = copyBtn.querySelector("span.material-symbols-outlined");
-    function getPin() {
-        const match = pinAnzeige.textContent.match(/\d+/);
-        return match ? match[0] : "";
-    }
     copyBtn.onclick = function() {
         const pin = getPin();
         if (pin) {
@@ -209,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const copyBtn = document.getElementById("copyLinkBtn");
     const iconSpan = copyBtn.querySelector("span.material-symbols-outlined");
     copyBtn.onclick = function() {
-        const link = window.location.origin + "/index.html";
+        const link = window.location.origin + "/index.html?pin=" + getPin();
         if (link) {
             navigator.clipboard.writeText(link);
             iconSpan.textContent = "check";
