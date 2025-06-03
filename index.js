@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const lobbyInput = document.getElementById('lobbyeingabe');
         if (lobbyInput) {
             lobbyInput.value = pin;
+            checkLobby();
         }
     }
 });
