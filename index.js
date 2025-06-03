@@ -10,15 +10,15 @@ function disableAllInputs(disabled = true) {
     });
 }
 
-// Liest die PIN aus der URL (?pin=...) und trägt sie automatisch ins Eingabefeld ein, falls vorhanden.
+// Funktion für Link-Kopieren-Button
 document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search); // Liest die PIN aus der URL (?pin=...)
     const pin = urlParams.get('pin');
     if (pin) {
-        const lobbyInput = document.getElementById('lobbyeingabe');
+        const lobbyInput = document.getElementById('lobbyeingabe'); // und trägt sie automatisch ins Eingabefeld ein, falls vorhanden.
         if (lobbyInput) {
             lobbyInput.value = pin;
-            checkLobby();
+            checkLobby(); // und springt direkt zur Namenseingabe, wenn die Lobby existiert.
         }
     }
 });
