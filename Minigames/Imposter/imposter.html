@@ -380,10 +380,9 @@
                 // Stimmen für alle Spieler holen
                 const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
                 const votesArr = await votesRes.json();
-                // votesArr: [0]=Name mit meisten Stimmen, [1]=Prozentwert
-                let topName = votesArr[0];
-                let topPercent = Number(votesArr[1]);
-                if (topPercent > 75 && !votingDone) {
+                // votesArr: [{spieler: "Name", prozent: 0}, ...]
+                let winner = votesArr.find(v => v.prozent > 75);
+                if (winner && !votingDone) {
                     votingDone = true;
                     clearInterval(votingInterval);
                     if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
@@ -397,8 +396,10 @@
                     const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
                     allPlayers = await res.json();
                 }
+                // votesArr enthält alle Spieler, ggf. sortieren wie allPlayers
                 allPlayers.forEach(name => {
-                    const percent = (name === topName) ? topPercent : 0;
+                    const voteObj = votesArr.find(v => v.spieler === name);
+                    const percent = voteObj ? Number(voteObj.prozent) : 0;
                     const label = document.createElement("div");
                     label.className = "md-progress-label";
                     label.textContent = name + (percent > 0 ? ` (${percent}%)` : "");
