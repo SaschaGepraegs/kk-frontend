@@ -244,6 +244,8 @@
         let selectedPlayer = null;
         let votingInterval = null;
         let votingDone = false;
+        let voteCooldown = false;
+        let voteCooldownTimeout = null;
 
         // --- UI Elements ---
         const roleCard = document.getElementById("roleCard");
@@ -316,6 +318,7 @@
             voteHint.textContent = "";
             selectedPlayer = null;
             voted = false;
+            voteCooldown = false;
             await renderPlayerList();
             startVotingInterval();
         }
@@ -334,7 +337,7 @@
                         card.style.fontStyle = "italic";
                     }
                     card.onclick = () => {
-                        if (voted) return;
+                        if (voteCooldown) return;
                         selectedPlayer = name;
                         document.querySelectorAll('.md-player-card').forEach(c => c.classList.remove('selected'));
                         card.classList.add('selected');
@@ -348,16 +351,24 @@
         }
 
         voteBtn.onclick = async () => {
-            if (!selectedPlayer || voted) return;
+            if (!selectedPlayer || voteCooldown) return;
             voteBtn.disabled = true;
-            voted = true;
+            voteCooldown = true;
             try {
                 await fetch(`https://kk-backend.vercel.app/castImposterVote?lobby=${lobby}&elect=${selectedPlayer}`);
-                voteBtn.style.display = "none";
-                voteHint.textContent = "Du hast schon abgestimmt.";
+                voteHint.textContent = "Du kannst in 20 Sekunden erneut abstimmen.";
                 document.querySelectorAll('.md-player-card').forEach(c => c.classList.add('voted'));
+                // 20 Sekunden Cooldown
+                voteCooldownTimeout = setTimeout(() => {
+                    voteCooldown = false;
+                    voteBtn.disabled = false;
+                    voteHint.textContent = "";
+                    document.querySelectorAll('.md-player-card').forEach(c => c.classList.remove('voted'));
+                }, 20000);
             } catch (e) {
                 voteHint.textContent = "Fehler beim Abstimmen.";
+                voteCooldown = false;
+                voteBtn.disabled = false;
             }
         };
 
@@ -375,10 +386,11 @@
                 if (Array.isArray(arr) && arr.length >= 3) {
                     const topName = arr[1];
                     const percent = Number(arr[2]);
-                    if (percent > 50 && !votingDone) {
+                    if (percent > 75 && !votingDone) {
                         votingDone = true;
                         clearInterval(votingInterval);
-                        window.location.href = "https://www.google.de";
+                        if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
+                        window.location.href = "/pause.html";
                         return;
                     }
                     renderResults(arr);
