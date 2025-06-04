@@ -406,7 +406,7 @@ body.md3-dark {
             <p class="md3-pin-text" id="usernameangabe">Nutzername: username</p>
             <div class="md3-pin-card md3-elevated-card">
                 <div class="md3-pin-content">
-                    <button onclick="window.location.replace('../index.html')" id="button1" class="md3-btn md3-btn-filled">Lobby verlassen</button>
+                    <button onclick="lobbyVerlassen()" id="button1" class="md3-btn md3-btn-filled">Lobby verlassen</button>
                 </div>
             </div>
             <div class="md3-pin-card md3-elevated-card">
@@ -551,4 +551,16 @@ body.md3-dark {
             console.error("Fehler beim Überprüfen der Lobby:", error);
         }
     }, 5000); // Alle 5 Sekunden prüfen
+
+    async function lobbyVerlassen() {
+        const pin = localStorage.getItem("uic_gamepin");
+        const username = localStorage.getItem("uic_username");
+        if (!pin || !username) return;
+        try {
+            await fetch('https://kk-backend.vercel.app/removePlayer?lobby=' + pin + '&spieler=' + username);
+            window.location.replace("../index.html");
+            } catch (error) {
+            console.error("Fehler beim Verlassen der Lobby:", error);
+            }
+        }
 </script>
