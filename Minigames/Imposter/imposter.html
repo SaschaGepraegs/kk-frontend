@@ -380,10 +380,9 @@
                 // Stimmen für alle Spieler holen
                 const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
                 const votesArr = await votesRes.json();
-                // votesArr: [0]=dummy, [1]=Name mit meisten Stimmen, [2]=Prozentwert
-                // Wir nehmen an, dass die API nur den Top-Kandidaten liefert, daher zeigen wir für alle 0% außer für den Top-Kandidaten
-                let topName = votesArr[1];
-                let topPercent = Number(votesArr[2]);
+                // votesArr: [0]=Name mit meisten Stimmen, [1]=Prozentwert
+                let topName = votesArr[0];
+                let topPercent = Number(votesArr[1]);
                 if (topPercent > 75 && !votingDone) {
                     votingDone = true;
                     clearInterval(votingInterval);
