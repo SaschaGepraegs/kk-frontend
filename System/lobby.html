@@ -525,4 +525,21 @@ body.md3-dark {
             }
         };
     });
+
+    // Neu: Prüft regelmäßig, ob der Spieler noch in der Lobby ist
+    setInterval(async () => {
+        const pin = localStorage.getItem("uic_gamepin"); // Lobby-Pin aus dem Local Storage
+        const username = localStorage.getItem("uic_username"); // Nutzername aus dem Local Storage
+        if(!pin || !username) return;
+        try{
+            const res = await fetch('https://kk-backend.vercel.app/istSpielerInLobby?lobby=' + pin +"&name=" + username);
+            const istInLobby = await res.json();
+            if (!istInLobby) {
+                alert("Du wurdest aus der Lobby entfernt.");
+                window.location.assign("../index.html");
+            }
+        }catch (error) {
+            console.error("Fehler beim Überprüfen der Lobby:", error);
+        }
+    }, 5000); // Alle 5 Sekunden prüfen
 </script>
