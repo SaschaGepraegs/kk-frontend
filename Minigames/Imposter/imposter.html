@@ -272,7 +272,7 @@
                 return;
             }
             try {
-                const res = await fetch(`https://kk-backend.vercel.app/istImposter?lobby=${encodeURIComponent(lobby)}&spieler=${encodeURIComponent(username)}`);
+                const res = await fetch(`https://kk-backend.vercel.app/istImposter?lobby=${lobby}&spieler=${username}`);
                 const arr = await res.json();
                 if (!Array.isArray(arr) || arr.length < 2) throw new Error("Ungültige Antwort");
                 role = arr[0];
@@ -323,7 +323,7 @@
         async function renderPlayerList() {
             playerList.innerHTML = "";
             try {
-                const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${encodeURIComponent(lobby)}`);
+                const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
                 const arr = await res.json();
                 arr.forEach(name => {
                     const card = document.createElement("div");
@@ -352,7 +352,7 @@
             voteBtn.disabled = true;
             voted = true;
             try {
-                await fetch(`https://kk-backend.vercel.app/castImposterVote?lobby=${encodeURIComponent(lobby)}&elect=${encodeURIComponent(selectedPlayer)}`);
+                await fetch(`https://kk-backend.vercel.app/castImposterVote?lobby=${lobby}&elect=${selectedPlayer}`);
                 voteBtn.style.display = "none";
                 voteHint.textContent = "Du hast schon abgestimmt.";
                 document.querySelectorAll('.md-player-card').forEach(c => c.classList.add('voted'));
@@ -369,7 +369,7 @@
 
         async function updateVotingResults() {
             try {
-                const res = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${encodeURIComponent(lobby)}`);
+                const res = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
                 const arr = await res.json();
                 // arr: [0]=dummy, [1]=Name mit meisten Stimmen, [2]=Prozentwert
                 if (Array.isArray(arr) && arr.length >= 3) {
@@ -389,10 +389,10 @@
         async function renderResults(voteArr) {
             // Zeige alle Spieler mit Balken
             try {
-                const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${encodeURIComponent(lobby)}`);
+                const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
                 const arr = await res.json();
                 // Hole aktuelle Stimmenverteilung
-                const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${encodeURIComponent(lobby)}`);
+                const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
                 const votesArr = await votesRes.json();
                 // votesArr: [0]=dummy, [1]=Name mit meisten Stimmen, [2]=Prozentwert
                 // Wir nehmen an, dass die API nur den Top-Kandidaten liefert, daher zeigen wir nur diesen an
