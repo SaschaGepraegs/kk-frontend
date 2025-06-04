@@ -228,10 +228,7 @@
             <div id="playerList" class="md-player-list"></div>
             <button id="voteBtn" class="md-btn" disabled>Vote bestätigen</button>
             <div id="voteHint" class="md-vote-hint"></div>
-        </div>
-        <div id="resultsCard" class="md-card" style="display:none;">
-            <div class="md-title">Abstimmungsergebnis</div>
-            <div id="resultsList"></div>
+            <div id="resultsList" style="width:100%;margin-top:18px;"></div>
         </div>
     </div>
     <script>
@@ -246,6 +243,7 @@
         let votingDone = false;
         let voteCooldown = false;
         let voteCooldownTimeout = null;
+        let allPlayers = [];
 
         // --- UI Elements ---
         const roleCard = document.getElementById("roleCard");
@@ -258,12 +256,11 @@
         const playerList = document.getElementById("playerList");
         const voteBtn = document.getElementById("voteBtn");
         const voteHint = document.getElementById("voteHint");
-        const resultsCard = document.getElementById("resultsCard");
         const resultsList = document.getElementById("resultsList");
 
         // --- Helper ---
         function showOnly(card) {
-            [roleCard, neutralCard, votingCard, resultsCard].forEach(c => c.style.display = "none");
+            [roleCard, neutralCard, votingCard].forEach(c => c.style.display = "none");
             card.style.display = "flex";
         }
 
@@ -327,8 +324,8 @@
             playerList.innerHTML = "";
             try {
                 const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
-                const arr = await res.json();
-                arr.forEach(name => {
+                allPlayers = await res.json();
+                allPlayers.forEach(name => {
                     const card = document.createElement("div");
                     card.className = "md-player-card";
                     card.textContent = name;
@@ -380,37 +377,29 @@
 
         async function updateVotingResults() {
             try {
-                const res = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
-                const arr = await res.json();
-                // arr: [0]=dummy, [1]=Name mit meisten Stimmen, [2]=Prozentwert
-                if (Array.isArray(arr) && arr.length >= 3) {
-                    const topName = arr[1];
-                    const percent = Number(arr[2]);
-                    if (percent > 75 && !votingDone) {
-                        votingDone = true;
-                        clearInterval(votingInterval);
-                        if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
-                        window.location.href = "/pause.html";
-                        return;
-                    }
-                    renderResults(arr);
-                }
-            } catch (e) {}
-        }
-
-        async function renderResults(voteArr) {
-            // Zeige alle Spieler mit Balken
-            try {
-                const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
-                const arr = await res.json();
-                // Hole aktuelle Stimmenverteilung
+                // Stimmen für alle Spieler holen
                 const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
                 const votesArr = await votesRes.json();
                 // votesArr: [0]=dummy, [1]=Name mit meisten Stimmen, [2]=Prozentwert
-                // Wir nehmen an, dass die API nur den Top-Kandidaten liefert, daher zeigen wir nur diesen an
+                // Wir nehmen an, dass die API nur den Top-Kandidaten liefert, daher zeigen wir für alle 0% außer für den Top-Kandidaten
+                let topName = votesArr[1];
+                let topPercent = Number(votesArr[2]);
+                if (topPercent > 75 && !votingDone) {
+                    votingDone = true;
+                    clearInterval(votingInterval);
+                    if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
+                    window.location.href = "/pause.html";
+                    return;
+                }
+                // Balken für alle Spieler anzeigen
                 resultsList.innerHTML = "";
-                arr.forEach(name => {
-                    const percent = (name === votesArr[1]) ? Number(votesArr[2]) : 0;
+                if (!Array.isArray(allPlayers) || allPlayers.length === 0) {
+                    // Spieler neu holen, falls noch nicht geladen
+                    const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
+                    allPlayers = await res.json();
+                }
+                allPlayers.forEach(name => {
+                    const percent = (name === topName) ? topPercent : 0;
                     const label = document.createElement("div");
                     label.className = "md-progress-label";
                     label.textContent = name + (percent > 0 ? ` (${percent}%)` : "");
@@ -423,7 +412,6 @@
                     resultsList.appendChild(label);
                     resultsList.appendChild(bar);
                 });
-                showOnly(resultsCard);
             } catch (e) {
                 resultsList.innerHTML = "<div style='color:red;'>Fehler beim Laden der Ergebnisse.</div>";
             }
