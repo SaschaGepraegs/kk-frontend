@@ -9,54 +9,67 @@ h1{
     text-align: center; /* Zentrierter Text */
     font-size: 2.5em;
     margin-top: 20px;
+    font-family: 'Georgia', serif; /* Schriftart */
+}
+
+#punkteUndstreak {
+    display: flex; 
+    align-items: center; /* Zentriert die Elemente */
+    justify-content: space-between; 
+    gap: 16px; /* Abstand zwischen den Elementen */
+    margin: 20px 32px 20px 32px; /* Abstand um das Element */
 }
 
 #punkte {
     font-size: 1.5em; /* Schriftgröße */
-    text-align: center; /* Zentrierter Text */
-    margin-top: 20px;
-    color: #690ae6; /* Weißer Text */
-    background-color: #ffffff;
-    border-radius: 5px;
+    color:cyan; /* Textfarbe */
 }
 
 #bonuspunkte{
     font-size: 1.2em; /* Schriftgröße */
-    text-align: center; /* Zentrierter Text */
-    margin-top: 5px;
     color: green;
-    font-weight: bold; /* fett */
-    height: 20px;
+    font-weight: bold; /* fett */ 
+    width: 140px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;     
 }
 
 #streak {
-    font-size: 1.2em; /* Schriftgröße */
-    text-align: right;
-    color:darkorange;
+    font-size: 1.5em; /* Schriftgröße */
+    color:darkorange; /* Textfarbe */
+}
+
+#timerUndtimerPlus {
+    position: relative;
+    background: #ffffff;
     border-radius: 5px;
-    padding: 4px 12px;
-    position:static;
-    font-style: italic; /* kursiv */
+    margin: 20px 0 0 0;
+    padding: 12px 32px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 48px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #timer {
-    font-size: 1.5em; /* Schriftgröße */
-    text-align: center; /* Zentrierter Text */
-    margin-top: 20px;
-    color: #eb0d0d; /* Weißer Text */
-    background-color: #ffffff;
-    border-radius: 5px;
-    
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); 
+    font-size: 1.5em;
+    color: #eb0d0d;
 }
 
 #timerPlus {
-    font-size: 1.2em; /* Schriftgröße */
-    text-align: center; /* Zentrierter Text */
-    margin-top: 5px;
+    position: absolute;
+    left: calc(50% + 60px); /* Abstand rechts vom Timer */
+    font-size: 1.2em;
     color: green;
     font-weight: bold;
-    height: 20px;
-    
+    min-width: 40px;
 }
 
 #gameTable {

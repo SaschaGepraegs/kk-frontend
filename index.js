@@ -10,6 +10,19 @@ function disableAllInputs(disabled = true) {
     });
 }
 
+// Funktion für Link-Kopieren-Button
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search); // Liest die PIN aus der URL (?pin=...)
+    const pin = urlParams.get('pin');
+    if (pin) {
+        const lobbyInput = document.getElementById('lobbyeingabe'); // und trägt sie automatisch ins Eingabefeld ein, falls vorhanden.
+        if (lobbyInput) {
+            lobbyInput.value = pin;
+            checkLobby(); // und springt direkt zur Namenseingabe, wenn die Lobby existiert.
+        }
+    }
+});
+
 // Enter-Taste für Lobbycode und Name
 document.addEventListener('DOMContentLoaded', () => {
     const lobbyInput = document.getElementById('lobbyeingabe');
