@@ -532,7 +532,7 @@ body.md3-dark {
         const username = localStorage.getItem("uic_username"); // Nutzername aus dem Local Storage
         if(!pin || !username) return;
         try{
-            const res = await fetch('https://kk-backend.vercel.app/istSpielerInLobby?lobby=' + pin +"&name=" + username);
+            const res = await fetch('https://kk-backend.vercel.app/checkForPlayer?lobby=' + pin +"&name=" + username);
             const istInLobby = await res.json();
             if (!istInLobby) {
                 alert("Du wurdest aus der Lobby entfernt.");
