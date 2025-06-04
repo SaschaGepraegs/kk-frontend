@@ -140,6 +140,13 @@
                 "lobby": localStorage.getItem("uic_gamepin"),
                 "username": localStorage.getItem("uic_username"),
             })
+            .then(async response => {
+                if (response.status === 403) {
+                alert("Du wurdest aus der Lobby entfernt.");
+                window.location.href = "/"; // oder andere Reaktion
+                return;
+                }
+        })
         })
         let data = await (await antwort).json()
         let endergebnis = JSON.stringify(data);
