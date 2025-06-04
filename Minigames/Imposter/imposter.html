@@ -6,22 +6,422 @@
     <title>Imposter | KlickKrawall</title>
     <link rel="icon" type="image/x-icon" href="/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="imposter.css">
-    <script src="imposter.js" defer></script>
+    <style>
+        :root {
+            --md-primary: #1976d2;
+            --md-primary-dark: #1565c0;
+            --md-secondary: #ff9800;
+            --md-error: #d32f2f;
+            --md-bg: #f5f5f5;
+            --md-surface: #fff;
+            --md-on-primary: #fff;
+            --md-on-surface: #222;
+            --md-radius: 16px;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: var(--md-bg);
+            color: var(--md-on-surface);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 8px;
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+        }
+        .md-card {
+            background: var(--md-surface);
+            border-radius: var(--md-radius);
+            box-shadow: 0 2px 12px 0 rgba(60,60,60,0.13);
+            margin: 24px 0 0 0;
+            padding: 24px 16px 20px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .md-title {
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--md-primary);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .md-role {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            padding: 10px 24px;
+            border-radius: 100px;
+            color: #fff;
+            background: var(--md-primary);
+            display: inline-block;
+        }
+        .md-role.imposter {
+            background: var(--md-error);
+        }
+        .md-word {
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 18px;
+            color: var(--md-primary-dark);
+            text-align: center;
+        }
+        .md-word.imposter {
+            color: var(--md-error);
+        }
+        .md-btn {
+            background: var(--md-primary);
+            color: var(--md-on-primary);
+            border: none;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            font-weight: 500;
+            padding: 12px 32px;
+            margin: 12px 0 0 0;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(25, 118, 210, 0.18);
+            transition: background 0.2s;
+            outline: none;
+            display: inline-block;
+        }
+        .md-btn:active, .md-btn:focus {
+            background: var(--md-primary-dark);
+        }
+        .md-btn[disabled] {
+            background: #bdbdbd;
+            color: #fff;
+            cursor: not-allowed;
+        }
+        .md-btn.secondary {
+            background: var(--md-secondary);
+            color: #fff;
+        }
+        .md-btn.secondary:active, .md-btn.secondary:focus {
+            background: #f57c00;
+        }
+        .md-btn.error {
+            background: var(--md-error);
+        }
+        .md-btn.error:active, .md-btn.error:focus {
+            background: #b71c1c;
+        }
+        .md-neutral {
+            font-size: 1.2rem;
+            color: #888;
+            text-align: center;
+            margin: 32px 0 0 0;
+        }
+        .md-player-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 18px 0 0 0;
+        }
+        .md-player-card {
+            background: var(--md-surface);
+            border-radius: 12px;
+            box-shadow: 0 1px 4px 0 rgba(60,60,60,0.07);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.15s;
+        }
+        .md-player-card.selected {
+            border: 2px solid var(--md-primary);
+            background: #e3f2fd;
+        }
+        .md-player-card.voted {
+            opacity: 0.6;
+        }
+        .md-progress-bar {
+            width: 100%;
+            height: 18px;
+            background: #e0e0e0;
+            border-radius: 9px;
+            overflow: hidden;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+        .md-progress-inner {
+            height: 100%;
+            background: var(--md-primary);
+            transition: width 0.3s;
+        }
+        .md-progress-label {
+            font-size: 0.98rem;
+            color: #444;
+            margin-bottom: 2px;
+            text-align: left;
+        }
+        .md-vote-hint {
+            color: var(--md-primary-dark);
+            font-size: 1.1rem;
+            margin-top: 18px;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100vw;
+                padding: 0 2vw;
+            }
+            .md-card {
+                margin: 12px 0 0 0;
+                padding: 16px 4px 14px 4px;
+            }
+            .md-title {
+                font-size: 1.3rem;
+            }
+            .md-role {
+                font-size: 1.1rem;
+                padding: 7px 16px;
+            }
+            .md-word {
+                font-size: 1.05rem;
+            }
+            .md-btn {
+                font-size: 1rem;
+                padding: 10px 18px;
+            }
+            .md-player-card {
+                font-size: 1rem;
+                padding: 10px 8px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <main class="mdc-elevation--z4">
-        <h1>Imposter</h1>
-        <div id="infoText">
-            <p>Drücke auf den Button, um dein Wort zu sehen.<br>
-            <small>Nur du darfst auf deinen Bildschirm schauen!</small></p>
+    <div class="container">
+        <div id="roleCard" class="md-card" style="display:none;">
+            <div class="md-title">Deine Rolle</div>
+            <div id="roleLabel" class="md-role"></div>
+            <div id="roleWord" class="md-word"></div>
+            <button id="hideRoleBtn" class="md-btn secondary">Rolle verbergen</button>
         </div>
-        <button id="showWordBtn" class="mdc-button mdc-button--raised">
-            <span class="mdc-button__label">Wort anzeigen</span>
-        </button>
-        <div id="wordCard" class="mdc-card" style="display:none;">
-            <span id="wordText"></span>
+        <div id="neutralCard" class="md-card" style="display:none;">
+            <div class="md-neutral">Rolle verborgen.<br>Reiche das Gerät weiter oder tippe auf „Weiter“.</div>
+            <button id="toVotingBtn" class="md-btn">Weiter</button>
         </div>
-    </main>
+        <div id="votingCard" class="md-card" style="display:none;">
+            <div class="md-title">Abstimmung</div>
+            <div id="playerList" class="md-player-list"></div>
+            <button id="voteBtn" class="md-btn" disabled>Vote bestätigen</button>
+            <div id="voteHint" class="md-vote-hint"></div>
+        </div>
+        <div id="resultsCard" class="md-card" style="display:none;">
+            <div class="md-title">Abstimmungsergebnis</div>
+            <div id="resultsList"></div>
+        </div>
+    </div>
+    <script>
+        // --- State ---
+        let lobby = localStorage.getItem("uic_gamepin");
+        let username = localStorage.getItem("uic_username");
+        let role = null; // "imposter" | "crewmate"
+        let wordOrImposter = null; // Wort oder Name des anderen Imposters
+        let voted = false;
+        let selectedPlayer = null;
+        let votingInterval = null;
+        let votingDone = false;
+
+        // --- UI Elements ---
+        const roleCard = document.getElementById("roleCard");
+        const roleLabel = document.getElementById("roleLabel");
+        const roleWord = document.getElementById("roleWord");
+        const hideRoleBtn = document.getElementById("hideRoleBtn");
+        const neutralCard = document.getElementById("neutralCard");
+        const toVotingBtn = document.getElementById("toVotingBtn");
+        const votingCard = document.getElementById("votingCard");
+        const playerList = document.getElementById("playerList");
+        const voteBtn = document.getElementById("voteBtn");
+        const voteHint = document.getElementById("voteHint");
+        const resultsCard = document.getElementById("resultsCard");
+        const resultsList = document.getElementById("resultsList");
+
+        // --- Helper ---
+        function showOnly(card) {
+            [roleCard, neutralCard, votingCard, resultsCard].forEach(c => c.style.display = "none");
+            card.style.display = "flex";
+        }
+
+        // --- 1. Rolle anzeigen ---
+        async function fetchRole() {
+            if (!lobby || !username) {
+                alert("Lobby oder Name fehlt!");
+                return;
+            }
+            try {
+                const res = await fetch(`https://kk-backend.vercel.app/istImposter?lobby=${encodeURIComponent(lobby)}&spieler=${encodeURIComponent(username)}`);
+                const arr = await res.json();
+                if (!Array.isArray(arr) || arr.length < 2) throw new Error("Ungültige Antwort");
+                role = arr[0];
+                wordOrImposter = arr[1];
+                renderRole();
+            } catch (e) {
+                alert("Fehler beim Laden der Rolle.");
+            }
+        }
+
+        function renderRole() {
+            if (role === "imposter") {
+                roleLabel.textContent = "IMPOSTER";
+                roleLabel.classList.add("imposter");
+                roleWord.textContent = "Dein Ziel: Finde heraus, welches Wort die Crewmates haben!";
+                roleWord.classList.add("imposter");
+                if (wordOrImposter && wordOrImposter !== "undefined") {
+                    roleWord.textContent += "\nZweiter Imposter: " + wordOrImposter;
+                }
+            } else {
+                roleLabel.textContent = "CREWMATE";
+                roleLabel.classList.remove("imposter");
+                roleWord.textContent = "Das geheime Wort: " + wordOrImposter;
+                roleWord.classList.remove("imposter");
+            }
+            showOnly(roleCard);
+        }
+
+        // --- 2. Rolle verbergen ---
+        hideRoleBtn.onclick = () => {
+            showOnly(neutralCard);
+        };
+        toVotingBtn.onclick = () => {
+            showVoting();
+        };
+
+        // --- 3. Abstimmung ---
+        async function showVoting() {
+            showOnly(votingCard);
+            voteBtn.disabled = true;
+            voteHint.textContent = "";
+            selectedPlayer = null;
+            voted = false;
+            await renderPlayerList();
+            startVotingInterval();
+        }
+
+        async function renderPlayerList() {
+            playerList.innerHTML = "";
+            try {
+                const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${encodeURIComponent(lobby)}`);
+                const arr = await res.json();
+                arr.forEach(name => {
+                    const card = document.createElement("div");
+                    card.className = "md-player-card";
+                    card.textContent = name;
+                    if (name === username) {
+                        card.style.opacity = "0.6";
+                        card.style.fontStyle = "italic";
+                    }
+                    card.onclick = () => {
+                        if (voted) return;
+                        selectedPlayer = name;
+                        document.querySelectorAll('.md-player-card').forEach(c => c.classList.remove('selected'));
+                        card.classList.add('selected');
+                        voteBtn.disabled = false;
+                    };
+                    playerList.appendChild(card);
+                });
+            } catch (e) {
+                playerList.innerHTML = "<div style='color:red;'>Fehler beim Laden der Spieler.</div>";
+            }
+        }
+
+        voteBtn.onclick = async () => {
+            if (!selectedPlayer || voted) return;
+            voteBtn.disabled = true;
+            voted = true;
+            try {
+                await fetch(`https://kk-backend.vercel.app/castImposterVote?lobby=${encodeURIComponent(lobby)}&elect=${encodeURIComponent(selectedPlayer)}`);
+                voteBtn.style.display = "none";
+                voteHint.textContent = "Du hast schon abgestimmt.";
+                document.querySelectorAll('.md-player-card').forEach(c => c.classList.add('voted'));
+            } catch (e) {
+                voteHint.textContent = "Fehler beim Abstimmen.";
+            }
+        };
+
+        // --- 4. Ergebnisse ---
+        function startVotingInterval() {
+            if (votingInterval) clearInterval(votingInterval);
+            votingInterval = setInterval(updateVotingResults, 1000);
+        }
+
+        async function updateVotingResults() {
+            try {
+                const res = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${encodeURIComponent(lobby)}`);
+                const arr = await res.json();
+                // arr: [0]=dummy, [1]=Name mit meisten Stimmen, [2]=Prozentwert
+                if (Array.isArray(arr) && arr.length >= 3) {
+                    const topName = arr[1];
+                    const percent = Number(arr[2]);
+                    if (percent > 50 && !votingDone) {
+                        votingDone = true;
+                        clearInterval(votingInterval);
+                        window.location.href = "https://www.google.de";
+                        return;
+                    }
+                    renderResults(arr);
+                }
+            } catch (e) {}
+        }
+
+        async function renderResults(voteArr) {
+            // Zeige alle Spieler mit Balken
+            try {
+                const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${encodeURIComponent(lobby)}`);
+                const arr = await res.json();
+                // Hole aktuelle Stimmenverteilung
+                const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${encodeURIComponent(lobby)}`);
+                const votesArr = await votesRes.json();
+                // votesArr: [0]=dummy, [1]=Name mit meisten Stimmen, [2]=Prozentwert
+                // Wir nehmen an, dass die API nur den Top-Kandidaten liefert, daher zeigen wir nur diesen an
+                resultsList.innerHTML = "";
+                arr.forEach(name => {
+                    const percent = (name === votesArr[1]) ? Number(votesArr[2]) : 0;
+                    const label = document.createElement("div");
+                    label.className = "md-progress-label";
+                    label.textContent = name + (percent > 0 ? ` (${percent}%)` : "");
+                    const bar = document.createElement("div");
+                    bar.className = "md-progress-bar";
+                    const inner = document.createElement("div");
+                    inner.className = "md-progress-inner";
+                    inner.style.width = percent + "%";
+                    bar.appendChild(inner);
+                    resultsList.appendChild(label);
+                    resultsList.appendChild(bar);
+                });
+                showOnly(resultsCard);
+            } catch (e) {
+                resultsList.innerHTML = "<div style='color:red;'>Fehler beim Laden der Ergebnisse.</div>";
+            }
+        }
+
+        // --- Initialisierung ---
+        fetchRole();
+
+        // Optional: Wenn VotingCard angezeigt wird, Voting-Status regelmäßig prüfen
+        // (bereits durch startVotingInterval abgedeckt)
+    </script>
 </body>
 </html>
