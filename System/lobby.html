@@ -7,53 +7,418 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KlickKrawall</title>
     <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <!-- Material Symbols (Google Fonts) -->
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Material+Symbols+Outlined" rel="stylesheet" />
     <style>
-        body {
-            background-color: #262626;
-            color: white;
-            font-family: "Roboto", sans-serif;
-            text-align: center;
-        }
         
-        div {
-            margin-top: 100px;
-        }
-        
-        button {
-            padding: 20px;
-        }
-        
-        #bottone1 {
-            padding-left: 33px;
-            padding-right: 33px;
-            padding-bottom: 16px;
-            padding-top: 16px;
-            border-radius: 9px;
-            background: #d5f365;
-            border: none;
-            font-family: inherit;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.4s;
-        }
-        
-        #bottone1:hover {
-            box-shadow: 7px 5px 56px -14px #C3D900;
-        }
-        
-        #bottone1:active {
-            transform: scale(0.97);
-            box-shadow: 7px 5px 56px -10px #C3D900;
-        }
+        /* Material Design 3 Farbpalette */
+:root {
+    --md3-primary: #6750a4;
+    --md3-on-primary: #fff;
+    --md3-primary-container: #eaddff;
+    --md3-on-primary-container: #21005d;
+    --md3-secondary: #625b71;
+    --md3-on-secondary: #fff;
+    --md3-secondary-container: #e8def8;
+    --md3-on-secondary-container: #1d192b;
+    --md3-surface: #f5f5f5;
+    --md3-surface-variant: #e7e0ec;
+    --md3-on-surface: #1c1b1f;
+    --md3-outline: #79747e;
+    --md3-error: #b3261e;
+    --md3-on-error: #fff;
+    --md3-bg: #f5f5f5;
+    --md3-shadow: 0 1.5px 8px 0 rgba(60, 60, 60, 0.10);
+    --md3-radius: 18px;
+    --md3-font: 'Roboto', Arial, sans-serif;
+}
+
+body.md3-bg {
+    background: var(--md3-bg);
+    color: var(--md3-on-surface);
+    font-family: var(--md3-font);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.md3-main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 2rem 1.5rem;
+}
+
+.md3-top-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+}
+
+.md3-logo {
+    font-size: 3.2rem;
+    color: var(--md3-primary);
+    margin-bottom: 0.2rem;
+}
+
+.md3-pin-card {
+    padding: 1.2rem 2.2rem;
+    border-radius: var(--md3-radius);
+    background: var(--md3-primary-container);
+    color: var(--md3-on-primary-container);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: var(--md3-shadow);
+    min-width: 340px;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.md3-pin-content {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.md3-pin-icon {
+    font-size: 2.2rem;
+    color: var(--md3-primary);
+}
+
+.md3-pin-heading {
+    font-size: 2.1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin-right: 0.7rem;
+}
+
+.md3-pin-text {
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+
+.md3-icon-btn {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    padding: 0.4rem;
+    cursor: pointer;
+    color: var(--md3-primary);
+    transition: background 0.2s;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.md3-icon-btn:hover {
+    background: var(--md3-primary-container);
+}
+
+.md3-content-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.md3-card {
+    border-radius: var(--md3-radius);
+    background: var(--md3-surface);
+    box-shadow: var(--md3-shadow);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    min-width: 320px;
+    max-width: 420px;
+    flex: 1 1 340px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.md3-elevated-card {
+    box-shadow: 0 2px 12px 0 rgba(60,60,60,0.13);
+}
+
+.md3-card-title {
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--md3-primary);
+    margin-bottom: 1.1rem;
+    letter-spacing: 0.01em;
+    text-align: left;
+}
+
+.md3-list {
+    background: var(--md3-surface-variant);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    min-height: 80px;
+    font-size: 1.08rem;
+    color: var(--md3-on-surface);
+    box-shadow: 0 1px 4px 0 rgba(60,60,60,0.04);
+}
+
+.md3-player-card, .md3-queue-card, .md3-actions-card {
+    min-height: 220px;
+}
+
+.md3-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.md3-btn {
+    display: center;
+    align-items: center;
+    gap: 0.7em;
+    font-size: 1.13rem;
+    font-family: var(--md3-font);
+    font-weight: 500;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    padding: 0.85em 2.2em;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    box-shadow: 0 1px 4px 0 rgba(60,60,60,0.04);
+    outline: none;
+    margin-bottom: 0.2rem;
+}
+
+.md3-btn-filled {
+    background: var(--md3-primary);
+    color: var(--md3-on-primary);
+}
+.md3-btn-filled:disabled {
+    background: #bdbdbd;
+    color: #fff;
+    cursor: not-allowed;
+}
+.md3-btn-filled:hover:not(:disabled) {
+    background: #4f378b;
+}
+
+.md3-btn-tonal {
+    background: var(--md3-secondary-container);
+    color: var(--md3-on-secondary-container);
+}
+.md3-btn-tonal:hover:not(:disabled) {
+    background: #d0bcff;
+}
+
+.md3-btn-outlined {
+    background: transparent;
+    color: var(--md3-primary);
+    border: 2px solid var(--md3-primary);
+}
+.md3-btn-outlined:hover:not(:disabled) {
+    background: var(--md3-primary-container);
+}
+
+.md3-popup-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background: rgba(30,30,30,0.18);
+    justify-content: center;
+    align-items: center;
+}
+.md3-popup-overlay[style*="display: flex"] {
+    display: flex !important;
+}
+
+.md3-popup-card {
+    background: var(--md3-surface);
+    border-radius: var(--md3-radius);
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.17);
+    padding: 2.5rem 2rem 2rem 2rem;
+    min-width: 260px;
+    max-width: 95vw;
+    width: 400px;
+    max-height: 95vh;
+    overflow-y: auto;
+    text-align: center;
+    animation: popupfadein 0.5s;
+}
+@keyframes popupfadein {
+    from { opacity: 0; transform: scale(0.95);}
+    to { opacity: 1; transform: scale(1);}
+}
+
+.game-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.game-card {
+    background: var(--md3-surface-variant);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px 0 rgba(127,127,255,0.08);
+    padding: 1rem 0.7rem 0.7rem 0.7rem;
+    width: 120px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, border 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2.5px solid transparent;
+    position: relative;
+}
+.game-card.selected, .game-card:hover {
+    border: 2.5px solid var(--md3-primary);
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px 0 rgba(103,80,164,0.12);
+}
+.game-card img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 0.7rem;
+    border-radius: 8px;
+    background: #fff;
+}
+.game-card span {
+    color: var(--md3-on-surface);
+    font-size: 1.05rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.md3-status-text {
+    color: var(--md3-primary);
+    margin-top: 1rem;
+    min-height: 1.5em;
+    font-size: 1.08rem;
+}
+
+/* Darkmode Farbpalette */
+.md3-dark {
+    --md3-primary: #d0bcff;
+    --md3-on-primary: #381e72;
+    --md3-primary-container: #4f378b;
+    --md3-on-primary-container: #eaddff;
+    --md3-secondary: #ccc2dc;
+    --md3-on-secondary: #332d41;
+    --md3-secondary-container: #4a4458;
+    --md3-on-secondary-container: #e8def8;
+    --md3-surface: #1c1b1f;
+    --md3-surface-variant: #49454f;
+    --md3-on-surface: #e6e1e5;
+    --md3-outline: #938f99;
+    --md3-error: #f2b8b5;
+    --md3-on-error: #601410;
+    --md3-bg: #121212;
+    --md3-shadow: 0 1.5px 8px 0 rgba(0,0,0,0.25);
+}
+
+/* Passe alle Komponenten an den Darkmode an (über CSS-Variablen) */
+body.md3-dark {
+    background: var(--md3-bg);
+    color: var(--md3-on-surface);
+}
+
+@media (max-width: 1100px) {
+    .md3-content-flex {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: stretch;
+    }
+    .md3-card {
+        max-width: 100%;
+        min-width: unset;
+    }
+}
+
+@media (max-width: 600px) {
+    .md3-main-container {
+        padding: 1rem 0.2rem 1rem 0.2rem;
+    }
+    .md3-top-bar {
+        gap: 0.7rem;
+        margin-bottom: 1.2rem;
+    }
+    .md3-pin-card {
+        min-width: unset;
+        max-width: 100vw;
+        padding: 0.7rem 1rem;
+    }
+    .md3-content-flex {
+        gap: 1.2rem;
+    }
+    .md3-card {
+        padding: 1.2rem 0.7rem 1rem 0.7rem;
+    }
+    .md3-popup-card {
+        width: 97vw;
+        min-width: unset;
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+        max-width: 97vw;
+        max-height: 97vh;
+    }
+    .game-card {
+        width: 90px;
+        padding: 0.5rem 0.2rem 0.5rem 0.2rem;
+    }
+    .game-card img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.spieler button {
+    background: none;
+    border: none;
+    color: #b3261e;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-left: 0.5em;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+.spieler button:hover {
+    color: #fff;
+    background: #b3261e;
+    border-radius: 50%;
+}
     </style>
 </head>
 
-<body>
-    <div>
-        <h1>Willkommen in der Lobby!</h1>
-        <p id="usernameangabe">Nutzername: username</p>
-    </div>
-    <div><button onclick="window.location.assign('../index.html')" id="bottone1">Lobby verlassen</button></div>
+<body class="md3-bg" id="bodyRoot">
+    <main class="md3-main-container">
+        <section class="md3-top-bar">
+            <h1>Willkommen in der Lobby!</h1>
+            <button id="darkModeToggle" class="md3-icon-btn" title="Darkmode umschalten" style="position:absolute;top:1.5rem;right:2.5rem;">
+                <span class="material-symbols-outlined" id="darkModeIcon">dark_mode</span>
+            </button>
+            <p class="md3-pin-text" id="usernameangabe">Nutzername: username</p>
+            <div class="md3-pin-card md3-elevated-card">
+                <div class="md3-pin-content">
+                    <button onclick="window.location.assign('../index.html')" id="button1" class="md3-btn md3-btn-filled">Lobby verlassen</button>
+                </div>
+            </div>
+            <div class="md3-pin-card md3-elevated-card">
+                <div class="md3-pin-content">
+                    <span id="linkAnzeige" class="md3-pin-text">Link zur Lobby kopieren</span>
+                    <button id="copyLinkBtn" class="md3-icon-btn" title="PIN kopieren">
+                        <span class="material-symbols-outlined">content_copy</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 
 </html>
@@ -91,7 +456,7 @@
     }
 
     function losgehts() {
-        document.getElementById("bottone1").style.visibility = "hidden"
+        document.getElementById("button1").style.visibility = "hidden"
         document.getElementById("usernameangabe").style.color = "green"
         document.getElementById("usernameangabe").innerHTML = "Die Runde startet demnächst!"
         fetch("https://kk-backend.vercel.app/losGehts?lobby=" + localStorage.getItem("uic_gamepin"));
@@ -121,4 +486,43 @@
             binda()
         }
     }
+
+    // Darkmode Toggle
+        document.addEventListener("DOMContentLoaded", function() {
+            const body = document.getElementById("bodyRoot");
+            const toggle = document.getElementById("darkModeToggle");
+            const icon = document.getElementById("darkModeIcon");
+            const darkClass = "md3-dark";
+            function setMode(dark) {
+                if (dark) {
+                    body.classList.add(darkClass);
+                    icon.textContent = "light_mode";
+                    localStorage.setItem("md3_darkmode", "1");
+                } else {
+                    body.classList.remove(darkClass);
+                    icon.textContent = "dark_mode";
+                    localStorage.setItem("md3_darkmode", "0");
+                }
+            }
+            // Initial
+            setMode(localStorage.getItem("md3_darkmode") === "1");
+            toggle.onclick = () => setMode(!body.classList.contains(darkClass));
+        });
+
+    // Copy-Button Funktionalität für den Lobby-Link (Material Icon)
+    document.addEventListener("DOMContentLoaded", function() {
+        const copyBtn = document.getElementById("copyLinkBtn");
+        const iconSpan = copyBtn.querySelector("span.material-symbols-outlined");
+        copyBtn.onclick = function() {
+            const link = "klickkrawall.netlify.app/index.html?pin=" + localStorage.getItem("uic_gamepin");
+            if (link) {
+                navigator.clipboard.writeText(link);
+                iconSpan.textContent = "check";
+                copyBtn.style.background = "var(--md3-primary-container)";
+                setTimeout(() => {
+                    iconSpan.textContent = "content_copy";                        copyBtn.style.background = "none";
+                }, 1200);
+            }
+        };
+    });
 </script>
