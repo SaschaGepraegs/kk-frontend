@@ -476,10 +476,9 @@ body.md3-dark {
             })
         })
         let data = await (await antwort).json()
-        let endergebnis = JSON.stringify(data);
-        console.log(endergebnis)
+        console.log("checkForPlayer:", data);
 
-        if (endergebnis == true) {
+        if (data === true) {
             alert("Diesen Nutzernamen gibt es schon.")
             window.location.assign("index.html")
         } else {
@@ -532,9 +531,19 @@ body.md3-dark {
         const username = localStorage.getItem("uic_username"); // Nutzername aus dem Local Storage
         if(!pin || !username) return;
         try{
-            const res = await fetch('https://kk-backend.vercel.app/checkForPlayer?lobby=' + pin +"&name=" + username);
+            const res = await fetch('https://kk-backend.vercel.app/checkForPlayer', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "lobby": pin,
+                    "username": username
+                })
+            });
             const istInLobby = await res.json();
-            if (!istInLobby) {
+            if (istInLobby === false) {
                 alert("Du wurdest aus der Lobby entfernt.");
                 window.location.assign("../index.html");
             }
