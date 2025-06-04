@@ -228,7 +228,11 @@
             <div id="playerList" class="md-player-list"></div>
             <button id="voteBtn" class="md-btn" disabled>Vote bestätigen</button>
             <div id="voteHint" class="md-vote-hint"></div>
-            <div id="resultsList" style="width:100%;margin-top:18px;"></div>
+            <div style="width:100%;margin-top:18px;">
+                <div id="cooldownCounter" style="color:#1976d2;font-size:1.05rem;margin-bottom:6px;"></div>
+                <div id="kickCounter" style="color:#d32f2f;font-size:1.05rem;margin-bottom:6px;"></div>
+                <div id="resultsList"></div>
+            </div>
         </div>
     </div>
     <script>
@@ -243,7 +247,11 @@
         let votingDone = false;
         let voteCooldown = false;
         let voteCooldownTimeout = null;
+        let voteCooldownEnd = null;
         let allPlayers = [];
+        let kickInterval = null;
+        let kickTimerEnd = null;
+        let kickCheckActive = false;
 
         // --- UI Elements ---
         const roleCard = document.getElementById("roleCard");
@@ -257,6 +265,8 @@
         const voteBtn = document.getElementById("voteBtn");
         const voteHint = document.getElementById("voteHint");
         const resultsList = document.getElementById("resultsList");
+        const cooldownCounter = document.getElementById("cooldownCounter");
+        const kickCounter = document.getElementById("kickCounter");
 
         // --- Helper ---
         function showOnly(card) {
@@ -316,8 +326,11 @@
             selectedPlayer = null;
             voted = false;
             voteCooldown = false;
+            voteCooldownEnd = null;
             await renderPlayerList();
             startVotingInterval();
+            startKickTimer();
+            updateCooldownCounter();
         }
 
         async function renderPlayerList() {
@@ -351,6 +364,8 @@
             if (!selectedPlayer || voteCooldown) return;
             voteBtn.disabled = true;
             voteCooldown = true;
+            voteCooldownEnd = Date.now() + 20000;
+            updateCooldownCounter();
             try {
                 await fetch(`https://kk-backend.vercel.app/castImposterVote?lobby=${lobby}&elect=${selectedPlayer}`);
                 voteHint.textContent = "Du kannst in 20 Sekunden erneut abstimmen.";
@@ -360,14 +375,84 @@
                     voteCooldown = false;
                     voteBtn.disabled = false;
                     voteHint.textContent = "";
+                    voteCooldownEnd = null;
                     document.querySelectorAll('.md-player-card').forEach(c => c.classList.remove('voted'));
                 }, 20000);
             } catch (e) {
                 voteHint.textContent = "Fehler beim Abstimmen.";
                 voteCooldown = false;
                 voteBtn.disabled = false;
+                voteCooldownEnd = null;
             }
         };
+
+        // --- Vote-Cooldown Counter ---
+        function updateCooldownCounter() {
+            if (voteCooldown && voteCooldownEnd) {
+                const left = Math.max(0, Math.ceil((voteCooldownEnd - Date.now()) / 1000));
+                cooldownCounter.textContent = `Du kannst in ${left}s wieder voten.`;
+                if (left > 0) {
+                    setTimeout(updateCooldownCounter, 250);
+                } else {
+                    cooldownCounter.textContent = "";
+                }
+            } else {
+                cooldownCounter.textContent = "";
+            }
+        }
+
+        // --- Kick-Timer (1-Minuten-Auswertung) ---
+        function startKickTimer() {
+            if (kickInterval) clearInterval(kickInterval);
+            // Synchronisiere alle Clients auf die gleiche Minute (z.B. seit Spielstart oder seit voller Minute)
+            // Wir nehmen als Startpunkt die nächste volle Minute nach Seitenaufruf
+            if (!kickTimerEnd) {
+                const now = Date.now();
+                kickTimerEnd = now + (60000 - (now % 60000));
+            }
+            updateKickCounter();
+            kickInterval = setInterval(() => {
+                updateKickCounter();
+            }, 250);
+            if (!kickCheckActive) {
+                kickCheckActive = true;
+                scheduleKickCheck();
+            }
+        }
+
+        function updateKickCounter() {
+            if (!kickTimerEnd) return;
+            const left = Math.max(0, Math.ceil((kickTimerEnd - Date.now()) / 1000));
+            kickCounter.textContent = `Nächste Auswertung in ${left}s`;
+        }
+
+        function scheduleKickCheck() {
+            const now = Date.now();
+            let msToNext = kickTimerEnd ? (kickTimerEnd - now) : 60000;
+            if (msToNext < 0) msToNext = 0;
+            setTimeout(async () => {
+                await checkKick();
+                // Setze Timer für nächste Minute
+                kickTimerEnd = Date.now() + 60000;
+                scheduleKickCheck();
+            }, msToNext);
+        }
+
+        async function checkKick() {
+            try {
+                const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
+                const votesArr = await votesRes.json();
+                let winner = votesArr.find(v => v.prozent > 75);
+                if (winner && !votingDone) {
+                    votingDone = true;
+                    clearInterval(votingInterval);
+                    clearInterval(kickInterval);
+                    if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
+                    window.location.href = "/pause.html";
+                }
+                // Wenn keiner >75%, läuft alles einfach weiter
+            } catch (e) {}
+        }
 
         // --- 4. Ergebnisse ---
         function startVotingInterval() {
@@ -381,14 +466,6 @@
                 const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
                 const votesArr = await votesRes.json();
                 // votesArr: [{spieler: "Name", prozent: 0}, ...]
-                let winner = votesArr.find(v => v.prozent > 75);
-                if (winner && !votingDone) {
-                    votingDone = true;
-                    clearInterval(votingInterval);
-                    if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
-                    window.location.href = "/pause.html";
-                    return;
-                }
                 // Balken für alle Spieler anzeigen
                 resultsList.innerHTML = "";
                 if (!Array.isArray(allPlayers) || allPlayers.length === 0) {
@@ -396,7 +473,6 @@
                     const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
                     allPlayers = await res.json();
                 }
-                // votesArr enthält alle Spieler, ggf. sortieren wie allPlayers
                 allPlayers.forEach(name => {
                     const voteObj = votesArr.find(v => v.spieler === name);
                     const percent = voteObj ? Number(voteObj.prozent) : 0;
