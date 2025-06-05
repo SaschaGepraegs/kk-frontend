@@ -303,12 +303,20 @@
                 roleWord.classList.remove("imposter");
             }
             showOnly(roleCard);
+            autoHideRoleAndShowVoting(); // Automatisch nach 5 Sekunden weiter
         }
 
         // --- 2. Rolle verbergen ---
-        hideRoleBtn.onclick = () => {
-            showVoting();
-        };
+        // hideRoleBtn.onclick = () => {
+        //     showVoting();
+        // };
+
+        // Automatisches Weiterleiten nach 5 Sekunden
+        function autoHideRoleAndShowVoting() {
+            setTimeout(() => {
+                showVoting();
+            }, 5000);
+        }
 
         // --- 3. Abstimmung ---
         async function showVoting() {
@@ -554,6 +562,26 @@
                     resultsList.appendChild(label);
                     resultsList.appendChild(bar);
                 });
+                // Counter-Balken für nächste Auswertung
+                if (kickTimerEnd) {
+                    const now = Date.now();
+                    let msLeft = kickTimerEnd - now;
+                    if (msLeft < 0) msLeft = 0;
+                    const percent = Math.round(100 - (msLeft / 60000) * 100);
+                    const counterLabel = document.createElement("div");
+                    counterLabel.className = "md-progress-label";
+                    counterLabel.textContent = `Nächste Auswertung in ${Math.ceil(msLeft/1000)}s`;
+                    const counterBar = document.createElement("div");
+                    counterBar.className = "md-progress-bar";
+                    counterBar.style.background = "#ffe082"; // Gelblich
+                    const counterInner = document.createElement("div");
+                    counterInner.className = "md-progress-inner";
+                    counterInner.style.background = "#ffb300"; // Orange
+                    counterInner.style.width = percent + "%";
+                    counterBar.appendChild(counterInner);
+                    resultsList.appendChild(counterLabel);
+                    resultsList.appendChild(counterBar);
+                }
             } catch (e) {
                 resultsList.innerHTML = "<div style='color:red;'>Fehler beim Laden der Ergebnisse.</div>";
             }
