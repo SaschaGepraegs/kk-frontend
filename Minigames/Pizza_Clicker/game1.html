@@ -12,18 +12,12 @@
     <h1>Pizza-Clicker!</h1>
     <p>Klicke so oft wie möglich in <span id="timer">30</span> Sekunden auf die Pizza!</p>
     <meter value="timer" max="30"></meter>
-    <img id="pizza" src="https://png.pngtree.com/png-vector/20240730/ourmid/pngtree-pizza-with-cheese-on-a-white-background-top-viewvery-high-quality-png-image_13292309.png"
-        onclick="geklickt()">
+    <div id="pizza-container">
+        <img id="pizza" src="https://png.pngtree.com/png-vector/20240730/ourmid/pngtree-pizza-with-cheese-on-a-white-background-top-viewvery-high-quality-png-image_13292309.png"
+            alt="Pizza">
+        <div id="click-effect-container"></div>
+    </div>
+    <div id="click-counter">🍕 0</div>
     <script src="game1.js"></script>
-    <script>
-        // Timer-Anzeige aktualisieren
-        let timerElem = document.getElementById("timer");
-        let timerValue = 30;
-        let timerInterval = setInterval(() => {
-            timerValue--;
-            if (timerValue >= 0) timerElem.textContent = timerValue;
-            if (timerValue <= 0) clearInterval(timerInterval);
-        }, 1000);
-    </script>
 </body>  
 </html>
