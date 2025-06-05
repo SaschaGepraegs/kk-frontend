@@ -8,43 +8,56 @@
     <title>KlickKrawall</title>
     <link rel="stylesheet" href="index.css">
     <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <!-- Material Symbols (Google Fonts) -->
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 
-<body>
-    <div>
-        <h1>KlickKrawall <mark> BETA </mark></h1>
-    </div>
-    <div id="lobbySection">
-        <p>Bitte gib hier deinen Lobby-Code ein:</p>
-        <input type="text" id="lobbyeingabe" class="namenseingabe Button1" maxlength="4" pattern="\d{1,4}"
-            inputmode="numeric" autocomplete="off" tabindex="1">
-        <button onclick="checkLobby()" id="Button1" tabindex="2">Weiter</button>
-    </div>
-    <div id="nameSection" style="display:none;">
-        <p>Bitte gib hier deinen Nutzernamen ein:</p>
-        <input type="text" id="namenseingabe" class="namenseingabe Button1" autocomplete="off" tabindex="3">
-        <button onclick="joinLobby()" id="Button2" class="Button1" tabindex="4">Weiter</button>
-    </div>
-    <div id="loaderOverlay">
-        <div class="apple-spinner">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-    <div>
-        <button onclick="LobbyHosten()" id="Button3" class="Button1" tabindex="5">Lobby Hosten</button>
-    </div>
+<body class="md3-bg" id="bodyRoot">
+    <main class="md3-main-container">
+        <section class="md3-top-bar">
+            <h1 class="md3-pin-heading">KlickKrawall <mark> BETA </mark></h1>
+            <button id="darkModeToggle" class="md3-icon-btn" title="Darkmode umschalten" style="position:absolute;top:1.5rem;right:2.5rem;">
+                <span class="material-symbols-outlined" id="darkModeIcon">dark_mode</span>
+            </button>
+            <div class="md3-pin-card md3-elevated-card" id="lobbySection">
+                <p class="md3-pin-text">Bitte gib hier deinen Lobby-Code ein:</p>
+                <div class="md3-pin-content">
+                    <input type="text" id="lobbyeingabe" class="md3-input" maxlength="4" pattern="\d{1,4}" inputmode="numeric" autocomplete="off" tabindex="1">
+                    <button onclick="checkLobby()" id="Button1" class="md3-btn md3-btn-filled" tabindex="2">Weiter</button>
+                </div>
+            </div>
+            <div class="md3-pin-card md3-elevated-card" id="nameSection" style="display:none;">
+                <p class="md3-pin-text">Bitte gib hier deinen Nutzernamen ein:</p>
+                <div class="md3-pin-content">
+                    <input type="text" id="namenseingabe" class="md3-input" maxlength="4" pattern="\d{1,4}" inputmode="numeric" autocomplete="off" tabindex="3">
+                    <button onclick="joinLobby()" id="Button1" class="md3-btn md3-btn-filled" tabindex="4">Weiter</button>
+                </div>
+            </div>
+            </div>
+                <div id="loaderOverlay">
+                <div class="apple-spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="md3-pin-card md3-elevated-card">
+                <div class="md3-pin-content">
+                    <button onclick="LobbyHosten()" id="Button3" class="md3-btn md3-btn-filled" tabindex="5">Lobby Hosten</button>
+                </div>
+            </div>
+        </section>
+    </main>
     <script src="index.js"></script>
 </body>
-
 </html>
