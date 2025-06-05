@@ -219,10 +219,6 @@
             <div id="roleWord" class="md-word"></div>
             <button id="hideRoleBtn" class="md-btn secondary">Rolle verbergen</button>
         </div>
-        <div id="neutralCard" class="md-card" style="display:none;">
-            <div class="md-neutral">Rolle verborgen.<br>Reiche das Gerät weiter oder tippe auf „Weiter“.</div>
-            <button id="toVotingBtn" class="md-btn">Weiter</button>
-        </div>
         <div id="votingCard" class="md-card" style="display:none;">
             <div class="md-title">Abstimmung</div>
             <div id="playerList" class="md-player-list"></div>
@@ -252,14 +248,13 @@
         let kickInterval = null;
         let kickTimerEnd = null;
         let kickCheckActive = false;
+        let kickedPlayers = []; // Liste der rausgeworfenen Spieler
 
         // --- UI Elements ---
         const roleCard = document.getElementById("roleCard");
         const roleLabel = document.getElementById("roleLabel");
         const roleWord = document.getElementById("roleWord");
         const hideRoleBtn = document.getElementById("hideRoleBtn");
-        const neutralCard = document.getElementById("neutralCard");
-        const toVotingBtn = document.getElementById("toVotingBtn");
         const votingCard = document.getElementById("votingCard");
         const playerList = document.getElementById("playerList");
         const voteBtn = document.getElementById("voteBtn");
@@ -270,7 +265,7 @@
 
         // --- Helper ---
         function showOnly(card) {
-            [roleCard, neutralCard, votingCard].forEach(c => c.style.display = "none");
+            [roleCard, votingCard].forEach(c => c.style.display = "none");
             card.style.display = "flex";
         }
 
@@ -312,14 +307,16 @@
 
         // --- 2. Rolle verbergen ---
         hideRoleBtn.onclick = () => {
-            showOnly(neutralCard);
-        };
-        toVotingBtn.onclick = () => {
             showVoting();
         };
 
         // --- 3. Abstimmung ---
         async function showVoting() {
+            // Prüfe, ob der aktuelle Spieler rausgeworfen wurde
+            if (kickedPlayers.includes(username)) {
+                showKickedPanel();
+                return;
+            }
             showOnly(votingCard);
             voteBtn.disabled = true;
             voteHint.textContent = "";
@@ -333,12 +330,30 @@
             updateCooldownCounter();
         }
 
+        function showKickedPanel() {
+            // Voting-Panel ausblenden, stattdessen Hinweis anzeigen
+            [roleCard, votingCard].forEach(c => c.style.display = "none");
+            // Prüfe, ob Panel schon existiert
+            let kickedPanel = document.getElementById("kickedPanel");
+            if (!kickedPanel) {
+                kickedPanel = document.createElement("div");
+                kickedPanel.id = "kickedPanel";
+                kickedPanel.className = "md-card";
+                kickedPanel.innerHTML = `<div class="md-title" style="color:#d32f2f;">Du bist raus!</div>
+                    <div class="md-neutral">Du wurdest rausgewählt und kannst nicht mehr abstimmen.<br>Bitte warte, bis das Spiel vorbei ist.</div>`;
+                document.querySelector(".container").appendChild(kickedPanel);
+            }
+            kickedPanel.style.display = "flex";
+        }
+
         async function renderPlayerList() {
             playerList.innerHTML = "";
             try {
                 const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
                 allPlayers = await res.json();
-                allPlayers.forEach(name => {
+                // Filtere rausgeworfene Spieler heraus
+                const activePlayers = allPlayers.filter(name => !kickedPlayers.includes(name));
+                activePlayers.forEach(name => {
                     const card = document.createElement("div");
                     card.className = "md-player-card";
                     card.textContent = name;
@@ -355,6 +370,10 @@
                     };
                     playerList.appendChild(card);
                 });
+                // Falls keine aktiven Spieler mehr, Voting-Panel ausblenden
+                if (activePlayers.length === 0) {
+                    votingCard.style.display = "none";
+                }
             } catch (e) {
                 playerList.innerHTML = "<div style='color:red;'>Fehler beim Laden der Spieler.</div>";
             }
@@ -416,25 +435,24 @@
             }, 250);
             if (!kickCheckActive) {
                 kickCheckActive = true;
-                scheduleKickCheck();
+                scheduleKickCheck(true); // true = erstes Mal
             }
         }
 
-        function updateKickCounter() {
-            if (!kickTimerEnd) return;
-            const left = Math.max(0, Math.ceil((kickTimerEnd - Date.now()) / 1000));
-            kickCounter.textContent = `Nächste Auswertung in ${left}s`;
-        }
-
-        function scheduleKickCheck() {
+        function scheduleKickCheck(first = false) {
             const now = Date.now();
-            let msToNext = kickTimerEnd ? (kickTimerEnd - now) : 60000;
+            let msToNext;
+            if (first) {
+                msToNext = kickTimerEnd ? (kickTimerEnd - now) : 60000;
+            } else {
+                msToNext = 15000; // 15 Sekunden für alle weiteren Checks
+            }
             if (msToNext < 0) msToNext = 0;
             setTimeout(async () => {
                 await checkKick();
-                // Setze Timer für nächste Minute
-                kickTimerEnd = Date.now() + 60000;
-                scheduleKickCheck();
+                // Setze Timer für nächste Auswertung
+                kickTimerEnd = Date.now() + (first ? 60000 : 15000);
+                scheduleKickCheck(false);
             }, msToNext);
         }
 
@@ -442,15 +460,38 @@
             try {
                 const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
                 const votesArr = await votesRes.json();
-                let winner = votesArr.find(v => v.prozent > 75);
-                if (winner && !votingDone) {
-                    votingDone = true;
-                    clearInterval(votingInterval);
-                    clearInterval(kickInterval);
-                    if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
-                    window.location.href = "/System/pause.html";
+                // Schwelle auf mindestens 60%
+                let winner = votesArr.find(v => v.prozent >= 60);
+                if (winner && !votingDone && !kickedPlayers.includes(winner.spieler)) {
+                    // Prüfe, ob der Spieler ein Imposter ist
+                    const isImposterRes = await fetch(`https://kk-backend.vercel.app/istImposter?lobby=${lobby}&spieler=${winner.spieler}`);
+                    const isImposterArr = await isImposterRes.json();
+                    if (isImposterArr && isImposterArr[0] === "imposter") {
+                        // Imposter enttarnt, registrieren
+                        await fetch(`https://kk-backend.vercel.app/revealImposter?lobby=${lobby}&spieler=${winner.spieler}`);
+                    }
+                    // Spieler als rausgeworfen markieren
+                    if (!kickedPlayers.includes(winner.spieler)) {
+                        kickedPlayers.push(winner.spieler);
+                    }
+                    // Prüfe, ob der aktuelle Spieler raus ist
+                    if (winner.spieler === username) {
+                        showKickedPanel();
+                        return;
+                    }
+                    // Prüfe, ob alle Imposter enttarnt sind
+                    const allRevealedRes = await fetch(`https://kk-backend.vercel.app/areAllImpostersRevealed?lobby=${lobby}`);
+                    const allRevealed = await allRevealedRes.json();
+                    if (allRevealed === true) {
+                        votingDone = true;
+                        clearInterval(votingInterval);
+                        clearInterval(kickInterval);
+                        if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
+                        window.location.href = "/System/pause.html";
+                    }
+                    // Sonst läuft das Spiel weiter, keine Weiterleitung
                 }
-                // Wenn keiner >75%, läuft alles einfach weiter
+                // Wenn keiner >=60%, läuft alles einfach weiter
             } catch (e) {}
         }
 
@@ -481,10 +522,35 @@
                     label.textContent = name + (percent > 0 ? ` (${percent}%)` : "");
                     const bar = document.createElement("div");
                     bar.className = "md-progress-bar";
+                    // Balken-Inhalt
                     const inner = document.createElement("div");
                     inner.className = "md-progress-inner";
                     inner.style.width = percent + "%";
                     bar.appendChild(inner);
+                    // 60%-Markierung
+                    const marker = document.createElement("div");
+                    marker.style.position = "absolute";
+                    marker.style.left = "60%";
+                    marker.style.top = "0";
+                    marker.style.bottom = "0";
+                    marker.style.width = "2px";
+                    marker.style.background = "#d32f2f";
+                    marker.style.opacity = "0.7";
+                    marker.title = "Kick-Schwelle (60%)";
+                    bar.style.position = "relative";
+                    bar.appendChild(marker);
+                    // Optional: kleine Linie oben als Dreieck/Marker
+                    const markerTriangle = document.createElement("div");
+                    markerTriangle.style.position = "absolute";
+                    markerTriangle.style.left = "60%";
+                    markerTriangle.style.top = "-7px";
+                    markerTriangle.style.width = "0";
+                    markerTriangle.style.height = "0";
+                    markerTriangle.style.borderLeft = "6px solid transparent";
+                    markerTriangle.style.borderRight = "6px solid transparent";
+                    markerTriangle.style.borderBottom = "7px solid #d32f2f";
+                    bar.appendChild(markerTriangle);
+
                     resultsList.appendChild(label);
                     resultsList.appendChild(bar);
                 });
