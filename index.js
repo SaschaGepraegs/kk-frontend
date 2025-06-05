@@ -3,6 +3,13 @@ localStorage.setItem("uic_gamepin", undefined);
 localStorage.setItem("uic_gamequeue_index", 0);
 localStorage.setItem("uic_status", undefined)
 
+// Wenn Seite geladen wird, dann springt der Cursor ins Eingabefeld für den Lobbycode.
+window.onload = function() {
+    setTimeout(() => {
+            document.getElementById("lobbyeingabe").focus();
+        }, 100);
+    }
+
 // Hilfsfunktion: Alle Buttons und Inputs deaktivieren
 function disableAllInputs(disabled = true) {
     document.querySelectorAll('button, input').forEach(el => {
@@ -201,3 +208,25 @@ async function LobbyHosten() {
         document.getElementById("Button3").disabled = false;
     }
 }
+
+// Darkmode Toggle
+document.addEventListener("DOMContentLoaded", function() {
+    const body = document.getElementById("bodyRoot");
+    const toggle = document.getElementById("darkModeToggle");
+    const icon = document.getElementById("darkModeIcon");
+    const darkClass = "md3-dark";
+    function setMode(dark) {
+        if (dark) {
+            body.classList.add(darkClass);
+            icon.textContent = "light_mode";
+            localStorage.setItem("md3_darkmode", "1");
+        } else {
+            body.classList.remove(darkClass);
+            icon.textContent = "dark_mode";
+            localStorage.setItem("md3_darkmode", "0");
+        }
+    }
+    // Initial
+    setMode(localStorage.getItem("md3_darkmode") === "1");
+    toggle.onclick = () => setMode(!body.classList.contains(darkClass));
+});
