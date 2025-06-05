@@ -217,7 +217,7 @@
             <div class="md-title">Deine Rolle</div>
             <div id="roleLabel" class="md-role"></div>
             <div id="roleWord" class="md-word"></div>
-            <button id="hideRoleBtn" class="md-btn secondary">Rolle verbergen</button>
+            <!-- Button entfernt -->
         </div>
         <div id="votingCard" class="md-card" style="display:none;">
             <div class="md-title">Abstimmung</div>
@@ -254,7 +254,6 @@
         const roleCard = document.getElementById("roleCard");
         const roleLabel = document.getElementById("roleLabel");
         const roleWord = document.getElementById("roleWord");
-        const hideRoleBtn = document.getElementById("hideRoleBtn");
         const votingCard = document.getElementById("votingCard");
         const playerList = document.getElementById("playerList");
         const voteBtn = document.getElementById("voteBtn");
@@ -307,9 +306,8 @@
         }
 
         // --- 2. Rolle verbergen ---
-        // hideRoleBtn.onclick = () => {
-        //     showVoting();
-        // };
+        // Button entfernen
+        // if (hideRoleBtn) hideRoleBtn.remove();
 
         // Automatisches Weiterleiten nach 5 Sekunden
         function autoHideRoleAndShowVoting() {
@@ -334,7 +332,7 @@
             voteCooldownEnd = null;
             await renderPlayerList();
             startVotingInterval();
-            startKickTimer();
+            startKickTimer(true); // true = erster Timer
             updateCooldownCounter();
         }
 
@@ -428,14 +426,14 @@
             }
         }
 
-        // --- Kick-Timer (1-Minuten-Auswertung) ---
-        function startKickTimer() {
+        // --- Kick-Timer (30s/15s-Auswertung) ---
+        function startKickTimer(isFirst = false) {
             if (kickInterval) clearInterval(kickInterval);
-            // Synchronisiere alle Clients auf die gleiche Minute (z.B. seit Spielstart oder seit voller Minute)
-            // Wir nehmen als Startpunkt die nächste volle Minute nach Seitenaufruf
-            if (!kickTimerEnd) {
-                const now = Date.now();
-                kickTimerEnd = now + (60000 - (now % 60000));
+            // Erster Timer: 30s ab Voting-Start, danach immer 15s
+            if (isFirst) {
+                kickTimerEnd = Date.now() + 30000;
+            } else {
+                kickTimerEnd = Date.now() + 15000;
             }
             updateKickCounter();
             kickInterval = setInterval(() => {
@@ -448,18 +446,17 @@
         }
 
         function scheduleKickCheck(first = false) {
-            const now = Date.now();
             let msToNext;
             if (first) {
-                msToNext = kickTimerEnd ? (kickTimerEnd - now) : 60000;
+                msToNext = kickTimerEnd ? (kickTimerEnd - Date.now()) : 30000;
             } else {
-                msToNext = 15000; // 15 Sekunden für alle weiteren Checks
+                msToNext = 15000;
             }
             if (msToNext < 0) msToNext = 0;
             setTimeout(async () => {
                 await checkKick();
                 // Setze Timer für nächste Auswertung
-                kickTimerEnd = Date.now() + (first ? 60000 : 15000);
+                kickTimerEnd = Date.now() + 15000;
                 scheduleKickCheck(false);
             }, msToNext);
         }
@@ -567,7 +564,22 @@
                     const now = Date.now();
                     let msLeft = kickTimerEnd - now;
                     if (msLeft < 0) msLeft = 0;
-                    const percent = Math.round(100 - (msLeft / 60000) * 100);
+                    // Erster Timer: 30s, danach 15s
+                    let total = 15000;
+                    if (kickCheckActive && scheduleKickCheck.firstCall) {
+                        total = 30000;
+                    } else if (kickTimerEnd - now > 15000) {
+                        total = 30000;
+                    }
+                    if (kickTimerEnd - now > 15000) total = 30000;
+                    if (kickTimerEnd - now <= 15000) total = 15000;
+                    if (kickTimerEnd - now > 15000) total = 30000;
+                    if (kickTimerEnd - now <= 15000) total = 15000;
+                    if (kickTimerEnd - now > 20000) total = 30000;
+                    if (kickTimerEnd - now <= 15000) total = 15000;
+                    // Korrekt: total = (kickTimerEnd - now > 15000) ? 30000 : 15000;
+                    total = (kickTimerEnd - now > 15000) ? 30000 : 15000;
+                    const percent = Math.round(100 - (msLeft / total) * 100);
                     const counterLabel = document.createElement("div");
                     counterLabel.className = "md-progress-label";
                     counterLabel.textContent = `Nächste Auswertung in ${Math.ceil(msLeft/1000)}s`;
