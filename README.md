@@ -26,5 +26,4 @@ Unser **Team** besteht aktuell aus [Alpay](https://github.com/nillenia), [Felix]
 ![Hauptmenü](Bilder/hauptmenu.jpg)
 ![Mainscreen](Bilder/mainscreen.jpg)
 ![Pause](Bilder/pause.jpg)
-![Auswahl](Bilder/auswahl.jpg)
 ![Los](Bilder/los.jpg)
