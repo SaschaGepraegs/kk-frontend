@@ -283,11 +283,12 @@
                 return;
             }
             try {
-                const res = await fetch(`https://kk-backend.vercel.app/istImposter?lobby=${lobby}&spieler=${username}`);
-                const arr = await res.json();
-                if (!Array.isArray(arr) || arr.length < 2) throw new Error("Ungültige Antwort");
-                role = arr[0];
-                wordOrImposter = arr[1];
+                // Nutze playerInfo-Endpoint für Rolle und Partner/Wort
+                const res = await fetch(`https://kk-backend.vercel.app/playerInfo?lobby=${lobby}&spieler=${username}`);
+                const info = await res.json();
+                if (!info || !info.rolle) throw new Error("Ungültige Antwort");
+                role = info.rolle;
+                wordOrImposter = (role === "imposter") ? info.partner : info.crewmateWord || info.word;
                 renderRole();
             } catch (e) {
                 alert("Fehler beim Laden der Rolle.");
@@ -363,9 +364,13 @@
         async function renderPlayerList() {
             playerList.innerHTML = "";
             try {
-                const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
-                allPlayers = await res.json();
+                // Nutze lobbyInfo für alle Spieler und rausgeworfene Spieler
+                const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                const lobbyInfo = await res.json();
+                allPlayers = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
                 // Filtere rausgeworfene Spieler heraus
+                const removed = Array.isArray(lobbyInfo.removedPlayers) ? lobbyInfo.removedPlayers : [];
+                kickedPlayers = removed;
                 const activePlayers = allPlayers.filter(name => !kickedPlayers.includes(name));
                 activePlayers.forEach(name => {
                     const card = document.createElement("div");
@@ -469,16 +474,30 @@
 
         async function checkKick() {
             try {
-                const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
-                const votesArr = await votesRes.json();
+                // Nutze lobbyInfo für Votes, removedPlayers und revealedImposters
+                const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                const lobbyInfo = await res.json();
+                const votesObj = lobbyInfo.imposterVotes || {};
+                const playersArr = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
+                const removed = Array.isArray(lobbyInfo.removedPlayers) ? lobbyInfo.removedPlayers : [];
+                const revealedImposters = Array.isArray(lobbyInfo.revealedImposters) ? lobbyInfo.revealedImposters : [];
+                allPlayers = playersArr;
+                kickedPlayers = removed;
+
+                // Votes in Prozent berechnen
+                const totalVotes = Object.values(votesObj).reduce((a, b) => a + b, 0) || 1;
+                const votesArr = playersArr.map(name => ({
+                    spieler: name,
+                    prozent: votesObj[name] ? Math.round((votesObj[name] / totalVotes) * 100) : 0
+                }));
+
                 // Schwelle auf mindestens 60%
                 let winner = votesArr.find(v => v.prozent >= 60);
                 if (winner && !votingDone && !kickedPlayers.includes(winner.spieler)) {
-                    // Prüfe, ob der Spieler ein Imposter ist
-                    const isImposterRes = await fetch(`https://kk-backend.vercel.app/istImposter?lobby=${lobby}&spieler=${winner.spieler}`);
-                    const isImposterArr = await isImposterRes.json();
-                    if (isImposterArr && isImposterArr[0] === "imposter") {
-                        // Imposter enttarnt, registrieren
+                    // Prüfe, ob der Spieler ein Imposter ist (nutze lobbyInfo)
+                    const isImposter = Array.isArray(lobbyInfo.imposter) && lobbyInfo.imposter.includes(winner.spieler);
+                    if (isImposter) {
+                        // Imposter enttarnt, registrieren (alter Endpoint)
                         await fetch(`https://kk-backend.vercel.app/revealImposter?lobby=${lobby}&spieler=${winner.spieler}`);
                     }
                     // Spieler als rausgeworfen markieren
@@ -488,24 +507,18 @@
                     // Prüfe, ob der aktuelle Spieler raus ist
                     if (winner.spieler === username) {
                         showKickedPanel();
-                        // Ergebnis: verloren, wenn rausgeworfen
                         setTimeout(() => showResultAndRedirect(false), 1200);
                         return;
                     }
                     // Prüfe, ob alle Imposter enttarnt sind
-                    const allRevealedRes = await fetch(`https://kk-backend.vercel.app/areAllImpostersRevealed?lobby=${lobby}`);
-                    const allRevealed = await allRevealedRes.json();
-                    if (allRevealed === true) {
+                    const allImposters = Array.isArray(lobbyInfo.imposter) ? lobbyInfo.imposter : [];
+                    const allRevealed = allImposters.every(name => revealedImposters.includes(name));
+                    if (allRevealed) {
                         votingDone = true;
                         clearInterval(votingInterval);
                         clearInterval(kickInterval);
                         if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
 
-                        // Ergebnislogik:
-                        // - Crewmate, nicht rausgeworfen: gewonnen
-                        // - Imposter, nicht enttarnt: verloren
-                        // - Imposter, enttarnt: verloren
-                        // - Crewmate, rausgeworfen: verloren (oben schon behandelt)
                         let win = false;
                         if (role === "crewmate" && !kickedPlayers.includes(username)) {
                             win = true;
@@ -515,7 +528,6 @@
                         showResultAndRedirect(win);
                         return;
                     }
-                    // Sonst läuft das Spiel weiter, keine Weiterleitung
                 }
                 // Wenn keiner >=60%, läuft alles einfach weiter
             } catch (e) {}
@@ -529,17 +541,20 @@
 
         async function updateVotingResults() {
             try {
-                // Stimmen für alle Spieler holen
-                const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
-                const votesArr = await votesRes.json();
-                // votesArr: [{spieler: "Name", prozent: 0}, ...]
-                // Balken für alle Spieler anzeigen
+                // Nutze lobbyInfo für Votes und Spieler
+                const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                const lobbyInfo = await res.json();
+                const votesObj = lobbyInfo.imposterVotes || {};
+                const playersArr = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
+                allPlayers = playersArr;
+                // Votes in Prozent berechnen
+                const totalVotes = Object.values(votesObj).reduce((a, b) => a + b, 0) || 1;
+                const votesArr = playersArr.map(name => ({
+                    spieler: name,
+                    prozent: votesObj[name] ? Math.round((votesObj[name] / totalVotes) * 100) : 0
+                }));
+
                 resultsList.innerHTML = "";
-                if (!Array.isArray(allPlayers) || allPlayers.length === 0) {
-                    // Spieler neu holen, falls noch nicht geladen
-                    const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
-                    allPlayers = await res.json();
-                }
                 allPlayers.forEach(name => {
                     const voteObj = votesArr.find(v => v.spieler === name);
                     const percent = voteObj ? Number(voteObj.prozent) : 0;

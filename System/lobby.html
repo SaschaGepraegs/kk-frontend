@@ -444,10 +444,10 @@ body.md3-dark {
     var t = setInterval(runFunction, 1500);
 
     async function runFunction() {
-        var antwort3 = fetch('https://kk-backend.vercel.app/gehtsLos?lobby=' + localStorage.getItem("uic_gamepin"));
-        let data = await (await antwort3).json()
-        let endergebnis = JSON.stringify(data);
-        if (endergebnis == "true") {
+        // Neuer Sammel-Endpoint für Lobbydaten
+        var antwort3 = fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + localStorage.getItem("uic_gamepin"));
+        let data = await (await antwort3).json();
+        if (data.gehtslos === true) {
             localStorage.setItem("uic_status", "ingame")
             window.location.assign("pause.html")
         } else {
@@ -527,23 +527,15 @@ body.md3-dark {
 
     // Neu: Prüft regelmäßig, ob der Spieler noch in der Lobby ist
     setInterval(async () => {
-        const pin = localStorage.getItem("uic_gamepin"); // Lobby-Pin aus dem Local Storage
-        const username = localStorage.getItem("uic_username"); // Nutzername aus dem Local Storage
+        const pin = localStorage.getItem("uic_gamepin");
+        const username = localStorage.getItem("uic_username");
         if(!pin || !username) return;
         try{
-            const res = await fetch('https://kk-backend.vercel.app/checkForPlayer', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "lobby": pin,
-                    "username": username
-                })
-            });
-            const istInLobby = await res.json();
-            if (istInLobby === false) {
+            // Neuer Sammel-Endpoint für Lobbydaten
+            const res = await fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + pin);
+            const data = await res.json();
+            // Spieler aus players-Array suchen
+            if (!Array.isArray(data.players) || !data.players.includes(username)) {
                 alert("Du wurdest aus der Lobby entfernt.");
                 window.location.assign("../index.html");
             }

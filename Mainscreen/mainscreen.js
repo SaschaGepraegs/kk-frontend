@@ -4,12 +4,13 @@ document.getElementById("pinAnzeige").textContent = `PIN: ${pin}`;
 
 async function ladeSpieler() {
     try {
-        const response = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${pin}`);
+        // Neuer Sammel-Endpoint für Lobbydaten
+        const response = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${pin}`);
         const data = await response.json();
         const liste = document.getElementById("spielerListe");
         liste.innerHTML = "";
-        if (Array.isArray(data)) {
-            data.forEach(spieler => {
+        if (Array.isArray(data.players)) {
+            data.players.forEach(spieler => {
                 const el = document.createElement("div");
                 el.className = "spieler";
                 el.style.display = "flex";
@@ -49,9 +50,10 @@ async function ladeSpieler() {
 
 async function pruefeSpielGestartet() {
     try {
-        const response = await fetch(`https://kk-backend.vercel.app/gehtsLos?lobby=${pin}`);
-        const spielGestartet = await response.json();
-        if (spielGestartet) {
+        // Neuer Sammel-Endpoint für Lobbydaten
+        const response = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${pin}`);
+        const data = await response.json();
+        if (data.gehtslos) {
             document.getElementById("startButton").disabled = true;
             document.getElementById("startButton").textContent = "Spiel läuft bereits";
         }
