@@ -107,7 +107,8 @@ async function checkLobby() {
         // Neuer Sammel-Endpoint für Lobbydaten
         const antwort = await fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + lobbycode);
         const data = await antwort.json();
-        if (!data.players || !Array.isArray(data.players) || data.players.length === 0) {
+        // Prüfe, ob das Objekt überhaupt gültig ist (z.B. players-Property vorhanden)
+        if (!data || typeof data !== "object" || !("players" in data)) {
             alert("Diese Lobby existiert nicht.");
             showLoader(false);
             disableAllInputs(false);
