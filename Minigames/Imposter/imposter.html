@@ -283,13 +283,20 @@
                 return;
             }
             try {
-                // Nutze playerInfo-Endpoint für Rolle und Partner/Wort
                 const res = await fetch(`https://kk-backend.vercel.app/playerInfo?lobby=${lobby}&spieler=${username}`);
                 const info = await res.json();
                 if (!info || !info.rolle) throw new Error("Ungültige Antwort");
                 role = info.rolle;
-                wordOrImposter = (role === "imposter") ? info.partner : info.crewmateWord || info.word;
-                renderRole();
+                if (role === "imposter") {
+                    // Partner nur anzeigen, wenn vorhanden und nicht identisch mit eigenem Namen
+                    wordOrImposter = (info.partner && info.partner !== "undefined" && info.partner !== username) ? info.partner : null;
+                    renderRole();
+                } else {
+                    const lobbyRes = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                    const lobbyInfo = await lobbyRes.json();
+                    wordOrImposter = lobbyInfo.crewmateWord || "-";
+                    renderRole();
+                }
             } catch (e) {
                 alert("Fehler beim Laden der Rolle.");
             }
@@ -299,11 +306,13 @@
             if (role === "imposter") {
                 roleLabel.textContent = "IMPOSTER";
                 roleLabel.classList.add("imposter");
-                roleWord.textContent = "Dein Ziel: Finde heraus, welches Wort die Crewmates haben!";
-                roleWord.classList.add("imposter");
-                if (wordOrImposter && wordOrImposter !== "undefined") {
-                    roleWord.textContent += "\nZweiter Imposter: " + wordOrImposter;
+                // Zeilenumbruch mit <br>
+                let text = "Dein Ziel: Finde heraus, welches Wort die Crewmates haben!";
+                if (wordOrImposter) {
+                    text += "<br>Zweiter Imposter: " + wordOrImposter;
                 }
+                roleWord.innerHTML = text;
+                roleWord.classList.add("imposter");
             } else {
                 roleLabel.textContent = "CREWMATE";
                 roleLabel.classList.remove("imposter");
@@ -474,7 +483,6 @@
 
         async function checkKick() {
             try {
-                // Nutze lobbyInfo für Votes, removedPlayers und revealedImposters
                 const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
                 const lobbyInfo = await res.json();
                 const votesObj = lobbyInfo.imposterVotes || {};
@@ -484,25 +492,21 @@
                 allPlayers = playersArr;
                 kickedPlayers = removed;
 
-                // Votes in Prozent berechnen
                 const totalVotes = Object.values(votesObj).reduce((a, b) => a + b, 0) || 1;
                 const votesArr = playersArr.map(name => ({
                     spieler: name,
                     prozent: votesObj[name] ? Math.round((votesObj[name] / totalVotes) * 100) : 0
                 }));
 
-                // Schwelle auf mindestens 60%
                 let winner = votesArr.find(v => v.prozent >= 60);
                 if (winner && !votingDone && !kickedPlayers.includes(winner.spieler)) {
-                    // Prüfe, ob der Spieler ein Imposter ist (nutze lobbyInfo)
                     const isImposter = Array.isArray(lobbyInfo.imposter) && lobbyInfo.imposter.includes(winner.spieler);
                     if (isImposter) {
-                        // Imposter enttarnt, registrieren (alter Endpoint)
                         await fetch(`https://kk-backend.vercel.app/revealImposter?lobby=${lobby}&spieler=${winner.spieler}`);
                     }
-                    // Spieler als rausgeworfen markieren
+                    // Spieler als rausgeworfen markieren (globales kickedPlayers aktualisieren)
                     if (!kickedPlayers.includes(winner.spieler)) {
-                        kickedPlayers.push(winner.spieler);
+                        kickedPlayers = [...kickedPlayers, winner.spieler];
                     }
                     // Prüfe, ob der aktuelle Spieler raus ist
                     if (winner.spieler === username) {
@@ -520,6 +524,7 @@
                         if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
 
                         let win = false;
+                        // Korrekte Siegbedingung: Crewmate gewinnt, wenn alle Imposter enttarnt sind und nicht rausgeworfen
                         if (role === "crewmate" && !kickedPlayers.includes(username)) {
                             win = true;
                         } else if (role === "imposter" && !kickedPlayers.includes(username)) {
@@ -529,7 +534,6 @@
                         return;
                     }
                 }
-                // Wenn keiner >=60%, läuft alles einfach weiter
             } catch (e) {}
         }
 
@@ -643,7 +647,7 @@
                     seconds--;
                     setTimeout(updateCountdown, 1000);
                 } else {
-                    window.location.href = "/"; // Zielseite ggf. anpassen
+                    window.location.href = "/System/pause.html"; // Zielseite ggf. anpassen
                 }
             }
             updateCountdown();
