@@ -230,6 +230,11 @@
                 <div id="resultsList"></div>
             </div>
         </div>
+        <div id="resultCard" class="md-card" style="display:none;">
+            <div id="resultTitle" class="md-title"></div>
+            <div id="resultMsg" class="md-neutral"></div>
+            <div id="resultCountdown" style="color:#888;font-size:1.05rem;margin-top:10px;"></div>
+        </div>
     </div>
     <script>
         // --- State ---
@@ -247,7 +252,6 @@
         let allPlayers = [];
         let kickInterval = null;
         let kickTimerEnd = null;
-        let kickCheckActive = false;
         let kickedPlayers = []; // Liste der rausgeworfenen Spieler
 
         // --- UI Elements ---
@@ -261,10 +265,14 @@
         const resultsList = document.getElementById("resultsList");
         const cooldownCounter = document.getElementById("cooldownCounter");
         const kickCounter = document.getElementById("kickCounter");
+        const resultCard = document.getElementById("resultCard");
+        const resultTitle = document.getElementById("resultTitle");
+        const resultMsg = document.getElementById("resultMsg");
+        const resultCountdown = document.getElementById("resultCountdown");
 
         // --- Helper ---
         function showOnly(card) {
-            [roleCard, votingCard].forEach(c => c.style.display = "none");
+            [roleCard, votingCard, resultCard].forEach(c => c.style.display = "none");
             card.style.display = "flex";
         }
 
@@ -275,12 +283,20 @@
                 return;
             }
             try {
-                const res = await fetch(`https://kk-backend.vercel.app/istImposter?lobby=${lobby}&spieler=${username}`);
-                const arr = await res.json();
-                if (!Array.isArray(arr) || arr.length < 2) throw new Error("Ungültige Antwort");
-                role = arr[0];
-                wordOrImposter = arr[1];
-                renderRole();
+                const res = await fetch(`https://kk-backend.vercel.app/playerInfo?lobby=${lobby}&spieler=${username}`);
+                const info = await res.json();
+                if (!info || !info.rolle) throw new Error("Ungültige Antwort");
+                role = info.rolle;
+                if (role === "imposter") {
+                    // Partner nur anzeigen, wenn vorhanden und nicht identisch mit eigenem Namen
+                    wordOrImposter = (info.partner && info.partner !== "undefined" && info.partner !== username) ? info.partner : null;
+                    renderRole();
+                } else {
+                    const lobbyRes = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                    const lobbyInfo = await lobbyRes.json();
+                    wordOrImposter = lobbyInfo.crewmateWord || "-";
+                    renderRole();
+                }
             } catch (e) {
                 alert("Fehler beim Laden der Rolle.");
             }
@@ -290,11 +306,13 @@
             if (role === "imposter") {
                 roleLabel.textContent = "IMPOSTER";
                 roleLabel.classList.add("imposter");
-                roleWord.textContent = "Dein Ziel: Finde heraus, welches Wort die Crewmates haben!";
-                roleWord.classList.add("imposter");
-                if (wordOrImposter && wordOrImposter !== "undefined") {
-                    roleWord.textContent += "\nZweiter Imposter: " + wordOrImposter;
+                // Zeilenumbruch mit <br>
+                let text = "Dein Ziel: Finde heraus, welches Wort die Crewmates haben!";
+                if (wordOrImposter) {
+                    text += "<br>Zweiter Imposter: " + wordOrImposter;
                 }
+                roleWord.innerHTML = text;
+                roleWord.classList.add("imposter");
             } else {
                 roleLabel.textContent = "CREWMATE";
                 roleLabel.classList.remove("imposter");
@@ -332,7 +350,7 @@
             voteCooldownEnd = null;
             await renderPlayerList();
             startVotingInterval();
-            startKickTimer(true); // true = erster Timer
+            startKickTimer(); // nur noch ein Timer
             updateCooldownCounter();
         }
 
@@ -355,9 +373,13 @@
         async function renderPlayerList() {
             playerList.innerHTML = "";
             try {
-                const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
-                allPlayers = await res.json();
+                // Nutze lobbyInfo für alle Spieler und rausgeworfene Spieler
+                const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                const lobbyInfo = await res.json();
+                allPlayers = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
                 // Filtere rausgeworfene Spieler heraus
+                const removed = Array.isArray(lobbyInfo.removedPlayers) ? lobbyInfo.removedPlayers : [];
+                kickedPlayers = removed;
                 const activePlayers = allPlayers.filter(name => !kickedPlayers.includes(name));
                 activePlayers.forEach(name => {
                     const card = document.createElement("div");
@@ -426,77 +448,92 @@
             }
         }
 
-        // --- Kick-Timer (30s/15s-Auswertung) ---
-        function startKickTimer(isFirst = false) {
+        // --- Kick-Timer (nur noch 25s-Auswertung) ---
+        function startKickTimer() {
             if (kickInterval) clearInterval(kickInterval);
-            // Erster Timer: 30s ab Voting-Start, danach immer 15s
-            if (isFirst) {
-                kickTimerEnd = Date.now() + 30000;
-            } else {
-                kickTimerEnd = Date.now() + 15000;
-            }
+            kickTimerEnd = Date.now() + 25000;
             updateKickCounter();
             kickInterval = setInterval(() => {
                 updateKickCounter();
             }, 250);
-            if (!kickCheckActive) {
-                kickCheckActive = true;
-                scheduleKickCheck(true); // true = erstes Mal
-            }
+            scheduleKickCheck();
         }
 
-        function scheduleKickCheck(first = false) {
-            let msToNext;
-            if (first) {
-                msToNext = kickTimerEnd ? (kickTimerEnd - Date.now()) : 30000;
-            } else {
-                msToNext = 15000;
-            }
+        function scheduleKickCheck() {
+            let msToNext = kickTimerEnd ? (kickTimerEnd - Date.now()) : 25000;
             if (msToNext < 0) msToNext = 0;
             setTimeout(async () => {
                 await checkKick();
                 // Setze Timer für nächste Auswertung
-                kickTimerEnd = Date.now() + 15000;
-                scheduleKickCheck(false);
+                kickTimerEnd = Date.now() + 25000;
+                scheduleKickCheck();
             }, msToNext);
+        }
+
+        function updateKickCounter() {
+            if (kickTimerEnd) {
+                const now = Date.now();
+                let msLeft = kickTimerEnd - now;
+                if (msLeft < 0) msLeft = 0;
+                kickCounter.textContent = `Nächste Auswertung in ${Math.ceil(msLeft/1000)}s`;
+            } else {
+                kickCounter.textContent = "";
+            }
         }
 
         async function checkKick() {
             try {
-                const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
-                const votesArr = await votesRes.json();
-                // Schwelle auf mindestens 60%
+                const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                const lobbyInfo = await res.json();
+                const votesObj = lobbyInfo.imposterVotes || {};
+                const playersArr = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
+                const removed = Array.isArray(lobbyInfo.removedPlayers) ? lobbyInfo.removedPlayers : [];
+                const revealedImposters = Array.isArray(lobbyInfo.revealedImposters) ? lobbyInfo.revealedImposters : [];
+                allPlayers = playersArr;
+                kickedPlayers = removed;
+
+                const totalVotes = Object.values(votesObj).reduce((a, b) => a + b, 0) || 1;
+                const votesArr = playersArr.map(name => ({
+                    spieler: name,
+                    prozent: votesObj[name] ? Math.round((votesObj[name] / totalVotes) * 100) : 0
+                }));
+
                 let winner = votesArr.find(v => v.prozent >= 60);
                 if (winner && !votingDone && !kickedPlayers.includes(winner.spieler)) {
-                    // Prüfe, ob der Spieler ein Imposter ist
-                    const isImposterRes = await fetch(`https://kk-backend.vercel.app/istImposter?lobby=${lobby}&spieler=${winner.spieler}`);
-                    const isImposterArr = await isImposterRes.json();
-                    if (isImposterArr && isImposterArr[0] === "imposter") {
-                        // Imposter enttarnt, registrieren
+                    const isImposter = Array.isArray(lobbyInfo.imposter) && lobbyInfo.imposter.includes(winner.spieler);
+                    if (isImposter) {
                         await fetch(`https://kk-backend.vercel.app/revealImposter?lobby=${lobby}&spieler=${winner.spieler}`);
                     }
-                    // Spieler als rausgeworfen markieren
+                    // Spieler als rausgeworfen markieren (globales kickedPlayers aktualisieren)
                     if (!kickedPlayers.includes(winner.spieler)) {
-                        kickedPlayers.push(winner.spieler);
+                        kickedPlayers = [...kickedPlayers, winner.spieler];
                     }
                     // Prüfe, ob der aktuelle Spieler raus ist
                     if (winner.spieler === username) {
                         showKickedPanel();
+                        setTimeout(() => showResultAndRedirect(false), 1200);
                         return;
                     }
                     // Prüfe, ob alle Imposter enttarnt sind
-                    const allRevealedRes = await fetch(`https://kk-backend.vercel.app/areAllImpostersRevealed?lobby=${lobby}`);
-                    const allRevealed = await allRevealedRes.json();
-                    if (allRevealed === true) {
+                    const allImposters = Array.isArray(lobbyInfo.imposter) ? lobbyInfo.imposter : [];
+                    const allRevealed = allImposters.every(name => revealedImposters.includes(name));
+                    if (allRevealed) {
                         votingDone = true;
                         clearInterval(votingInterval);
                         clearInterval(kickInterval);
                         if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
-                        window.location.href = "/System/pause.html";
+
+                        let win = false;
+                        // Korrekte Siegbedingung: Crewmate gewinnt, wenn alle Imposter enttarnt sind und nicht rausgeworfen
+                        if (role === "crewmate" && !kickedPlayers.includes(username)) {
+                            win = true;
+                        } else if (role === "imposter" && !kickedPlayers.includes(username)) {
+                            win = false;
+                        }
+                        showResultAndRedirect(win);
+                        return;
                     }
-                    // Sonst läuft das Spiel weiter, keine Weiterleitung
                 }
-                // Wenn keiner >=60%, läuft alles einfach weiter
             } catch (e) {}
         }
 
@@ -508,17 +545,20 @@
 
         async function updateVotingResults() {
             try {
-                // Stimmen für alle Spieler holen
-                const votesRes = await fetch(`https://kk-backend.vercel.app/getImposterVoting?lobby=${lobby}`);
-                const votesArr = await votesRes.json();
-                // votesArr: [{spieler: "Name", prozent: 0}, ...]
-                // Balken für alle Spieler anzeigen
+                // Nutze lobbyInfo für Votes und Spieler
+                const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                const lobbyInfo = await res.json();
+                const votesObj = lobbyInfo.imposterVotes || {};
+                const playersArr = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
+                allPlayers = playersArr;
+                // Votes in Prozent berechnen
+                const totalVotes = Object.values(votesObj).reduce((a, b) => a + b, 0) || 1;
+                const votesArr = playersArr.map(name => ({
+                    spieler: name,
+                    prozent: votesObj[name] ? Math.round((votesObj[name] / totalVotes) * 100) : 0
+                }));
+
                 resultsList.innerHTML = "";
-                if (!Array.isArray(allPlayers) || allPlayers.length === 0) {
-                    // Spieler neu holen, falls noch nicht geladen
-                    const res = await fetch(`https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=${lobby}`);
-                    allPlayers = await res.json();
-                }
                 allPlayers.forEach(name => {
                     const voteObj = votesArr.find(v => v.spieler === name);
                     const percent = voteObj ? Number(voteObj.prozent) : 0;
@@ -559,26 +599,12 @@
                     resultsList.appendChild(label);
                     resultsList.appendChild(bar);
                 });
-                // Counter-Balken für nächste Auswertung
+                // Counter-Balken für nächste Auswertung (nur noch 25s)
                 if (kickTimerEnd) {
                     const now = Date.now();
                     let msLeft = kickTimerEnd - now;
                     if (msLeft < 0) msLeft = 0;
-                    // Erster Timer: 30s, danach 15s
-                    let total = 15000;
-                    if (kickCheckActive && scheduleKickCheck.firstCall) {
-                        total = 30000;
-                    } else if (kickTimerEnd - now > 15000) {
-                        total = 30000;
-                    }
-                    if (kickTimerEnd - now > 15000) total = 30000;
-                    if (kickTimerEnd - now <= 15000) total = 15000;
-                    if (kickTimerEnd - now > 15000) total = 30000;
-                    if (kickTimerEnd - now <= 15000) total = 15000;
-                    if (kickTimerEnd - now > 20000) total = 30000;
-                    if (kickTimerEnd - now <= 15000) total = 15000;
-                    // Korrekt: total = (kickTimerEnd - now > 15000) ? 30000 : 15000;
-                    total = (kickTimerEnd - now > 15000) ? 30000 : 15000;
+                    const total = 25000;
                     const percent = Math.round(100 - (msLeft / total) * 100);
                     const counterLabel = document.createElement("div");
                     counterLabel.className = "md-progress-label";
@@ -597,6 +623,34 @@
             } catch (e) {
                 resultsList.innerHTML = "<div style='color:red;'>Fehler beim Laden der Ergebnisse.</div>";
             }
+        }
+
+        // --- Ergebnisanzeige und Weiterleitung ---
+        function showResultAndRedirect(win) {
+            [roleCard, votingCard].forEach(c => c.style.display = "none");
+            resultCard.style.display = "flex";
+            if (win) {
+                resultTitle.textContent = "Gewonnen!";
+                resultTitle.style.color = "#1976d2";
+                resultMsg.textContent = "Herzlichen Glückwunsch, du hast das Spiel erfolgreich beendet.";
+                // Belohnungspunkte vergeben (nur einmal)
+                fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${encodeURIComponent(lobby)}&spieler=${encodeURIComponent(username)}&punkte=300`).catch(()=>{});
+            } else {
+                resultTitle.textContent = "Verloren!";
+                resultTitle.style.color = "#d32f2f";
+                resultMsg.textContent = "Leider hast du das Spiel verloren. Viel Glück beim nächsten Mal!";
+            }
+            let seconds = 7;
+            function updateCountdown() {
+                resultCountdown.textContent = `Weiterleitung in ${seconds} Sekunden...`;
+                if (seconds > 0) {
+                    seconds--;
+                    setTimeout(updateCountdown, 1000);
+                } else {
+                    window.location.href = "/System/pause.html"; // Zielseite ggf. anpassen
+                }
+            }
+            updateCountdown();
         }
 
         // --- Initialisierung ---

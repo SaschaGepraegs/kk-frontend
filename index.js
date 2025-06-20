@@ -104,9 +104,11 @@ async function checkLobby() {
         return;
     }
     try {
-        const antwort = await fetch('https://kk-backend.vercel.app/getOpenLobbyList');
+        // Neuer Sammel-Endpoint für Lobbydaten
+        const antwort = await fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + lobbycode);
         const data = await antwort.json();
-        if (!JSON.stringify(data).includes(lobbycode)&&lobbycode!="test") {
+        // Prüfe, ob das Objekt überhaupt gültig ist (z.B. players-Property vorhanden)
+        if (!data || typeof data !== "object" || !("players" in data)) {
             alert("Diese Lobby existiert nicht.");
             showLoader(false);
             disableAllInputs(false);
@@ -169,11 +171,11 @@ async function joinLobby() {
 }
 
 async function gehtsLos() {
-    var antwort3 = fetch('https://kk-backend.vercel.app/gehtsLos?lobby=' + localStorage.getItem("uic_gamepin"));
+    // Neuer Sammel-Endpoint für Lobbydaten
+    var antwort3 = fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + localStorage.getItem("uic_gamepin"));
     let data = await (await antwort3).json();
-    let endergebnis = JSON.stringify(data);
 
-    if (endergebnis == "true") {
+    if (data.gehtslos === true) {
         alert('Das Spiel hat bereits gestartet! Wenn du es zurücksetzen willst, dann logge dich bitte als Spieler "reset" ein.');
         showLoader(false);
         disableAllInputs(false);

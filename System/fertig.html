@@ -70,41 +70,33 @@
 <script>
     document.getElementById("thecoolbtn").style.visibility = "visible";
     async function getFinishedPlayers() {
-        var antwort = fetch('https://kk-backend.vercel.app/getFinishedPlayers?lobby=' + localStorage.getItem("uic_lobby"));
-        let data = await (await antwort).json()
-        console.log(data.length)
-        console.log(data)
+        // Neuer Sammel-Endpoint für Lobbydaten
+        var antwort = fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + localStorage.getItem("uic_lobby"));
+        let data = await (await antwort).json();
 
-        const list = data
-        const half = Math.ceil(list.length / 2);
+        // finishedPlayers und finishedPlayersTiming auslesen
+        const finished = data.finishedPlayers || [];
+        const timings = data.finishedPlayersTiming || [];
 
-        const firstHalf = list.slice(0, half)
-        const secondHalf = list.slice(half)
-
-        console.log(firstHalf, secondHalf)
-
-        if (firstHalf[0][0] == undefined || firstHalf[0][0] == "undefined") {
+        // Anzeige der Plätze
+        if (!finished[0]) {
             document.getElementById("ersterplatz").innerHTML = "";
         } else {
-            document.getElementById("ersterplatz").innerHTML = "🥇 Erster Platz geht an " + firstHalf[0][0] + ", fertiggeworden um " + inZeitUmwandlen(secondHalf[0][0]) + " Uhr.";
+            document.getElementById("ersterplatz").innerHTML = "🥇 Erster Platz geht an " + finished[0] + (timings[0] ? ", fertiggeworden um " + inZeitUmwandlen(timings[0]) + " Uhr." : "");
         }
 
-        if (firstHalf[0][1] == undefined || firstHalf[0][1] == "undefined") {
+        if (!finished[1]) {
             document.getElementById("zweiterplatz").innerHTML = "";
         } else {
-            document.getElementById("zweiterplatz").innerHTML = "🥈 Zweiter Platz geht an " + firstHalf[0][1] + ", fertiggeworden um " + inZeitUmwandlen(secondHalf[0][1]) + " Uhr.";
+            document.getElementById("zweiterplatz").innerHTML = "🥈 Zweiter Platz geht an " + finished[1] + (timings[1] ? ", fertiggeworden um " + inZeitUmwandlen(timings[1]) + " Uhr." : "");
         }
 
-        if (firstHalf[0][2] == undefined || firstHalf[0][2] == "undefined") {
-            document.getElementById("dritterplatz").innerHTML = ""
-            document.getElementById("thecoolbtn").style.visibility = "visible"
+        if (!finished[2]) {
+            document.getElementById("dritterplatz").innerHTML = "";
+            document.getElementById("thecoolbtn").style.visibility = "visible";
         } else {
-            document.getElementById("dritterplatz").innerHTML = "🥉 Dritter Platz geht an " + firstHalf[0][2] + ", fertiggeworden um " + inZeitUmwandlen(secondHalf[0][2]) + " Uhr."
+            document.getElementById("dritterplatz").innerHTML = "🥉 Dritter Platz geht an " + finished[2] + (timings[2] ? ", fertiggeworden um " + inZeitUmwandlen(timings[2]) + " Uhr." : "");
         }
-
-
-
-
     }
 
     setInterval(getFinishedPlayers, 1500);
@@ -115,18 +107,12 @@
 
     function inZeitUmwandlen(unix_timestamp) {
         var date = new Date(unix_timestamp * 1000);
-        // Hours part from the timestamp
         var hours = date.getHours();
-        // Minutes part from the timestamp
         var minutes = "0" + date.getMinutes();
-        // Seconds part from the timestamp
         var seconds = "0" + date.getSeconds();
-
-        // Will display time in 10:30:23 format
         var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-        console.log(formattedTime);
-
         return formattedTime
     }
 </script>
+
+</html>
