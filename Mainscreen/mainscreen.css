@@ -379,3 +379,48 @@ body.md3-dark {
     background: #b3261e;
     border-radius: 50%;
 }
+
+.md3-select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.md3-select {
+  padding: .85em 2.2em .85em 1.1em;
+  border: 2px solid var(--md3-outline);
+  border-radius: var(--md3-radius);
+  background: var(--md3-surface);
+  color: var(--md3-on-surface);
+  font: 500 1.13rem var(--md3-font);
+  appearance: none;
+  cursor: pointer;
+  box-shadow: var(--md3-shadow);
+  min-height: 44px;
+  background: var(--md3-surface) url("data:image/svg+xml;utf8,<svg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5' stroke='%236750a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 1.1em center/1.3em;
+  transition: border-color .18s, background .18s, color .18s;
+}
+.md3-select:focus, .md3-select:hover {
+  border-color: var(--md3-primary);
+  background: var(--md3-primary-container);
+  color: var(--md3-on-primary-container);
+}
+.md3-select-option {
+  background: var(--md3-surface);
+  color: var(--md3-on-surface);
+  font: 400 1.07rem var(--md3-font);
+}
+body.md3-dark .md3-select {
+  background: var(--md3-surface) url("data:image/svg+xml;utf8,<svg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5' stroke='%23d0bcff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 1.1em center/1.3em;
+  color: var(--md3-on-surface);
+  border-color: var(--md3-outline);
+}
+
+@media (pointer: coarse) {
+  .md3-select { min-height: 48px; font-size: 1.13rem; padding: 1em 2.2em 1em 1.1em; }
+}
+@media (max-width:600px) {
+  .md3-select { font-size: 1.01rem; padding: .7em 1.7em .7em .8em; border-radius: 14px; min-height: 40px; }
+  .md3-select-group label { font-size: .97rem; }
+}
