@@ -27,3 +27,4 @@ Unser **Team** besteht aktuell aus [Alpay](https://github.com/nillenia), [Felix]
 ![Mainscreen](Bilder/v2/mainscreen.jpg)
 ![Pause](Bilder/v2/pause.jpg)
 ![Los](Bilder/v2/los.jpg)
+![Pizza](Bilder/v3/pizza.jpg)
