@@ -1,0 +1,19 @@
+--- ANZAHL AN PUNKTEN PRO SPIEL ---
+
+Pizza-Clicker:
+    1 Punkt pro Klick auf Pizza
+    Durchschnittlich etwa 250 Punkte realistisch
+
+Memory+:
+    25 Punkte pro Paar
+    Ab 2 richtigen Paaren in Folge: Bonus = Streak × 5 (z.B. beim 3. in Folge: 15 Bonus)
+    Maximal möglich (perfektes Spiel): 375 Punkte
+
+Schere Stein Papier:
+    Anzahl gewonnener Spiele * 60 = Anzahl der Punkte
+
+Imposter:
+    Falls verloren 0 Punkte, falls gewonnen 300 Punkte
+
+Asteroids:
+    [Spiel noch nicht veröffentlicht]
