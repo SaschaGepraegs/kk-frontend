@@ -349,8 +349,7 @@
             voteCooldown = false;
             voteCooldownEnd = null;
             await renderPlayerList();
-            startVotingInterval();
-            startKickTimer(); // nur noch ein Timer
+            // startVotingInterval und startKickTimer werden jetzt in renderPlayerList aufgerufen, wenn goToElection true ist
             updateCooldownCounter();
         }
 
@@ -381,6 +380,26 @@
                 const removed = Array.isArray(lobbyInfo.removedPlayers) ? lobbyInfo.removedPlayers : [];
                 kickedPlayers = removed;
                 const activePlayers = allPlayers.filter(name => !kickedPlayers.includes(name));
+                // NEU: goToElection prüfen
+                const goToElection = !!lobbyInfo.goToElection;
+                if (!goToElection) {
+                    voteBtn.disabled = true;
+                    voteHint.textContent = "Warten auf Wahlstart...";
+                    // Timer für erneute Prüfung nach 1 Sekunde
+                    setTimeout(renderPlayerList, 1000);
+                    // Ergebnisse trotzdem anzeigen
+                    resultsList.innerHTML = "";
+                    // Balken für Wartezeit (optional)
+                    kickCounter.textContent = "Wahl startet in Kürze...";
+                    return;
+                } else {
+                    voteHint.textContent = "";
+                    voteBtn.disabled = true;
+                    kickCounter.textContent = "";
+                    // Timer und Intervalle nur starten, wenn Wahlphase aktiv
+                    startVotingInterval();
+                    startKickTimer();
+                }
                 activePlayers.forEach(name => {
                     const card = document.createElement("div");
                     card.className = "md-player-card";
@@ -448,10 +467,10 @@
             }
         }
 
-        // --- Kick-Timer (nur noch 25s-Auswertung) ---
+        // --- Kick-Timer (jetzt 10s-Auswertung) ---
         function startKickTimer() {
             if (kickInterval) clearInterval(kickInterval);
-            kickTimerEnd = Date.now() + 25000;
+            kickTimerEnd = Date.now() + 10000; // 10 Sekunden
             updateKickCounter();
             kickInterval = setInterval(() => {
                 updateKickCounter();
@@ -460,12 +479,12 @@
         }
 
         function scheduleKickCheck() {
-            let msToNext = kickTimerEnd ? (kickTimerEnd - Date.now()) : 25000;
+            let msToNext = kickTimerEnd ? (kickTimerEnd - Date.now()) : 10000;
             if (msToNext < 0) msToNext = 0;
             setTimeout(async () => {
                 await checkKick();
                 // Setze Timer für nächste Auswertung
-                kickTimerEnd = Date.now() + 25000;
+                kickTimerEnd = Date.now() + 10000; // 10 Sekunden
                 scheduleKickCheck();
             }, msToNext);
         }
@@ -599,12 +618,12 @@
                     resultsList.appendChild(label);
                     resultsList.appendChild(bar);
                 });
-                // Counter-Balken für nächste Auswertung (nur noch 25s)
+                // Counter-Balken für nächste Auswertung (jetzt 10s)
                 if (kickTimerEnd) {
                     const now = Date.now();
                     let msLeft = kickTimerEnd - now;
                     if (msLeft < 0) msLeft = 0;
-                    const total = 25000;
+                    const total = 10000;
                     const percent = Math.round(100 - (msLeft / total) * 100);
                     const counterLabel = document.createElement("div");
                     counterLabel.className = "md-progress-label";

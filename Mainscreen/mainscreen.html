@@ -55,13 +55,26 @@
             </div>
         </section>
         <section class="md3-content-flex">
-            <div class="md3-card md3-elevated-card md3-player-card">
-                <h2 class="md3-card-title">Spieler</h2>
-                <div id="spielerListe" class="md3-list">Spieler werden geladen...</div>
+            <!-- Zusammengefasste Box für Spieler und Warteschlange -->
+            <div class="md3-card md3-elevated-card md3-player-queue-card">
+                <h2 class="md3-card-title">Spieler & Warteschlange</h2>
+                <div>
+                    <h3 style="margin-bottom:0.5em;font-size:1.1em;color:var(--md3-primary);">Spieler</h3>
+                    <div id="spielerListe" class="md3-list">Spieler werden geladen...</div>
+                </div>
+                <div style="margin-top:1.5em;">
+                    <h3 style="margin-bottom:0.5em;font-size:1.1em;color:var(--md3-primary);">Ausgewählte Spiele</h3>
+                    <div id="warteschlangeContent" class="md3-list">Lade Spielauswahl...</div>
+                </div>
             </div>
-            <div class="md3-card md3-elevated-card md3-queue-card">
-                <h2 class="md3-card-title">Ausgewählte Spiele</h2>
-                <div id="warteschlangeContent" class="md3-list">Lade Spielauswahl...</div>
+            <!-- Leere zweite Box für zukünftige Optionen -->
+            <div class="md3-card md3-elevated-card md3-options-card" style="display: none;">
+                <h2 class="md3-card-title">Optionen</h2>
+                <div style="display:flex;flex-direction:column;gap:1em;align-items:flex-start;">
+                    <button class="md3-btn md3-btn-outlined" disabled>Option 1</button>
+                    <button class="md3-btn md3-btn-outlined" disabled>Option 2</button>
+                    <button class="md3-btn md3-btn-outlined" disabled>Option 3</button>
+                </div>
             </div>
         </section>
 
@@ -118,6 +131,7 @@
                 <div class="md3-pin-text" style="margin-bottom: 10px;">Hier entsteht gerade der neue "Zufallsmodus".</div>
                 <button id="zurückBtn4" class="md3-btn md3-btn-tonal">zurück</button>
             </div>
+        </div>
 
     </main>
 </body>
