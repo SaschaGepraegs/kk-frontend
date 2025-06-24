@@ -4,9 +4,9 @@ function fortfahren() {
 }
 let clicks = 0;
 let timer = 30;
-if(localStorage.getItem("uic_status")!= "test"){
+/*if(localStorage.getItem("uic_status")!= "test"){
     timer = 99999999;
-}
+}*/
 let intervalId = null;
 let timerId = null;
 let meter;
@@ -112,8 +112,9 @@ async function spielBeenden() {
 }
 
 // Spielstart nach Laden der Seite
-if(localStorage.getItem("uic_status")!= "test"){
+if(localStorage.getItem("uic_status") != "test"){
     window.onload = startGame;
 }else{
     alert("Testoberfläche");
+    timer = 999999;
 }
