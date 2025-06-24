@@ -180,27 +180,9 @@ async function gehtsLos() {
         showLoader(false);
         disableAllInputs(false);
     } else {
-        await binda();
-        window.location.assign("System/pause.html");
+        window.location.assign("System/lobby.html");
     }
 }
-
-async function binda() {
-        const antwort = fetch('https://kk-backend.vercel.app/binDa', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "lobby": localStorage.getItem("uic_gamepin"),
-                "username": localStorage.getItem("uic_username")
-            })
-        })
-        let data = await (await antwort).json()
-        let endergebnis = data;
-        console.log(endergebnis)
-    }
 
 async function LobbyHosten() {
     disableAllInputs(true);
