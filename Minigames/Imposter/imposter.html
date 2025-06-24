@@ -382,21 +382,41 @@
                 const activePlayers = allPlayers.filter(name => !kickedPlayers.includes(name));
                 // NEU: goToElection prüfen
                 const goToElection = !!lobbyInfo.goToElection;
+                // --- Election Vote Button: Einmalig, nur wenn noch nicht gedrückt ---
+                if (!window.electionVoteButtonCreated) {
+                    window.electionVoteButtonCreated = true;
+                    const electionBtn = document.createElement("button");
+                    electionBtn.id = "electionVoteBtn";
+                    electionBtn.className = "md-btn secondary";
+                    electionBtn.textContent = "Für Wahlstart stimmen";
+                    electionBtn.style.marginTop = "16px";
+                    electionBtn.onclick = async function() {
+                        electionBtn.disabled = true;
+                        electionBtn.textContent = "Danke für deine Stimme!";
+                        try {
+                            await fetch(`https://kk-backend.vercel.app/voteForElection?lobby=${encodeURIComponent(lobby)}&spieler=${encodeURIComponent(username)}`);
+                        } catch (e) {}
+                    };
+                    // Button nur anzeigen, solange noch nicht gewählt wurde
+                    voteHint.parentNode.insertBefore(electionBtn, voteHint.nextSibling);
+                }
                 if (!goToElection) {
                     voteBtn.disabled = true;
                     voteHint.textContent = "Warten auf Wahlstart...";
-                    // Timer für erneute Prüfung nach 1 Sekunde
+                    // Election-Button sichtbar lassen
+                    const btn = document.getElementById("electionVoteBtn");
+                    if (btn) btn.style.display = "";
                     setTimeout(renderPlayerList, 1000);
-                    // Ergebnisse trotzdem anzeigen
                     resultsList.innerHTML = "";
-                    // Balken für Wartezeit (optional)
                     kickCounter.textContent = "Wahl startet in Kürze...";
                     return;
                 } else {
                     voteHint.textContent = "";
                     voteBtn.disabled = true;
                     kickCounter.textContent = "";
-                    // Timer und Intervalle nur starten, wenn Wahlphase aktiv
+                    // Election-Button ausblenden, sobald Wahl startet
+                    const btn = document.getElementById("electionVoteBtn");
+                    if (btn) btn.style.display = "none";
                     startVotingInterval();
                     startKickTimer();
                 }
