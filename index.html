@@ -24,14 +24,14 @@
                 <p class="md3-pin-text">Bitte gib hier deinen Lobby-Code ein:</p>
                 <div class="md3-pin-content">
                     <input type="text" id="lobbyeingabe" class="md3-input" maxlength="4" pattern="\d{1,4}" inputmode="numeric" autocomplete="off" tabindex="1">
-                    <button onclick="checkLobby()" id="Button1" class="md3-btn md3-btn-filled" tabindex="2">Weiter</button>
+                    <button onclick="checkLobby()" id="lobbyBtn" class="md3-btn md3-btn-filled" tabindex="2">Weiter</button>
                 </div>
             </div>
             <div class="md3-pin-card md3-elevated-card" id="nameSection" style="display:none;">
                 <p class="md3-pin-text">Bitte gib hier deinen Nutzernamen ein:</p>
                 <div class="md3-pin-content">
                     <input type="text" id="namenseingabe" class="md3-input" maxlength="16" autocomplete="off" tabindex="3">
-                    <button onclick="joinLobby()" id="Button1" class="md3-btn md3-btn-filled" tabindex="4">Weiter</button>
+                    <button onclick="joinLobby()" id="nameBtn" class="md3-btn md3-btn-filled" tabindex="4">Weiter</button>
                 </div>
             </div>
             </div>
@@ -53,7 +53,7 @@
             </div>
             <div class="md3-pin-card md3-elevated-card">
                 <div class="md3-pin-content">
-                    <button onclick="LobbyHosten()" id="Button3" class="md3-btn md3-btn-filled" tabindex="5">Lobby Hosten</button>
+                    <button onclick="LobbyHosten()" id="hostBtn" class="md3-btn md3-btn-filled" tabindex="5">Lobby Hosten</button>
                 </div>
             </div>
         </section>

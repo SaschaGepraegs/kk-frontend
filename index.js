@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // Enter-Taste für Lobbycode und Name
 document.addEventListener('DOMContentLoaded', () => {
     const lobbyInput = document.getElementById('lobbyeingabe');
-    const lobbyBtn = document.getElementById('Button1');
+    const lobbyBtn = document.getElementById('lobbyBtn');
     const nameInput = document.getElementById('namenseingabe');
-    const nameBtn = document.getElementById('Button2');
-    const hostBtn = document.getElementById('Button3');
+    const nameBtn = document.getElementById('nameBtn');
+    const hostBtn = document.getElementById('hostBtn');
 
     if (lobbyInput) {
         lobbyInput.addEventListener('keydown', (e) => {
@@ -186,8 +186,8 @@ async function gehtsLos() {
 
 async function LobbyHosten() {
     disableAllInputs(true);
-    document.getElementById("Button3").innerHTML = "Erstelle Lobby...";
-    document.getElementById("Button3").disabled = true;
+    document.getElementById("hostBtn").innerHTML = "Erstelle Lobby...";
+    document.getElementById("hostBtn").disabled = true;
     showLoader(true);
     const pin = Math.floor(1000 + Math.random() * 9000);
     const response = await fetch('https://kk-backend.vercel.app/registerLobby?gamepin=' + pin, {
@@ -206,8 +206,8 @@ async function LobbyHosten() {
         alert("Fehler beim Erstellen der Lobby.");
         showLoader(false);
         disableAllInputs(false);
-        document.getElementById("Button3").innerHTML = "Lobby Hosten";
-        document.getElementById("Button3").disabled = false;
+        document.getElementById("hostBtn").innerHTML = "Lobby Hosten";
+        document.getElementById("hostBtn").disabled = false;
     }
 }
 
