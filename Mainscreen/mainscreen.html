@@ -35,7 +35,7 @@
         <section class="md3-content-flex">
             <div class="md3-card md3-elevated-card md3-actions-card">
                 <div class="md3-actions">
-                    <button id="startButton" class ="md3-btn md3-btn-filled">
+                    <button id="startBtn" class ="md3-btn md3-btn-filled" style="display: none;">
                         <span class="material-symbols-outlined">play_circle</span>
                         Spiel starten
                     </button>
@@ -60,8 +60,8 @@
                 <div id="spielerListe" class="md3-list">Spieler werden geladen...</div>
             </div>
             <div class="md3-card md3-elevated-card md3-queue-card">
-                <h2 class="md3-card-title">Warteschlange</h2>
-                <div id="warteschlangeContent" class="md3-list">Lade Warteschlange...</div>
+                <h2 class="md3-card-title">Ausgewählte Spiele</h2>
+                <div id="warteschlangeContent" class="md3-list">Lade Spielauswahl...</div>
             </div>
         </section>
 
@@ -80,7 +80,8 @@
                         <option class="md3-select-option" value="5">5</option>
                     </select>
                 </div>
-                <button id="weiter" class="md3-btn md3-btn-filled">Weiter</button>
+                <button id="zurückBtn1" class="md3-btn md3-btn-tonal">Zurück</button>
+                <button id="weiterBtn" class="md3-btn md3-btn-filled">Weiter</button>
             </div>
         </div>
 
@@ -90,9 +91,10 @@
                 <h2 class="md3-card-title">Spielmodus wählen</h2>
                 <div class="md3-pin-text" style="margin-bottom: 10px;">Welchen Modus wollt ihr spielen?</div>
                 <div class="md3-pin-card md3-elevated-card" style="margin-bottom: 20px;">
-                    <button id="zufälligModus" class="md3-btn md3-btn-filled">zufällig</button>
-                    <button id="spieleAuswählenModus" class="md3-btn md3-btn-filled">Spiele auswählen</button>
+                    <button id="zufälligModusBtn" class="md3-btn md3-btn-filled">zufällig</button>
+                    <button id="spieleAuswählenModusBtn" class="md3-btn md3-btn-filled">Spiele auswählen</button>
                 </div>
+                <button id="zurückBtn2" class="md3-btn md3-btn-tonal">Zurück</button>
             </div>
         </div>
         
@@ -103,8 +105,9 @@
                 <div class="game-grid" id="gameGrid">
                     <!-- Spielkarten werden per JS eingefügt -->
                 </div>
-                <button id="spielSetzenBtn" class="md3-btn md3-btn-filled">Spiel setzen</button>
+                <button id="spieleSetzenBtn" class="md3-btn md3-btn-filled">Spiel setzen</button>
                 <div id="auswahlStatus" class="md3-status-text"></div>
+                <button id="zurückBtn3" class="md3-btn md3-btn-tonal">Zurück</button>
             </div>
         </div>
 
@@ -113,7 +116,7 @@
             <div id="popupMenu" class="md3-popup-card md3-elevated-card">
                 <h2 class="md3-card-title">Zufallsmodus</h2>
                 <div class="md3-pin-text" style="margin-bottom: 10px;">Hier entsteht gerade der neue "Zufallsmodus".</div>
-                <button id="zurückBtn" class="md3-btn md3-btn-filled">zurück</button>
+                <button id="zurückBtn4" class="md3-btn md3-btn-tonal">zurück</button>
             </div>
 
     </main>
