@@ -3,71 +3,119 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lobby-Übersicht</title>
+    <title>KlickKrawall | Mainscreen</title>
     <script src="mainscreen.js" defer></script>
     <link rel="stylesheet" href="mainscreen.css" />
+    <!-- Material Symbols (Google Fonts) -->
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
-<body>
-    <h1>Lobby</h1>
-    <h2 id="pinAnzeige">PIN: </h2>
-    <div id="spielerListe">Spieler werden geladen...</div>
-    <div id="warteschlangeBox" style="max-width:600px;margin:1.5rem auto 0 auto;padding:1rem;background:#232526;border-radius:12px;box-shadow:0 0 10px rgba(255,255,255,0.07);color:#fff;text-align:center;">
-        <h3 style="margin-top:0;">Warteschlange</h3>
-        <div id="warteschlangeContent">Lade Warteschlange...</div>
-    </div>
-    <button id="startButton">Spiel starten</button>
-    <button id="spielBeendenBtn">Spiel beenden</button>
-    <button id="gameAuswahlBtn" style="display:block; margin:2rem auto 0 auto; padding:1rem 2rem; font-size:1.1rem; background:#ff6ec4; color:#fff; border:none; border-radius:8px; cursor:pointer;">Nächstes Spiel auswählen</button>
-    <!-- Popup für Spielauswahl -->
-    <div id="popupOverlay">
-        <div id="popupMenu">
-            <h2>Nächstes Spiel auswählen</h2>
-            <div class="game-grid" id="gameGrid">
-                <!-- Spielkarten werden per JS eingefügt -->
+<body class="md3-bg" id="bodyRoot">
+    <main class="md3-main-container">
+        <section class="md3-top-bar">
+            <h1>KlickKrawall-Mainscreen</h1>
+            <button id="darkModeToggle" class="md3-icon-btn" title="Darkmode umschalten" style="position:absolute;top:1.5rem;right:2.5rem;">
+                <span class="material-symbols-outlined" id="darkModeIcon">dark_mode</span>
+            </button>
+            <div class="md3-pin-card md3-elevated-card">
+                <div class="md3-pin-content">
+                    <span id="pinAnzeige" class="md3-pin-text">PIN: </span>
+                    <button id="copyPinBtn" class="md3-icon-btn" title="PIN kopieren">
+                        <span class="material-symbols-outlined">content_copy</span>
+                    </button>
+                </div>
+                <div class="md3-pin-content">
+                    <span id="linkAnzeige" class="md3-pin-text">Link zur Lobby kopieren</span>
+                    <button id="copyLinkBtn" class="md3-icon-btn" title="Link kopieren">
+                        <span class="material-symbols-outlined">content_copy</span>
+                    </button>
+                </div>
             </div>
-            <button id="spielSetzenBtn" disabled>Spiel setzen</button>
-            <div id="auswahlStatus"></div>
+        </section>
+        <section class="md3-content-flex">
+            <div class="md3-card md3-elevated-card md3-actions-card">
+                <div class="md3-actions">
+                    <button id="startButton" class ="md3-btn md3-btn-filled">
+                        <span class="material-symbols-outlined">play_circle</span>
+                        Spiel starten
+                    </button>
+                    <button id="spielBeendenBtn" class="md3-btn md3-btn-tonal">
+                        <span class="material-symbols-outlined">stop_circle</span>
+                        Spiel beenden
+                    </button>
+                    <button id="modusWählenBtn" class="md3-btn md3-btn-outlined">
+                        <span class="material-symbols-outlined">settings</span>
+                        Spielmodus wählen
+                    </button>
+                    <button id="resetBtn" class="md3-btn md3-btn-outlined" style="display: none">
+                        <span class="material-symbols-outlined">refresh</span>
+                        Spiel-Modus zurücksetzen
+                    </button>
+                </div>
+            </div>
+        </section>
+        <section class="md3-content-flex">
+            <div class="md3-card md3-elevated-card md3-player-card">
+                <h2 class="md3-card-title">Spieler</h2>
+                <div id="spielerListe" class="md3-list">Spieler werden geladen...</div>
+            </div>
+            <div class="md3-card md3-elevated-card md3-queue-card">
+                <h2 class="md3-card-title">Warteschlange</h2>
+                <div id="warteschlangeContent" class="md3-list">Lade Warteschlange...</div>
+            </div>
+        </section>
+
+        <!-- Popup für die Rundenanzahl-->
+        <div id="popupOverlayRunden" class="md3-popup-overlay">
+            <div id="popupMenu" class="md3-popup-card md3-elevated-card">
+                <h2 class="md3-card-title">Rundenanzahl wählen</h2>
+                <div class="md3-pin-text" style="margin-bottom: 10px;">Wie viele Runden wollt ihr spielen?</div>
+                <div id="anzahlRunden" class="md3-select-group">
+                    <label for="rundenInput"></label>
+                    <select id="runden" name="runden" class="md3-select">
+                        <option class="md3-select-option" value="1" selected>1</option>
+                        <option class="md3-select-option" value="2">2</option>
+                        <option class="md3-select-option" value="3">3</option>
+                        <option class="md3-select-option" value="4">4</option>
+                        <option class="md3-select-option" value="5">5</option>
+                    </select>
+                </div>
+                <button id="weiter" class="md3-btn md3-btn-filled">Weiter</button>
+            </div>
         </div>
-    </div>
-    <script>
-        // Button-Logik für "Nächstes Spiel auswählen" anpassen:
-        // Der Button soll IMMER sichtbar sein, daher alles entfernen:
-        // Prüfe, ob das Spiel gestartet wurde und blende den Button ein/aus
-        // let spielGestartetGlobal = false;
-        // async function pruefeObGameGestartetUndButton() { ... }
-        // setInterval(pruefeObGameGestartetUndButton, 1000);
 
-        // Warteschlange anzeigen
-        async function ladeWarteschlange() {
-            try {
-                const response = await fetch(`https://kk-backend.vercel.app/naechstesSpiel?lobby=${pin}`);
-                const queue = await response.json();
-                const content = document.getElementById("warteschlangeContent");
-                if (Array.isArray(queue) && queue.length > 0) {
-                    // Mapping für Namen (optional)
-                    const spieleNamen = {
-                        1: "Pizza-Clicker",
-                        2: "Schere Stein Papier",
-                        3: "Memory+",
-                        4: "Asteroids"
-                        // ...weitere Spiele nach Bedarf...
-                    };
-                    content.innerHTML = queue.map((id, idx) =>
-                        `<span style="display:inline-block;margin:0 8px;padding:4px 10px;border-radius:8px;background:#333;font-weight:${idx===0?'bold':'normal'};color:${idx===0?'#ff6ec4':'#fff'};">
-                            ${spieleNamen[id] || 'Spiel ' + id}
-                        </span>`
-                    ).join('');
-                } else {
-                    content.textContent = "Keine Spiele in der Warteschlange.";
-                }
-            } catch (e) {
-                document.getElementById("warteschlangeContent").textContent = "Fehler beim Laden der Warteschlange.";
-            }
-        }
+        <!-- Popup für den Spielmodus-->
+        <div id="popupOverlayModus" class="md3-popup-overlay">
+            <div id="popupMenu" class="md3-popup-card md3-elevated-card">
+                <h2 class="md3-card-title">Spielmodus wählen</h2>
+                <div class="md3-pin-text" style="margin-bottom: 10px;">Welchen Modus wollt ihr spielen?</div>
+                <div class="md3-pin-card md3-elevated-card" style="margin-bottom: 20px;">
+                    <button id="zufälligModus" class="md3-btn md3-btn-filled">zufällig</button>
+                    <button id="spieleAuswählenModus" class="md3-btn md3-btn-filled">Spiele auswählen</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Popup für Auswahlmodus -->
+        <div id="popupOverlayAuswahl" class="md3-popup-overlay">
+            <div id="popupMenu" class="md3-popup-card md3-elevated-card">
+                <h2 class="md3-card-title">Nächstes Spiel auswählen</h2>
+                <div class="game-grid" id="gameGrid">
+                    <!-- Spielkarten werden per JS eingefügt -->
+                </div>
+                <button id="spielSetzenBtn" class="md3-btn md3-btn-filled">Spiel setzen</button>
+                <div id="auswahlStatus" class="md3-status-text"></div>
+            </div>
+        </div>
 
-        // Initial laden und alle 3 Sekunden aktualisieren
-        ladeWarteschlange();
-        setInterval(ladeWarteschlange, 3000);
-    </script>
+        <!-- Popup für den Zufallsmodus-->
+        <div id="popupOverlayZufall" class="md3-popup-overlay">
+            <div id="popupMenu" class="md3-popup-card md3-elevated-card">
+                <h2 class="md3-card-title">Zufallsmodus</h2>
+                <div class="md3-pin-text" style="margin-bottom: 10px;">Hier entsteht gerade der neue "Zufallsmodus".</div>
+                <button id="zurückBtn" class="md3-btn md3-btn-filled">zurück</button>
+            </div>
+
+    </main>
 </body>
 </html>

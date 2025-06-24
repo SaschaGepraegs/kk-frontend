@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imposter | KlickKrawall</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --md-primary: #1976d2;
+            --md-primary-dark: #1565c0;
+            --md-secondary: #ff9800;
+            --md-error: #d32f2f;
+            --md-bg: #f5f5f5;
+            --md-surface: #fff;
+            --md-on-primary: #fff;
+            --md-on-surface: #222;
+            --md-radius: 16px;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: var(--md-bg);
+            color: var(--md-on-surface);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 8px;
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+        }
+        .md-card {
+            background: var(--md-surface);
+            border-radius: var(--md-radius);
+            box-shadow: 0 2px 12px 0 rgba(60,60,60,0.13);
+            margin: 24px 0 0 0;
+            padding: 24px 16px 20px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .md-title {
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--md-primary);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .md-role {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            padding: 10px 24px;
+            border-radius: 100px;
+            color: #fff;
+            background: var(--md-primary);
+            display: inline-block;
+        }
+        .md-role.imposter {
+            background: var(--md-error);
+        }
+        .md-word {
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 18px;
+            color: var(--md-primary-dark);
+            text-align: center;
+        }
+        .md-word.imposter {
+            color: var(--md-error);
+        }
+        .md-btn {
+            background: var(--md-primary);
+            color: var(--md-on-primary);
+            border: none;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            font-weight: 500;
+            padding: 12px 32px;
+            margin: 12px 0 0 0;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(25, 118, 210, 0.18);
+            transition: background 0.2s;
+            outline: none;
+            display: inline-block;
+        }
+        .md-btn:active, .md-btn:focus {
+            background: var(--md-primary-dark);
+        }
+        .md-btn[disabled] {
+            background: #bdbdbd;
+            color: #fff;
+            cursor: not-allowed;
+        }
+        .md-btn.secondary {
+            background: var(--md-secondary);
+            color: #fff;
+        }
+        .md-btn.secondary:active, .md-btn.secondary:focus {
+            background: #f57c00;
+        }
+        .md-btn.error {
+            background: var(--md-error);
+        }
+        .md-btn.error:active, .md-btn.error:focus {
+            background: #b71c1c;
+        }
+        .md-neutral {
+            font-size: 1.2rem;
+            color: #888;
+            text-align: center;
+            margin: 32px 0 0 0;
+        }
+        .md-player-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 18px 0 0 0;
+        }
+        .md-player-card {
+            background: var(--md-surface);
+            border-radius: 12px;
+            box-shadow: 0 1px 4px 0 rgba(60,60,60,0.07);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.15s;
+        }
+        .md-player-card.selected {
+            border: 2px solid var(--md-primary);
+            background: #e3f2fd;
+        }
+        .md-player-card.voted {
+            opacity: 0.6;
+        }
+        .md-progress-bar {
+            width: 100%;
+            height: 18px;
+            background: #e0e0e0;
+            border-radius: 9px;
+            overflow: hidden;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+        .md-progress-inner {
+            height: 100%;
+            background: var(--md-primary);
+            transition: width 0.3s;
+        }
+        .md-progress-label {
+            font-size: 0.98rem;
+            color: #444;
+            margin-bottom: 2px;
+            text-align: left;
+        }
+        .md-vote-hint {
+            color: var(--md-primary-dark);
+            font-size: 1.1rem;
+            margin-top: 18px;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100vw;
+                padding: 0 2vw;
+            }
+            .md-card {
+                margin: 12px 0 0 0;
+                padding: 16px 4px 14px 4px;
+            }
+            .md-title {
+                font-size: 1.3rem;
+            }
+            .md-role {
+                font-size: 1.1rem;
+                padding: 7px 16px;
+            }
+            .md-word {
+                font-size: 1.05rem;
+            }
+            .md-btn {
+                font-size: 1rem;
+                padding: 10px 18px;
+            }
+            .md-player-card {
+                font-size: 1rem;
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="roleCard" class="md-card" style="display:none;">
+            <div class="md-title">Deine Rolle</div>
+            <div id="roleLabel" class="md-role"></div>
+            <div id="roleWord" class="md-word"></div>
+            <!-- Button entfernt -->
+        </div>
+        <div id="votingCard" class="md-card" style="display:none;">
+            <div class="md-title">Abstimmung</div>
+            <div id="playerList" class="md-player-list"></div>
+            <button id="voteBtn" class="md-btn" disabled>Vote bestätigen</button>
+            <div id="voteHint" class="md-vote-hint"></div>
+            <div style="width:100%;margin-top:18px;">
+                <div id="cooldownCounter" style="color:#1976d2;font-size:1.05rem;margin-bottom:6px;"></div>
+                <div id="kickCounter" style="color:#d32f2f;font-size:1.05rem;margin-bottom:6px;"></div>
+                <div id="resultsList"></div>
+            </div>
+        </div>
+        <div id="resultCard" class="md-card" style="display:none;">
+            <div id="resultTitle" class="md-title"></div>
+            <div id="resultMsg" class="md-neutral"></div>
+            <div id="resultCountdown" style="color:#888;font-size:1.05rem;margin-top:10px;"></div>
+        </div>
+    </div>
+    <script>
+        // --- State ---
+        let lobby = localStorage.getItem("uic_gamepin");
+        let username = localStorage.getItem("uic_username");
+        let role = null; // "imposter" | "crewmate"
+        let wordOrImposter = null; // Wort oder Name des anderen Imposters
+        let voted = false;
+        let selectedPlayer = null;
+        let votingInterval = null;
+        let votingDone = false;
+        let voteCooldown = false;
+        let voteCooldownTimeout = null;
+        let voteCooldownEnd = null;
+        let allPlayers = [];
+        let kickInterval = null;
+        let kickTimerEnd = null;
+        let kickedPlayers = []; // Liste der rausgeworfenen Spieler
+
+        // --- UI Elements ---
+        const roleCard = document.getElementById("roleCard");
+        const roleLabel = document.getElementById("roleLabel");
+        const roleWord = document.getElementById("roleWord");
+        const votingCard = document.getElementById("votingCard");
+        const playerList = document.getElementById("playerList");
+        const voteBtn = document.getElementById("voteBtn");
+        const voteHint = document.getElementById("voteHint");
+        const resultsList = document.getElementById("resultsList");
+        const cooldownCounter = document.getElementById("cooldownCounter");
+        const kickCounter = document.getElementById("kickCounter");
+        const resultCard = document.getElementById("resultCard");
+        const resultTitle = document.getElementById("resultTitle");
+        const resultMsg = document.getElementById("resultMsg");
+        const resultCountdown = document.getElementById("resultCountdown");
+
+        // --- Helper ---
+        function showOnly(card) {
+            [roleCard, votingCard, resultCard].forEach(c => c.style.display = "none");
+            card.style.display = "flex";
+        }
+
+        // --- 1. Rolle anzeigen ---
+        async function fetchRole() {
+            if (!lobby || !username) {
+                alert("Lobby oder Name fehlt!");
+                return;
+            }
+            try {
+                const res = await fetch(`https://kk-backend.vercel.app/playerInfo?lobby=${lobby}&spieler=${username}`);
+                const info = await res.json();
+                if (!info || !info.rolle) throw new Error("Ungültige Antwort");
+                role = info.rolle;
+                if (role === "imposter") {
+                    // Partner nur anzeigen, wenn vorhanden und nicht identisch mit eigenem Namen
+                    wordOrImposter = (info.partner && info.partner !== "undefined" && info.partner !== username) ? info.partner : null;
+                    renderRole();
+                } else {
+                    const lobbyRes = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                    const lobbyInfo = await lobbyRes.json();
+                    wordOrImposter = lobbyInfo.crewmateWord || "-";
+                    renderRole();
+                }
+            } catch (e) {
+                alert("Fehler beim Laden der Rolle.");
+            }
+        }
+
+        function renderRole() {
+            if (role === "imposter") {
+                roleLabel.textContent = "IMPOSTER";
+                roleLabel.classList.add("imposter");
+                // Zeilenumbruch mit <br>
+                let text = "Dein Ziel: Finde heraus, welches Wort die Crewmates haben!";
+                if (wordOrImposter) {
+                    text += "<br>Zweiter Imposter: " + wordOrImposter;
+                }
+                roleWord.innerHTML = text;
+                roleWord.classList.add("imposter");
+            } else {
+                roleLabel.textContent = "CREWMATE";
+                roleLabel.classList.remove("imposter");
+                roleWord.textContent = "Das geheime Wort: " + wordOrImposter;
+                roleWord.classList.remove("imposter");
+            }
+            showOnly(roleCard);
+            autoHideRoleAndShowVoting(); // Automatisch nach 5 Sekunden weiter
+        }
+
+        // --- 2. Rolle verbergen ---
+        // Button entfernen
+        // if (hideRoleBtn) hideRoleBtn.remove();
+
+        // Automatisches Weiterleiten nach 5 Sekunden
+        function autoHideRoleAndShowVoting() {
+            setTimeout(() => {
+                showVoting();
+            }, 5000);
+        }
+
+        // --- 3. Abstimmung ---
+        async function showVoting() {
+            // Prüfe, ob der aktuelle Spieler rausgeworfen wurde
+            if (kickedPlayers.includes(username)) {
+                showKickedPanel();
+                return;
+            }
+            showOnly(votingCard);
+            voteBtn.disabled = true;
+            voteHint.textContent = "";
+            selectedPlayer = null;
+            voted = false;
+            voteCooldown = false;
+            voteCooldownEnd = null;
+            await renderPlayerList();
+            startVotingInterval();
+            startKickTimer(); // nur noch ein Timer
+            updateCooldownCounter();
+        }
+
+        function showKickedPanel() {
+            // Voting-Panel ausblenden, stattdessen Hinweis anzeigen
+            [roleCard, votingCard].forEach(c => c.style.display = "none");
+            // Prüfe, ob Panel schon existiert
+            let kickedPanel = document.getElementById("kickedPanel");
+            if (!kickedPanel) {
+                kickedPanel = document.createElement("div");
+                kickedPanel.id = "kickedPanel";
+                kickedPanel.className = "md-card";
+                kickedPanel.innerHTML = `<div class="md-title" style="color:#d32f2f;">Du bist raus!</div>
+                    <div class="md-neutral">Du wurdest rausgewählt und kannst nicht mehr abstimmen.<br>Bitte warte, bis das Spiel vorbei ist.</div>`;
+                document.querySelector(".container").appendChild(kickedPanel);
+            }
+            kickedPanel.style.display = "flex";
+        }
+
+        async function renderPlayerList() {
+            playerList.innerHTML = "";
+            try {
+                // Nutze lobbyInfo für alle Spieler und rausgeworfene Spieler
+                const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                const lobbyInfo = await res.json();
+                allPlayers = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
+                // Filtere rausgeworfene Spieler heraus
+                const removed = Array.isArray(lobbyInfo.removedPlayers) ? lobbyInfo.removedPlayers : [];
+                kickedPlayers = removed;
+                const activePlayers = allPlayers.filter(name => !kickedPlayers.includes(name));
+                activePlayers.forEach(name => {
+                    const card = document.createElement("div");
+                    card.className = "md-player-card";
+                    card.textContent = name;
+                    if (name === username) {
+                        card.style.opacity = "0.6";
+                        card.style.fontStyle = "italic";
+                    }
+                    card.onclick = () => {
+                        if (voteCooldown) return;
+                        selectedPlayer = name;
+                        document.querySelectorAll('.md-player-card').forEach(c => c.classList.remove('selected'));
+                        card.classList.add('selected');
+                        voteBtn.disabled = false;
+                    };
+                    playerList.appendChild(card);
+                });
+                // Falls keine aktiven Spieler mehr, Voting-Panel ausblenden
+                if (activePlayers.length === 0) {
+                    votingCard.style.display = "none";
+                }
+            } catch (e) {
+                playerList.innerHTML = "<div style='color:red;'>Fehler beim Laden der Spieler.</div>";
+            }
+        }
+
+        voteBtn.onclick = async () => {
+            if (!selectedPlayer || voteCooldown) return;
+            voteBtn.disabled = true;
+            voteCooldown = true;
+            voteCooldownEnd = Date.now() + 20000;
+            updateCooldownCounter();
+            try {
+                await fetch(`https://kk-backend.vercel.app/castImposterVote?lobby=${lobby}&elect=${selectedPlayer}`);
+                voteHint.textContent = "Du kannst in 20 Sekunden erneut abstimmen.";
+                document.querySelectorAll('.md-player-card').forEach(c => c.classList.add('voted'));
+                // 20 Sekunden Cooldown
+                voteCooldownTimeout = setTimeout(() => {
+                    voteCooldown = false;
+                    voteBtn.disabled = false;
+                    voteHint.textContent = "";
+                    voteCooldownEnd = null;
+                    document.querySelectorAll('.md-player-card').forEach(c => c.classList.remove('voted'));
+                }, 20000);
+            } catch (e) {
+                voteHint.textContent = "Fehler beim Abstimmen.";
+                voteCooldown = false;
+                voteBtn.disabled = false;
+                voteCooldownEnd = null;
+            }
+        };
+
+        // --- Vote-Cooldown Counter ---
+        function updateCooldownCounter() {
+            if (voteCooldown && voteCooldownEnd) {
+                const left = Math.max(0, Math.ceil((voteCooldownEnd - Date.now()) / 1000));
+                cooldownCounter.textContent = `Du kannst in ${left}s wieder voten.`;
+                if (left > 0) {
+                    setTimeout(updateCooldownCounter, 250);
+                } else {
+                    cooldownCounter.textContent = "";
+                }
+            } else {
+                cooldownCounter.textContent = "";
+            }
+        }
+
+        // --- Kick-Timer (nur noch 25s-Auswertung) ---
+        function startKickTimer() {
+            if (kickInterval) clearInterval(kickInterval);
+            kickTimerEnd = Date.now() + 25000;
+            updateKickCounter();
+            kickInterval = setInterval(() => {
+                updateKickCounter();
+            }, 250);
+            scheduleKickCheck();
+        }
+
+        function scheduleKickCheck() {
+            let msToNext = kickTimerEnd ? (kickTimerEnd - Date.now()) : 25000;
+            if (msToNext < 0) msToNext = 0;
+            setTimeout(async () => {
+                await checkKick();
+                // Setze Timer für nächste Auswertung
+                kickTimerEnd = Date.now() + 25000;
+                scheduleKickCheck();
+            }, msToNext);
+        }
+
+        function updateKickCounter() {
+            if (kickTimerEnd) {
+                const now = Date.now();
+                let msLeft = kickTimerEnd - now;
+                if (msLeft < 0) msLeft = 0;
+                kickCounter.textContent = `Nächste Auswertung in ${Math.ceil(msLeft/1000)}s`;
+            } else {
+                kickCounter.textContent = "";
+            }
+        }
+
+        async function checkKick() {
+            try {
+                const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                const lobbyInfo = await res.json();
+                const votesObj = lobbyInfo.imposterVotes || {};
+                const playersArr = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
+                const removed = Array.isArray(lobbyInfo.removedPlayers) ? lobbyInfo.removedPlayers : [];
+                const revealedImposters = Array.isArray(lobbyInfo.revealedImposters) ? lobbyInfo.revealedImposters : [];
+                allPlayers = playersArr;
+                kickedPlayers = removed;
+
+                const totalVotes = Object.values(votesObj).reduce((a, b) => a + b, 0) || 1;
+                const votesArr = playersArr.map(name => ({
+                    spieler: name,
+                    prozent: votesObj[name] ? Math.round((votesObj[name] / totalVotes) * 100) : 0
+                }));
+
+                let winner = votesArr.find(v => v.prozent >= 60);
+                if (winner && !votingDone && !kickedPlayers.includes(winner.spieler)) {
+                    const isImposter = Array.isArray(lobbyInfo.imposter) && lobbyInfo.imposter.includes(winner.spieler);
+                    if (isImposter) {
+                        await fetch(`https://kk-backend.vercel.app/revealImposter?lobby=${lobby}&spieler=${winner.spieler}`);
+                    }
+                    // Spieler als rausgeworfen markieren (globales kickedPlayers aktualisieren)
+                    if (!kickedPlayers.includes(winner.spieler)) {
+                        kickedPlayers = [...kickedPlayers, winner.spieler];
+                    }
+                    // Prüfe, ob der aktuelle Spieler raus ist
+                    if (winner.spieler === username) {
+                        showKickedPanel();
+                        setTimeout(() => showResultAndRedirect(false), 1200);
+                        return;
+                    }
+                    // Prüfe, ob alle Imposter enttarnt sind
+                    const allImposters = Array.isArray(lobbyInfo.imposter) ? lobbyInfo.imposter : [];
+                    const allRevealed = allImposters.every(name => revealedImposters.includes(name));
+                    if (allRevealed) {
+                        votingDone = true;
+                        clearInterval(votingInterval);
+                        clearInterval(kickInterval);
+                        if (voteCooldownTimeout) clearTimeout(voteCooldownTimeout);
+
+                        let win = false;
+                        // Korrekte Siegbedingung: Crewmate gewinnt, wenn alle Imposter enttarnt sind und nicht rausgeworfen
+                        if (role === "crewmate" && !kickedPlayers.includes(username)) {
+                            win = true;
+                        } else if (role === "imposter" && !kickedPlayers.includes(username)) {
+                            win = false;
+                        }
+                        showResultAndRedirect(win);
+                        return;
+                    }
+                }
+            } catch (e) {}
+        }
+
+        // --- 4. Ergebnisse ---
+        function startVotingInterval() {
+            if (votingInterval) clearInterval(votingInterval);
+            votingInterval = setInterval(updateVotingResults, 1000);
+        }
+
+        async function updateVotingResults() {
+            try {
+                // Nutze lobbyInfo für Votes und Spieler
+                const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
+                const lobbyInfo = await res.json();
+                const votesObj = lobbyInfo.imposterVotes || {};
+                const playersArr = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
+                allPlayers = playersArr;
+                // Votes in Prozent berechnen
+                const totalVotes = Object.values(votesObj).reduce((a, b) => a + b, 0) || 1;
+                const votesArr = playersArr.map(name => ({
+                    spieler: name,
+                    prozent: votesObj[name] ? Math.round((votesObj[name] / totalVotes) * 100) : 0
+                }));
+
+                resultsList.innerHTML = "";
+                allPlayers.forEach(name => {
+                    const voteObj = votesArr.find(v => v.spieler === name);
+                    const percent = voteObj ? Number(voteObj.prozent) : 0;
+                    const label = document.createElement("div");
+                    label.className = "md-progress-label";
+                    label.textContent = name + (percent > 0 ? ` (${percent}%)` : "");
+                    const bar = document.createElement("div");
+                    bar.className = "md-progress-bar";
+                    // Balken-Inhalt
+                    const inner = document.createElement("div");
+                    inner.className = "md-progress-inner";
+                    inner.style.width = percent + "%";
+                    bar.appendChild(inner);
+                    // 60%-Markierung
+                    const marker = document.createElement("div");
+                    marker.style.position = "absolute";
+                    marker.style.left = "60%";
+                    marker.style.top = "0";
+                    marker.style.bottom = "0";
+                    marker.style.width = "2px";
+                    marker.style.background = "#d32f2f";
+                    marker.style.opacity = "0.7";
+                    marker.title = "Kick-Schwelle (60%)";
+                    bar.style.position = "relative";
+                    bar.appendChild(marker);
+                    // Optional: kleine Linie oben als Dreieck/Marker
+                    const markerTriangle = document.createElement("div");
+                    markerTriangle.style.position = "absolute";
+                    markerTriangle.style.left = "60%";
+                    markerTriangle.style.top = "-7px";
+                    markerTriangle.style.width = "0";
+                    markerTriangle.style.height = "0";
+                    markerTriangle.style.borderLeft = "6px solid transparent";
+                    markerTriangle.style.borderRight = "6px solid transparent";
+                    markerTriangle.style.borderBottom = "7px solid #d32f2f";
+                    bar.appendChild(markerTriangle);
+
+                    resultsList.appendChild(label);
+                    resultsList.appendChild(bar);
+                });
+                // Counter-Balken für nächste Auswertung (nur noch 25s)
+                if (kickTimerEnd) {
+                    const now = Date.now();
+                    let msLeft = kickTimerEnd - now;
+                    if (msLeft < 0) msLeft = 0;
+                    const total = 25000;
+                    const percent = Math.round(100 - (msLeft / total) * 100);
+                    const counterLabel = document.createElement("div");
+                    counterLabel.className = "md-progress-label";
+                    counterLabel.textContent = `Nächste Auswertung in ${Math.ceil(msLeft/1000)}s`;
+                    const counterBar = document.createElement("div");
+                    counterBar.className = "md-progress-bar";
+                    counterBar.style.background = "#ffe082"; // Gelblich
+                    const counterInner = document.createElement("div");
+                    counterInner.className = "md-progress-inner";
+                    counterInner.style.background = "#ffb300"; // Orange
+                    counterInner.style.width = percent + "%";
+                    counterBar.appendChild(counterInner);
+                    resultsList.appendChild(counterLabel);
+                    resultsList.appendChild(counterBar);
+                }
+            } catch (e) {
+                resultsList.innerHTML = "<div style='color:red;'>Fehler beim Laden der Ergebnisse.</div>";
+            }
+        }
+
+        // --- Ergebnisanzeige und Weiterleitung ---
+        function showResultAndRedirect(win) {
+            [roleCard, votingCard].forEach(c => c.style.display = "none");
+            resultCard.style.display = "flex";
+            if (win) {
+                resultTitle.textContent = "Gewonnen!";
+                resultTitle.style.color = "#1976d2";
+                resultMsg.textContent = "Herzlichen Glückwunsch, du hast das Spiel erfolgreich beendet.";
+                // Belohnungspunkte vergeben (nur einmal)
+                fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${encodeURIComponent(lobby)}&spieler=${encodeURIComponent(username)}&punkte=300`).catch(()=>{});
+            } else {
+                resultTitle.textContent = "Verloren!";
+                resultTitle.style.color = "#d32f2f";
+                resultMsg.textContent = "Leider hast du das Spiel verloren. Viel Glück beim nächsten Mal!";
+            }
+            let seconds = 7;
+            function updateCountdown() {
+                resultCountdown.textContent = `Weiterleitung in ${seconds} Sekunden...`;
+                if (seconds > 0) {
+                    seconds--;
+                    setTimeout(updateCountdown, 1000);
+                } else {
+                    window.location.href = "/System/pause.html"; // Zielseite ggf. anpassen
+                }
+            }
+            updateCountdown();
+        }
+
+        // --- Initialisierung ---
+        fetchRole();
+
+        // Optional: Wenn VotingCard angezeigt wird, Voting-Status regelmäßig prüfen
+        // (bereits durch startVotingInterval abgedeckt)
+    </script>
+</body>
+</html>

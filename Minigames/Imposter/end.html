@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Spiel beendet | KlickKrawall</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #f5f5f5;
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #222;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .end-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px 0 rgba(60,60,60,0.13);
+            padding: 36px 28px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 260px;
+        }
+        .end-title {
+            font-size: 2.1rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+        .end-title.win {
+            color: #388e3c;
+        }
+        .end-title.lose {
+            color: #d32f2f;
+        }
+        .end-desc {
+            font-size: 1.15rem;
+            color: #444;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .end-timer {
+            font-size: 1.05rem;
+            color: #1976d2;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="end-card">
+        <div id="endTitle" class="end-title"></div>
+        <div id="endDesc" class="end-desc"></div>
+        <div id="endTimer" class="end-timer"></div>
+    </div>
+    <script>
+        // --- Ergebnis bestimmen ---
+        const role = localStorage.getItem("uic_role"); // "imposter" | "crewmate"
+        const kicked = localStorage.getItem("uic_kicked") === "true"; // true = rausgeworfen/enttarnt
+
+        let win = false;
+        let desc = "";
+
+        if (role === "crewmate") {
+            win = !kicked;
+            desc = win
+                ? "Du hast als Crewmate überlebt! Glückwunsch!"
+                : "Du wurdest rausgewählt. Vielleicht klappt's beim nächsten Mal.";
+        } else if (role === "imposter") {
+            win = !kicked;
+            desc = win
+                ? "Du bist als Imposter unenttarnt geblieben! Stark gespielt!"
+                : "Du wurdest enttarnt. Versuch es nochmal!";
+        } else {
+            // Fallback
+            desc = "Das Ergebnis konnte nicht ermittelt werden.";
+        }
+
+        // Anzeige aktualisieren
+        const endTitle = document.getElementById("endTitle");
+        const endDesc = document.getElementById("endDesc");
+        const endTimer = document.getElementById("endTimer");
+
+        endTitle.textContent = win ? "Gewonnen!" : "Verloren!";
+        endTitle.classList.add(win ? "win" : "lose");
+        endDesc.textContent = desc;
+
+        // Timer & Weiterleitung
+        let seconds = 7;
+        function updateTimer() {
+            endTimer.textContent = `Weiterleitung in ${seconds} Sekunden...`;
+            if (seconds > 0) {
+                seconds--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                window.location.href = "/System/pause.html";
+            }
+        }
+        updateTimer();
+    </script>
+</body>
+</html>

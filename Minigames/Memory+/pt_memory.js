@@ -8,12 +8,19 @@ const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch f
 var LobbyStatus;
 let timerInterval; // NEU: Intervall-ID speichern
 let spielBeendet = false; // NEU: Flag für Spielende
+<<<<<<< HEAD
 const resetbutton = document.getElementById("resetbutton");
 
 
 window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
 
 
+=======
+let lobbystatusvar
+
+window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
+ 
+>>>>>>> 81b18a4c823aa4b978e05cc47dcbd607ad8633cb
 // Funktion, um verschiedene Variablen zurückzusetzen
 function reset(){
     punkte = 0; // Punkte zurücksetzen
@@ -30,7 +37,7 @@ function reset(){
     }
 }
 
-function spielStarten(){ // Funktion, die das Spiel startet
+async function spielStarten(){ // Funktion, die das Spiel startet
     reset(); // Reset-Funktion aufrufen
     Timer(); // Timer starten
     const KartenInfos = [ // Array mit Karteninformationen
@@ -66,16 +73,23 @@ function spielStarten(){ // Funktion, die das Spiel startet
 
 // Funktion, um die Karte aufzudecken
 function KarteAufdecken(){
-    this.src = this.KartenBild; // Bild der Karte anzeigen
     this.aufgedeckt = true; // Karte ist aufgedeckt
-    KartenGeräusch.currentTime = 0.2; // Geräusch zurücksetzen
+    aktuellAufgedeckteKarten.push(this); // Karte in das Array der aktuell aufgedeckten Karten hinzufügen
+    this.classList.toggle("clicked"); // Animation für das Aufdecken
+    setTimeout(() => {this.src = this.KartenBild; // Bild der Karte anzeigen
+    }, 250); // aber erst nach Hälfte der css-Animation (0,25s)    
+    KartenGeräusch.currentTime = 0.35; // Geräusch auf 0,35s setzen
     KartenGeräusch.play(); // Geräusch abspielen
 }
 
 // Funktion, um die Karte zuzudecken
 function KarteZudecken(){
-    this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite anzeigen
     this.aufgedeckt = false; // Karte ist zugedeckt
+    this.classList.toggle("clicked"); // Animation für das Zudecken
+    setTimeout(() => {this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite anzeigen
+    }, 100); // aber erst nach einem Drittel der css-Animation (0,1s)
+    KartenGeräusch.currentTime = 0.4; // Geräusch auf 0,35s setzen
+    KartenGeräusch.play(); // Geräusch abspielen
 }
 
 // Funktion um die Karten zu vergleichen
@@ -83,23 +97,23 @@ function kartenVergleichen(){
     KartenSperren(); // Karten sperren, solange Animation läuft!
     setTimeout(function(){
         if(aktuellAufgedeckteKarten[0].KartenWert == aktuellAufgedeckteKarten[1].KartenWert){
-            aktuellAufgedeckteKarten[0].onclick = null;
-            aktuellAufgedeckteKarten[1].onclick = null;
-            aktuellAufgedeckteKarten[0].classList.add("found");
-            aktuellAufgedeckteKarten[1].classList.add("found");
+            aktuellAufgedeckteKarten[0].onclick = null; // Klick-Event-Listener ausschalten
+            aktuellAufgedeckteKarten[1].onclick = null; // Klick-Event-Listener ausschalten
+            aktuellAufgedeckteKarten[0].classList.add("found"); // css-Klasse "found" für die gefundene Karten hinzufügen,
+            aktuellAufgedeckteKarten[1].classList.add("found"); // dadurch wird css-Animation "found" aktiviert
             setTimeout(() => {
-                aktuellAufgedeckteKarten[0].style.visibility = "hidden";
-                aktuellAufgedeckteKarten[1].style.visibility = "hidden";
-                aktuellAufgedeckteKarten = [];
-                KartenEntsperren(); // Karten erst jetzt wieder entsperren!
-            }, 1200); // Dauer der CSS-Animation (fadeOut)
-            punkte+=25;
-            Streak();
-            document.getElementById("punkte").textContent = "Punkte: " + punkte;
-            timer += 1;
-            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer;
-            document.getElementById("timerPlus").textContent = "+1s";
-            setTimeout(() => {timerPlus.textContent = "";}, 800);
+                aktuellAufgedeckteKarten[0].style.visibility = "hidden"; // Karte ausblenden
+                aktuellAufgedeckteKarten[1].style.visibility = "hidden"; // Karte ausblenden
+                aktuellAufgedeckteKarten = []; // Array der aktuell aufgedeckten Karten leeren
+                KartenEntsperren(); // Karten wieder entsperren
+            },  300); // aber erst nach der css-Animation (0,3 s) ausblenden
+            punkte+=25; // Punkte erhöhen
+            Streak(); // Streak erhöhen (und eventuell Bonuspunkte vergeben)
+            document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
+            timer += 1; // Timer um 1 Sekunde erhöhen
+            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer; // Timer anzeigen
+            document.getElementById("timerPlus").textContent = "+1s"; // "+1s" anzeigen
+            setTimeout(() => {timerPlus.textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
             aufgedeckteKarten += 2; // Zähler für aufgedeckte Karten erhöhen
             if(aufgedeckteKarten == cards.length){ // Wenn alle Karten aufgedeckt sind
                 spielBeenden(); // Spiel beenden
@@ -107,16 +121,14 @@ function kartenVergleichen(){
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]);
             KarteZudecken.call(aktuellAufgedeckteKarten[1]);
-            aktuellAufgedeckteKarten[0].classList.toggle("clicked");
-            aktuellAufgedeckteKarten[1].classList.toggle("clicked");
             streak = 0;
             setTimeout(() => {
                 aktuellAufgedeckteKarten = [];
                 KartenEntsperren();
-            }, 400); // Zeit für das Zudecken
+            }, 300); // Zeit für das Zudecken / css-Animation (0,3s)
         }
         document.getElementById("streak").innerHTML = "Streak: " + streak;
-    }, 500); // Zeit, wie lange beide Karten offen bleiben
+    }, 600); // Zeit, wie lange beide Karten offen bleiben
 }
 
 // Funktion um die Karten zu sperren
@@ -132,8 +144,6 @@ function KartenEntsperren(){
         cards[i].onclick = function () { // Klick-Event-Listener hinzufügen
             if(this.aufgedeckt == false && aktuellAufgedeckteKarten.length <2) { // Wenn die angeklickte Karte nicht aufgedeckt ist und weniger als 2 Karten aufgedeckt sind
                 KarteAufdecken.call(this); // Karte aufdecken
-                this.classList.toggle("clicked"); //Animation für Umdrehen
-                aktuellAufgedeckteKarten.push(this); // Karte in das Array der aktuell aufgedeckten Karten hinzufügen
                 if(aktuellAufgedeckteKarten.length == 2){ // Wenn 2 Karten aufgedeckt sind
                     kartenVergleichen(); // Karten vergleichen
                 }
@@ -173,8 +183,9 @@ function Timer(){
 function Streak(){
     streak++; // Zähler für richtige Paare erhöhen
     if(streak >= 2){
-        punkte+=(streak*5); // Ab 2 richtigen Paaren in Folge: 1 Bonuspunkt mehr
-        document.getElementById("bonuspunkte").textContent = "+1 Bonuspunkt"; // "+1 Bonuspunkt" anzeigen
+        let bonus = streak*5;
+        punkte+=bonus; // Ab 2 richtigen Paaren in Folge: Bonuspunkte
+        document.getElementById("bonuspunkte").textContent = "+"+ bonus +" Punkte"; // "+... Punkte" anzeigen
         setTimeout(() => {document.getElementById("bonuspunkte").textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
     }
 }
@@ -198,7 +209,8 @@ async function spielBeenden() {
 
 async function checkLobby() {
     const status = await LobbyStatus();
-    if (status === "off") {
+    if (status == "off") {
+        console.log("Lobby ist geschlossen oder nicht gefunden");
         window.location.assign("./index.html");
     }
 }
@@ -206,16 +218,21 @@ async function checkLobby() {
 async function LobbyStatus() {
     let lobby = localStorage.getItem("uic_gamepin");
     if (!lobby) return "off";
-    lobby = lobby.toString().trim();
+    lobby = String(lobby);
     try {
         const response = await fetch(`https://kk-backend.vercel.app/getOpenLobbyList`);
         const data = await response.json();
         if (Array.isArray(data) && data.map(String).map(s => s.trim()).includes(lobby)) {
+            console.log("Lobby ist offen");
+            lobbystatusvar = "on";
             return "on";
         } else {
+            console.log("Lobby ist geschlossen oder nicht gefunden");
+            lobbystatusvar = "off";
             return "off";
         }
     } catch {
+        console.log("Lobby ist geschlossen oder nicht gefunden");
         return "off";
     }
 }

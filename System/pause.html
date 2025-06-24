@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KlickKrawall</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
     <style>
         html { box-sizing: border-box; }
         *, *:before, *:after { box-sizing: inherit; }
@@ -266,7 +267,7 @@
                 2: "Schere Stein Papier",
                 3: "Memory+",
                 4: "Asteroids",
-                5: "Zitate zuordnen",
+                5: "Imposter",
                 6: "Game 6",
                 7: "Game 7",
             };
@@ -276,7 +277,7 @@
                 2: "/Minigames/Schere_Stein_Papier/game2.html",
                 3: "/Minigames/Memory+/pt_memory.html",
                 4: "/Minigames/Asteroids/asteroids.html",
-                5: "zitate.html",
+                5: "/Minigames/Imposter/imposter.html",
                 6: "game6.html",
                 7: "game7.html",
             };
@@ -309,14 +310,16 @@
             const lobby = localStorage.getItem("uic_gamepin");
             if (!lobby) return;
             try {
-                const response = await fetch(`https://kk-backend.vercel.app/getPointsOfPlayer?lobby=${encodeURIComponent(lobby)}`);
-                const punkteArr = await response.json();
+                // Neuer Sammel-Endpoint für Lobbydaten
+                const response = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${encodeURIComponent(lobby)}`);
+                const data = await response.json();
                 const scoreList = document.getElementById("scoreList");
                 scoreList.innerHTML = "";
-                if (Array.isArray(punkteArr) && punkteArr.length > 0) {
-                    punkteArr.forEach(eintrag => {
+                // Punkte aus dem neuen Objekt extrahieren
+                if (data.punkte && typeof data.punkte === "object" && Object.keys(data.punkte).length > 0) {
+                    Object.entries(data.punkte).forEach(([spieler, punkte]) => {
                         const li = document.createElement("li");
-                        li.innerHTML = `<span>${eintrag.spieler}</span> <span>${eintrag.punkte}</span>`;
+                        li.innerHTML = `<span>${spieler}</span> <span>${punkte}</span>`;
                         scoreList.appendChild(li);
                     });
                     document.getElementById("scoreDummyHint").textContent = "";
