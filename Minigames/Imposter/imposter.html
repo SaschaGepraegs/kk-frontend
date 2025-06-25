@@ -375,9 +375,10 @@
                 // Nutze lobbyInfo für alle Spieler und rausgeworfene Spieler
                 const res = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${lobby}`);
                 const lobbyInfo = await res.json();
-                allPlayers = Array.isArray(lobbyInfo.players) ? lobbyInfo.players : [];
+                // KORREKT: Spieler aus lobbyInfo["players"] extrahieren
+                allPlayers = Array.isArray(lobbyInfo["players"]) ? lobbyInfo["players"] : [];
                 // Filtere rausgeworfene Spieler heraus
-                const removed = Array.isArray(lobbyInfo.removedPlayers) ? lobbyInfo.removedPlayers : [];
+                const removed = Array.isArray(lobbyInfo["removedPlayers"]) ? lobbyInfo["removedPlayers"] : [];
                 kickedPlayers = removed;
                 const activePlayers = allPlayers.filter(name => !kickedPlayers.includes(name));
                 // NEU: goToElection prüfen
