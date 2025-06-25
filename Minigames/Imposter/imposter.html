@@ -528,22 +528,43 @@
                         // Prüfe, ob der aktuelle Spieler raus ist
                         if (winner.spieler === username) {
                             showKickedPanel();
-                            setTimeout(() => showResultAndRedirect(false), 1200);
+                            setTimeout(() => checkImposterRevealAndContinue(), 3000);
                             return;
                         }
                         // Prüfe, ob alle Imposter enttarnt sind
-                        const allImposters = Array.isArray(lobbyInfo.imposter) ? lobbyInfo.imposter : [];
-                        const allRevealed = allImposters.every(name => revealedImposters.includes(name));
-                        let win = false;
-                        if (role === "crewmate" && !kickedPlayers.includes(username)) {
-                            win = true;
-                        } else if (role === "imposter" && !kickedPlayers.includes(username)) {
-                            win = false;
-                        }
-                        showResultAndRedirect(win);
+                        setTimeout(() => checkImposterRevealAndContinue(), 3000);
                     }
                 } catch (e) {}
             }, 1000);
+        }
+
+        // NEU: Nach Voting prüfen, ob Spiel vorbei ist oder Voting erneut starten
+        async function checkImposterRevealAndContinue() {
+            try {
+                const res = await fetch(`https://kk-backend.vercel.app/areAllImpostersRevealed?lobby=${lobby}`);
+                const data = await res.json();
+                if (data === true || data?.allRevealed === true) {
+                    // Spiel vorbei, Ergebnis anzeigen
+                    let win = false;
+                    // Prüfe, ob Spieler noch lebt und Rolle
+                    if (role === "crewmate" && !kickedPlayers.includes(username)) {
+                        win = true;
+                    } else if (role === "imposter" && !kickedPlayers.includes(username)) {
+                        win = false;
+                    }
+                    showResultAndRedirect(win);
+                } else {
+                    // Spiel geht weiter: Voting erneut anzeigen, neue Stimme erlauben
+                    voted = false;
+                    votingDone = false;
+                    showVoting();
+                }
+            } catch (e) {
+                // Bei Fehler: trotzdem Voting erneut anzeigen
+                voted = false;
+                votingDone = false;
+                showVoting();
+            }
         }
 
         // --- 4. Ergebnisse ---
