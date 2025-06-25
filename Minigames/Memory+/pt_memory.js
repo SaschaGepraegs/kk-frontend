@@ -8,7 +8,6 @@ const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch f
 var LobbyStatus;
 let timerInterval; // NEU: Intervall-ID speichern
 let spielBeendet = false; // NEU: Flag für Spielende
-const resetbutton = document.getElementById("resetbutton");
 
 window.onload = spielStarten; // Beim Laden der Seite das Spiel starten
 
@@ -18,7 +17,6 @@ function reset(){
     timer = 25; // Timer zurücksetzen
     if(localStorage.getItem("uic_status")== "test"){ //Testoberfläche
         timer = 99999999;
-        resetbutton.style.visibility = "visible";
     }
     streak = 0; // Streak zurücksetzen
     aufgedeckteKarten = 0; // Aufgedeckte Karten zurücksetzen
