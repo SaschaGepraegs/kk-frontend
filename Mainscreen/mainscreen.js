@@ -1,6 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const pin = urlParams.get('pin');
-document.getElementById("pinAnzeige").textContent = `PIN: ${pin}`;
+document.getElementById("pinAnzeige").textContent = pin;
 const runden = document.getElementById("runden");
 
 // --- Popup-Logik für Spielauswahl ---
