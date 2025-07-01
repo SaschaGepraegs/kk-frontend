@@ -4,7 +4,7 @@ function fortfahren() {
 }
 let AnzahlGewonnen = 0;
 let timer = 20;
-if(localStorage.getItem("uic_status") = "test"){
+if(localStorage.getItem("uic_status") == "test"){
     timer = 999999
 }
 let intervalId = null;

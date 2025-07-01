@@ -2,8 +2,11 @@ function fortfahren() {
     localStorage.setItem("uic_task1done", "true");
     window.location.assign("/System/pause.html");
 }
-let clicks;
-let timer;
+let clicks = 0;
+let timer = 30;
+/*if(localStorage.getItem("uic_status") == "test"){
+    timer = 99999999;
+}*/
 let intervalId = null;
 let timerId = null;
 let meter;
