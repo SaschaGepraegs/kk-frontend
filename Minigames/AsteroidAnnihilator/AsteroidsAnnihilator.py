@@ -33,7 +33,7 @@ WAIT_TIME_FOR_NEXT_FIRE = int(FPS * 0.5)  # Waits half a second before the ship 
 INITIAL_ASTEROIDS = 10
 ENEMY_SPAWN_FREQUENCY = FPS * 10  # A new asteroid should appear on screen every 10 seconds (on average).
 ALIEN_FIRE_FREQUENCY = FPS * 1  # An alien can fire every 1 seconds (on average).
-# All damages count as points as well (e.g.: it's a damage if the ship was hit, or it's a point if the ship's bullet
+# All damages count as points as well (e.g.: it's a damage if the ship was hit, or it's a point if the ship's bullet)
 # has hit any object.
 DEFAULT_DAMAGE = 5
 SMALL_DAMAGE = 10
@@ -134,7 +134,7 @@ class Character:  # The base class for all characters.
         delta_y = self.y - other.y
         distance = math.sqrt(delta_x * delta_x + delta_y * delta_y)
 
-        # The characters collided if the distance from their centers is less than the sum of their radiuses.
+        # The characters collided if the distance from their centers is less than the sum of their radius.
         return distance <= my_radius + other_radius
 
     def hit(self, damage):
@@ -230,7 +230,7 @@ class SmallAsteroid(Asteroid):
     def __init__(self, angle, x=None, y=None):
         x, y = self.generate_position(x, y, angle)
         super().__init__(x, y, angle, small_asteroid_image, bang_small_sound)
-        self.damage = SMALL_DAMANGE
+        self.damage = SMALL_DAMAGE
         self.split_class = None
         self.split_angle = 0
         self.accelerate()
@@ -240,7 +240,7 @@ class MediumAsteroid(Asteroid):
     def __init__(self, angle, x=None, y=None):
         x, y = self.generate_position(x, y, angle)
         super().__init__(x, y, angle, medium_asteroid_image, bang_medium_sound)
-        self.damage = MEDIUM_DAMANGE
+        self.damage = MEDIUM_DAMAGE
         self.split_class = SmallAsteroid
         self.split_angle = MEDIUM_SPLIT_ANGLE
         self.accelerate()
@@ -250,7 +250,7 @@ class BigAsteroid(Asteroid):
     def __init__(self, angle, x=None, y=None):
         x, y = self.generate_position(x, y, angle)
         super().__init__(x, y, angle, big_asteroid_image, bang_large_sound)
-        self.damage = BIG_DAMANGE
+        self.damage = BIG_DAMAGE
         self.split_class = MediumAsteroid
         self.split_angle = BIG_SPLIT_ANGLE
         self.accelerate()
@@ -261,7 +261,7 @@ class Alien(Enemy):
         x, y = self.generate_position(x, y, angle)
         super().__init__(x, y, angle, alien_ship_image, bang_alien_sound)
         self.fire_image = alien_fire_image
-        self.damage = ALIEN_DAMANGE
+        self.damage = ALIEN_DAMAGE
         self.accelerate()
         alien_sound.play()
 
