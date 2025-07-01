@@ -12,7 +12,7 @@ import random
 import time
 
 import pygame
-import pygame.freetype
+import pygame.freetype  # Imports the library for drawing texts using some font.
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 1920, 1080
 HALF_WIDTH = SCREEN_WIDTH // 2
@@ -42,7 +42,7 @@ BIG_DAMAGE = 30
 ALIEN_DAMAGE = 50
 MEDIUM_SPLIT_ANGLE = ANGLE_STEP * 12  # The two smaller asteroids will turn 60° each when a medium asteroid has been hit.
 BIG_SPLIT_ANGLE = ANGLE_STEP * 9  # The two medium asteroids will turn 45° each when a big asteroid has been hit.
-GAME_OVER_TIME = 5
+GAME_OVER_TIME = 5  # 5 seconds
 
 
 def get_ships():
