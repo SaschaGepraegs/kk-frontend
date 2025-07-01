@@ -5,114 +5,231 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Fertig | KlickKrawall</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Honk:SHLN@59.8&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Material+Symbols+Outlined" rel="stylesheet" />
     <style>
-        body {
-            background-color: #262626;
-            text-align: center;
-            color: white;
-            font-family: "Roboto", sans-serif;
+        :root {
+            --md3-primary: #6750a4;
+            --md3-on-primary: #fff;
+            --md3-primary-container: #eaddff;
+            --md3-on-primary-container: #21005d;
+            --md3-surface: #f5f5f5;
+            --md3-on-surface: #1c1b1f;
+            --md3-bg: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+            --md3-shadow: 0 1.5px 8px 0 rgba(60, 60, 60, 0.10);
+            --md3-radius: 18px;
+            --md3-font: 'Roboto', Arial, sans-serif;
         }
-        
-        div {
-            margin-top: 100px;
+
+        body.md3-bg {
+            background: var(--md3-bg);
+            color: var(--md3-on-surface);
+            font-family: var(--md3-font);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
-        
-        button {
-            margin-bottom: 15px;
-            padding-left: 33px;
-            padding-right: 33px;
-            padding-bottom: 16px;
-            padding-top: 16px;
-            border-radius: 9px;
-            background: #d5f365;
+
+        .md3-main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+        }
+
+        .md3-pin-card {
+            padding: 1.2rem 2.2rem;
+            border-radius: var(--md3-radius);
+            background: var(--md3-primary-container);
+            color: var(--md3-on-primary-container);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--md3-shadow);
+            min-width: 340px;
+            max-width: 420px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .md3-finish-card {
+            background: linear-gradient(90deg, #0db18d 0%, #2dffc4 100%);
+            color: #232323;
+            box-shadow: 0px 0px 80px 10px rgba(45, 255, 196, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .md3-pin-heading {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            margin-right: 0.7rem;
+            font-family: 'Honk', 'Roboto', Arial, sans-serif;
+        }
+
+        .md3-pin-text {
+            font-size: 1.3rem;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            margin-bottom: 1rem;
+        }
+
+        .md3-platz {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+        }
+
+        .md3-btn {
+            display: center;
+            align-items: center;
+            gap: 0.7em;
+            font-size: 1.13rem;
+            font-family: var(--md3-font);
+            font-weight: 500;
+            border-radius: 100px;
             border: none;
-            font-family: inherit;
-            text-align: center;
             cursor: pointer;
-            transition: 0.4s;
+            padding: 0.85em 2.2em;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            box-shadow: 0 1px 4px 0 rgba(60, 60, 60, 0.04);
+            outline: none;
+            margin-bottom: 0.2rem;
         }
-        
-        button:hover {
-            box-shadow: 7px 5px 56px -14px #C3D900;
+
+        .md3-btn-filled {
+            background: var(--md3-primary);
+            color: var(--md3-on-primary);
         }
-        
-        button:active {
-            transform: scale(0.97);
-            box-shadow: 7px 5px 56px -10px #C3D900;
+
+        .md3-btn-filled:disabled {
+            background: #bdbdbd;
+            color: #fff;
+            cursor: not-allowed;
         }
-        
-        .malsehen {
-            -webkit-box-shadow: 0px 0px 80px 10px rgba(45, 255, 196, 0.9);
-            -moz-box-shadow: 0px 0px 80px 10px rgba(45, 255, 196, 0.9);
-            box-shadow: 0px 0px 80px 10px rgba(45, 255, 196, 0.9);
-            background-color: rgb(13, 177, 141);
+
+        .md3-btn-filled:hover:not(:disabled) {
+            background: #4f378b;
+        }
+
+        .md3-score-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        .md3-score-table th,
+        .md3-score-table td {
+            padding: 0.6em 1.1em;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+
+        .md3-score-table th {
+            color: var(--md3-primary);
+            font-weight: 700;
+            border-bottom: 2px solid #d1c4e9;
+            background: transparent;
+        }
+
+        .md3-score-table tr {
+            background: transparent;
+        }
+
+        .md3-score-table tr:nth-child(even) {
+            background: #f3eaff;
+        }
+
+        .md3-score-table td {
+            color: var(--md3-on-primary-container);
+        }
+
+        @media (max-width: 600px) {
+            .md3-main-container {
+                padding: 1rem 0.2rem 1rem 0.2rem;
+            }
+
+            .md3-pin-card {
+                min-width: unset;
+                max-width: 100vw;
+                padding: 0.7rem 1rem;
+            }
+
+            .md3-score-table th,
+            .md3-score-table td {
+                padding: 0.4em 0.5em;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 
-<body>
-    <div class="malsehen">
-        <h1>Fertig!</h1>
-        <p>Du hast es geschafft!</p>
-    </div>
-    <div>
-        <h2>Hier kannst du die Spieler sehen, die auch schon fertig sind:</h2>
-        <p id="ersterplatz">Spieler die fertig sind, werden hier angezeigt.</p><br>
-        <p id="zweiterplatz"></p><br>
-        <p id="dritterplatz"></p><br>
-    </div>
-    <div>
-        <button id="thecoolbtn" style="padding: 15px;" onclick="reset()">Spiel verlassen</button>
-    </div>
+<body class="md3-bg">
+    <main class="md3-main-container">
+        <section class="md3-pin-card md3-finish-card">
+            <h1 class="md3-pin-heading">Fertig!</h1>
+            <p class="md3-pin-text">Du hast es geschafft!</p>
+        </section>
+        <section class="md3-pin-card">
+            <h2 class="md3-pin-text">Punkteübersicht:</h2>
+            <div id="punkteTabelleContainer">
+                <table class="md3-score-table" id="punkteTabelle">
+                    <thead>
+                        <tr>
+                            <th>Spieler</th>
+                            <th>Punkte</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamisch befüllt -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section class="md3-pin-card" style="text-align:center;">
+            <button id="thecoolbtn" class="md3-btn md3-btn-filled" onclick="reset()">Spiel verlassen</button>
+        </section>
+    </main>
+    <script>
+        document.getElementById("thecoolbtn").style.visibility = "visible";
+
+        async function updatePunkteTabelle() {
+            try {
+                const antwort = await fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + localStorage.getItem("uic_lobby"));
+                const data = await antwort.json();
+                const players = data.players || [];
+                const punkte = data.punkte || {};
+
+                const tbody = document.querySelector("#punkteTabelle tbody");
+                tbody.innerHTML = "";
+
+                // Sortiere Spieler nach Punkten absteigend
+                players
+                    .slice()
+                    .sort((a, b) => (punkte[b] || 0) - (punkte[a] || 0))
+                    .forEach(spieler => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `<td>${spieler}</td><td>${punkte[spieler] ?? 0}</td>`;
+                        tbody.appendChild(tr);
+                    });
+            } catch (e) {
+                // Fehleranzeige optional
+            }
+        }
+
+        setInterval(updatePunkteTabelle, 3000);
+        updatePunkteTabelle();
+
+        function reset() {
+            window.location.assign("/index.html")
+        }
+    </script>
 </body>
-
-<script>
-    document.getElementById("thecoolbtn").style.visibility = "visible";
-    async function getFinishedPlayers() {
-        // Neuer Sammel-Endpoint für Lobbydaten
-        var antwort = fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + localStorage.getItem("uic_lobby"));
-        let data = await (await antwort).json();
-
-        // finishedPlayers und finishedPlayersTiming auslesen
-        const finished = data.finishedPlayers || [];
-        const timings = data.finishedPlayersTiming || [];
-
-        // Anzeige der Plätze
-        if (!finished[0]) {
-            document.getElementById("ersterplatz").innerHTML = "";
-        } else {
-            document.getElementById("ersterplatz").innerHTML = "🥇 Erster Platz geht an " + finished[0] + (timings[0] ? ", fertiggeworden um " + inZeitUmwandlen(timings[0]) + " Uhr." : "");
-        }
-
-        if (!finished[1]) {
-            document.getElementById("zweiterplatz").innerHTML = "";
-        } else {
-            document.getElementById("zweiterplatz").innerHTML = "🥈 Zweiter Platz geht an " + finished[1] + (timings[1] ? ", fertiggeworden um " + inZeitUmwandlen(timings[1]) + " Uhr." : "");
-        }
-
-        if (!finished[2]) {
-            document.getElementById("dritterplatz").innerHTML = "";
-            document.getElementById("thecoolbtn").style.visibility = "visible";
-        } else {
-            document.getElementById("dritterplatz").innerHTML = "🥉 Dritter Platz geht an " + finished[2] + (timings[2] ? ", fertiggeworden um " + inZeitUmwandlen(timings[2]) + " Uhr." : "");
-        }
-    }
-
-    setInterval(getFinishedPlayers, 1500);
-
-    function reset() {
-        window.location.assign("/index.html")
-    }
-
-    function inZeitUmwandlen(unix_timestamp) {
-        var date = new Date(unix_timestamp * 1000);
-        var hours = date.getHours();
-        var minutes = "0" + date.getMinutes();
-        var seconds = "0" + date.getSeconds();
-        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-        return formattedTime
-    }
-</script>
 
 </html>

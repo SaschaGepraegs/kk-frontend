@@ -328,6 +328,7 @@
                 }
             } catch (e) {
                 document.getElementById("scoreDummyHint").textContent = "(Fehler beim Laden der Punkte)";
+                window.location.assign("/System/fertig.html"); // Zurück zur Pause-Seite bei Fehler
             }
         }
 
