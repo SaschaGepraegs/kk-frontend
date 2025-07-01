@@ -201,7 +201,7 @@
 
         async function updatePunkteTabelle() {
             try {
-                const antwort = await fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + localStorage.getItem("uic_lobby"));
+                const antwort = await fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + localStorage.getItem("uic_gamepin"));
                 const data = await antwort.json();
                 const players = data.players || [];
                 const punkte = data.punkte || {};
