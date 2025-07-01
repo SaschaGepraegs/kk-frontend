@@ -57,7 +57,7 @@
         <section class="md3-content-flex">
             <!-- Zusammengefasste Box für Spieler und Warteschlange -->
             <div class="md3-card md3-elevated-card md3-player-queue-card">
-                <h2 class="md3-card-title">Spieler & Warteschlange</h2>
+                <h2 class="md3-card-title">Spieler & ausgewählte Spiele</h2>
                 <div>
                     <h3 style="margin-bottom:0.5em;font-size:1.1em;color:var(--md3-primary);">Spieler</h3>
                     <div id="spielerListe" class="md3-list">Spieler werden geladen...</div>
@@ -104,7 +104,7 @@
                 <h2 class="md3-card-title">Spielmodus wählen</h2>
                 <div class="md3-pin-text" style="margin-bottom: 10px;">Welchen Modus wollt ihr spielen?</div>
                 <div class="md3-pin-card md3-elevated-card" style="margin-bottom: 20px;">
-                    <button id="zufälligModusBtn" class="md3-btn md3-btn-filled">zufällig</button>
+                    <button id="zufälligModusBtn" class="md3-btn md3-btn-filled">Zufallsmodus</button>
                     <button id="spieleAuswählenModusBtn" class="md3-btn md3-btn-filled">Spiele auswählen</button>
                 </div>
                 <button id="zurückBtn2" class="md3-btn md3-btn-tonal">Zurück</button>
@@ -119,8 +119,8 @@
                     <!-- Spielkarten werden per JS eingefügt -->
                 </div>
                 <button id="spieleSetzenBtn" class="md3-btn md3-btn-filled">Spiel setzen</button>
-                <div id="auswahlStatus" class="md3-status-text"></div>
                 <button id="zurückBtn3" class="md3-btn md3-btn-tonal">Zurück</button>
+                <div id="auswahlStatus" class="md3-status-text"></div>
             </div>
         </div>
 
@@ -128,8 +128,9 @@
         <div id="popupOverlayZufall" class="md3-popup-overlay">
             <div id="popupMenu" class="md3-popup-card md3-elevated-card">
                 <h2 class="md3-card-title">Zufallsmodus</h2>
-                <div class="md3-pin-text" style="margin-bottom: 10px;">Hier entsteht gerade der neue "Zufallsmodus".</div>
-                <button id="zurückBtn4" class="md3-btn md3-btn-tonal">zurück</button>
+                <button id="zufallSetzenBtn" class="md3-btn md3-btn-filled">Spiele zufällig auswählen</button>
+                <button id="zurückBtn4" class="md3-btn md3-btn-tonal">Zurück</button>
+                <div id="zufallStatus" class="md3-status-text"></div>
             </div>
         </div>
 
