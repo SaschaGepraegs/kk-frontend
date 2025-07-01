@@ -1,6 +1,7 @@
 const urlParams = new URLSearchParams(window.location.search);
 const pin = urlParams.get('pin');
 document.getElementById("pinAnzeige").textContent = `PIN: ${pin}`;
+document.getElementById("pinAnzeige").textContent = pin;
 let selectedGameIds = []
 const runden = document.getElementById("runden");
 
@@ -27,17 +28,6 @@ const spiele = [
     //{ id: 19, name: "Game 19", img: "https://dummyimage.com/64x64/ffb74d/fff.png&text=19" },
     //{ id: 20, name: "Game 20", img: "https://dummyimage.com/64x64/81c784/fff.png&text=20" }
 ];
-
-renderGameGrid();
-ladeSpieler();
-pruefeSpielGestartet();
-ladeWarteschlange();
-// Initial laden und jede Sekunde aktualisieren
-setInterval(() => {
-    ladeSpieler();
-    pruefeSpielGestartet();
-    ladeWarteschlange();
-}, 1000);
 
 // --- Popup-Logik für Spielauswahl ---
 // Hier werden sämtliche Buttons und Popups definiert
@@ -310,6 +300,18 @@ async function starteSpiel() {
     startBtn.style.display = "none"; // Start-Button ausblenden
     resetBtn.style.display = "none"; // Reset-Button ausblenden
 }
+
+// Die Funktionen müssen hier unten stehen, nicht an den Anfang des Codes packen, da die functions sonst auf Buttons zugreifen, die noch nicht initialisiert sind
+renderGameGrid();
+ladeSpieler();
+pruefeSpielGestartet();
+ladeWarteschlange();
+// Initial laden und jede Sekunde aktualisieren
+setInterval(() => {
+    ladeSpieler();
+    pruefeSpielGestartet();
+    ladeWarteschlange();
+}, 1000);
 
 // Hilfsfunktionen
 // Funktion zum Abrufen der PIN (ausgelager, da sie mehrfach benötigt wird)

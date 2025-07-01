@@ -14,7 +14,7 @@
     --md3-outline: #79747e;
     --md3-error: #b3261e;
     --md3-on-error: #fff;
-    --md3-bg: #f5f5f5;
+    --md3-bg: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
     --md3-shadow: 0 1.5px 8px 0 rgba(60, 60, 60, 0.10);
     --md3-radius: 18px;
     --md3-font: 'Roboto', Arial, sans-serif;
@@ -305,7 +305,7 @@ body.md3-bg {
     --md3-outline: #938f99;
     --md3-error: #f2b8b5;
     --md3-on-error: #601410;
-    --md3-bg: #121212;
+    --md3-bg: radial-gradient(circle, rgba(62, 36, 71, 1) 0%, rgba(37, 48, 61, 1) 100%);
     --md3-shadow: 0 1.5px 8px 0 rgba(0,0,0,0.25);
 }
 
