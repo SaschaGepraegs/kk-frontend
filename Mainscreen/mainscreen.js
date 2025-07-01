@@ -10,8 +10,8 @@ const spiele = [
     { id: 2, name: "Schere Stein Papier", img: "https://dummyimage.com/64x64/90caf9/fff.png&text=SSP" },
     { id: 3, name: "Memory+", img: "https://dummyimage.com/64x64/ce93d8/fff.png&text=Memory+" },
     { id: 4, name: "Asteroids", img: "https://dummyimage.com/64x64/d95e0d/fff.png&text=Asteroids"},
-    { id: 5, name: "Imposter", img: "https://dummyimage.com/64x64/1976d2/fff.png&text=Imposter" }
-    //{ id: 6, name: "Game 6", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=6" },
+    { id: 5, name: "Imposter", img: "https://dummyimage.com/64x64/1976d2/fff.png&text=Imposter" },
+    { id: 6, name: "Double or Nothing", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=DON" },
     //{ id: 7, name: "Game 7", img: "https://dummyimage.com/64x64/4fc3f7/fff.png&text=7" },
     //{ id: 8, name: "Game 8", img: "https://dummyimage.com/64x64/ba68c8/fff.png&text=8" },
     //{ id: 9, name: "Game 9", img: "https://dummyimage.com/64x64/ffb74d/fff.png&text=9" },
@@ -232,8 +232,8 @@ async function ladeWarteschlange() {
                 2: "Schere Stein Papier",
                 3: "Memory+",
                 4: "Asteroids",
-                5: "Imposter"
-                // ...weitere Spiele nach Bedarf...
+                5: "Imposter",
+                6: "Double or Nothing"
             };
             content.innerHTML = queue.map((id, idx) =>
                 `<span style="display:inline-block;margin:0 8px;padding:4px 10px;border-radius:8px;background:#333;font-weight:${idx===0?'bold':'normal'};color:${idx===0?'#ff6ec4':'#fff'};">

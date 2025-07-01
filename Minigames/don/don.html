@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don</title>
+    <link rel="stylesheet" href="don.css">
+</head>
+<body>
+    <h1>Double or Nothing</h1>
+    <div id="infoBereich">
+        <p id="spielerName"></p>
+        <p id="punkteStand"></p>
+    </div>
+    <form id="donForm" autocomplete="off">
+        <label for="einsatz">Wie viele Punkte willst du setzen?</label><br>
+        <input type="number" id="einsatz" min="1" step="1" required>
+        <button type="submit">Gamble!</button>
+    </form>
+    <script src="don.js"></script>
+</body>
+</html>
