@@ -1,8 +1,178 @@
 const urlParams = new URLSearchParams(window.location.search);
 const pin = urlParams.get('pin');
-document.getElementById("pinAnzeige").textContent = `PIN: ${pin}`;
+document.getElementById("pinAnzeige").textContent = pin;
+let selectedGameIds = []
 const runden = document.getElementById("runden");
 
+// Spiele-Daten (Name + Dummy-Logo)
+const spiele = [
+    { id: 1, name: "Pizza-Clicker", img: "https://dummyimage.com/64x64/ffb300/fff.png&text=Pizza" },
+    { id: 2, name: "Schere Stein Papier", img: "https://dummyimage.com/64x64/90caf9/fff.png&text=SSP" },
+    { id: 3, name: "Memory+", img: "https://dummyimage.com/64x64/ce93d8/fff.png&text=Memory+" },
+    { id: 4, name: "Asteroids", img: "https://dummyimage.com/64x64/d95e0d/fff.png&text=Asteroids"},
+    { id: 5, name: "Imposter", img: "https://dummyimage.com/64x64/1976d2/fff.png&text=Imposter" }
+    //{ id: 6, name: "Game 6", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=6" },
+    //{ id: 7, name: "Game 7", img: "https://dummyimage.com/64x64/4fc3f7/fff.png&text=7" },
+    //{ id: 8, name: "Game 8", img: "https://dummyimage.com/64x64/ba68c8/fff.png&text=8" },
+    //{ id: 9, name: "Game 9", img: "https://dummyimage.com/64x64/ffb74d/fff.png&text=9" },
+    //{ id: 10, name: "Game 10", img: "https://dummyimage.com/64x64/81c784/fff.png&text=10" },
+    //{ id: 11, name: "Game 11", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=11" },
+    //{ id: 12, name: "Game 12", img: "https://dummyimage.com/64x64/4fc3f7/fff.png&text=12" },
+    //{ id: 13, name: "Game 13", img: "https://dummyimage.com/64x64/ba68c8/fff.png&text=13" },
+    //{ id: 14, name: "Game 14", img: "https://dummyimage.com/64x64/ffb74d/fff.png&text=14" },
+    //{ id: 15, name: "Game 15", img: "https://dummyimage.com/64x64/81c784/fff.png&text=15" },
+    //{ id: 16, name: "Game 16", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=16" },
+    //{ id: 17, name: "Game 17", img: "https://dummyimage.com/64x64/4fc3f7/fff.png&text=17" },
+    //{ id: 18, name: "Game 18", img: "https://dummyimage.com/64x64/ba68c8/fff.png&text=18" },
+    //{ id: 19, name: "Game 19", img: "https://dummyimage.com/64x64/ffb74d/fff.png&text=19" },
+    //{ id: 20, name: "Game 20", img: "https://dummyimage.com/64x64/81c784/fff.png&text=20" }
+];
+
+// --- Popup-Logik für Spielauswahl ---
+// Hier werden sämtliche Buttons und Popups definiert
+const startBtn = document.getElementById("startBtn"); // startet das Spiel
+const spielBeendenBtn = document.getElementById("spielBeendenBtn");  // beendet das Spiel
+const resetBtn = document.getElementById("resetBtn"); // Button zum Zurücksetzen der Spielauswahl
+const modusWählenBtn = document.getElementById("modusWählenBtn"); // Button zum Wählen des Spielmodus (Rundenanzahl und Modus)
+const popupOverlayRunden = document.getElementById("popupOverlayRunden"); // Popup für Rundenanzahl-Auswahl
+const popupOverlayModus = document.getElementById("popupOverlayModus"); // Popup für Modus-Auswahl (Auswahl oder Zufall)
+const popupOverlayAuswahl = document.getElementById("popupOverlayAuswahl"); // Popup für den Auswahlmodus
+const popupOverlayZufall = document.getElementById("popupOverlayZufall"); // Popup für den Zufallsmodus
+const gameGrid = document.getElementById("gameGrid"); // Grid für die Anzeige der Spiele-Auswahl
+const spieleSetzenBtn = document.getElementById("spieleSetzenBtn"); // Button zum Auswählen der Spiele (im Auswahlmodus)
+const zufallSetzenBtn = document.getElementById("zufallSetzenBtn"); // Button zum Auswählen der Spiele (im Zufallsmodus)
+const auswahlStatus = document.getElementById("auswahlStatus"); // Statusanzeige für die Spiele-Auswahl (im Auswahlmodus)
+const zufallStatus = document.getElementById("zufallStatus"); // Statusanzeige für die Spiele-Auswahl (im Zufallsmodus)
+const weiterBtn = document.getElementById("weiterBtn"); // Weiter-Button im Popup Runden (nach der Rundenanzahl-Auswahl gelangt man zur Modus-Auswahl)
+const spieleAuswählenModusBtn = document.getElementById("spieleAuswählenModusBtn"); // Button zum Auswahlmodus
+const zufälligModusBtn = document.getElementById("zufälligModusBtn"); // Button zum Zufallsmodus
+const zurückBtn1 = document.getElementById("zurückBtn1"); // Zurück-Button im Popup Runden
+const zurückBtn2 = document.getElementById("zurückBtn2"); // Zurück-Button im Popup Modus
+const zurückBtn3 = document.getElementById("zurückBtn3"); // Zurück-Button im Popup Auswahlmodus
+const zurückBtn4 = document.getElementById("zurückBtn4"); // Zurück-Button im Popup Zufallsmodus
+
+// Start-Button
+startBtn.addEventListener("click", () => {
+starteSpiel();
+});
+
+// Spiel-Beenden-Button
+spielBeendenBtn.addEventListener("click", async () => {
+    fetch("https://kk-backend.vercel.app/reset?lobby=" + pin); // Reset-Endpoint aufrufen
+    window.location.replace("../index.html"); // Zurück zur Startseite
+    return;
+});
+
+// Reset-Button (Zurücksetzen der Spielauswahl)
+resetBtn.addEventListener("click", () => {
+    fetch(`https://kk-backend.vercel.app/changeNaechstesSpiel?lobby=${pin}&spielid[]=false`); // Leert die Spielauswahl
+    resetBtn.style.display = "none"; // Reset-Button ausblenden
+    modusWählenBtn.style.display = "flex"; // Modus-Wählen-Button anzeigen
+    ladeWarteschlange(); // Warteschlange neu laden
+});
+
+// Popup-Overlays nur öffnen bzw. schließen, wenn der entsprechende Button gedrückt wird
+// Runden
+modusWählenBtn.addEventListener("click", () => {
+    popupOverlayRunden.style.display = "flex";
+});
+
+// Modus
+weiterBtn.addEventListener("click", () => {
+        popupOverlayRunden.style.display = "none";
+        popupOverlayModus.style.display = "flex";
+});
+
+// Auswahlmodus
+spieleAuswählenModusBtn.addEventListener("click", () => {
+    popupOverlayModus.style.display = "none";
+    popupOverlayAuswahl.style.display = "flex";
+    auswahlStatus.textContent = "";
+    selectedGameIds = [];
+    spieleSetzenBtn.disabled = true;
+    renderGameGrid();
+});
+
+// Zufallsmodus
+zufälligModusBtn.addEventListener("click", async () => {
+    popupOverlayModus.style.display = "none";
+    popupOverlayZufall.style.display = "flex";
+    zufallStatus.textContent = "";
+    selectedGameIds = [];
+});
+
+// Spiele-Setzen-Button
+spieleSetzenBtn.addEventListener("click", async () => {
+    if (!selectedGameIds.length) return;
+    const params = selectedGameIds.map(id => `spielid[]=${id}`).join("&");
+    try {
+        const res = await fetch(`https://kk-backend.vercel.app/changeNaechstesSpiel?lobby=${pin}&${params}`); // Spiele-Setzen-Endpoint aufrufen
+        if (res.ok) { // Wenn die Anfrage erfolgreich war
+            auswahlStatus.textContent = "Spiele ausgesucht!"; // Meldung anzeigen
+            popupOverlayAuswahl.style.display = "none"; // Auswahl-Popup schließen
+            modusWählenBtn.style.display = "none"; // Modus-Wählen-Button ausblenden
+            resetBtn.style.display = "flex"; // Reset-Button anzeigen
+            startBtn.style.display = "flex"; // Start-Button anzeigen
+            ladeWarteschlange(); // Warteschlange neu laden
+        } else {
+            auswahlStatus.textContent = "Fehler beim Setzen des Spiels."; // Fehlermeldung anzeigen
+        }
+    } catch (e) {
+        auswahlStatus.textContent = "Fehler beim Setzen des Spiels."; // Fehlermeldung anzeigen
+    }
+});
+
+// Zufallsmodus-Setzen-Button
+zufallSetzenBtn.addEventListener("click", async () => {
+    const zufallszahlen = getZufallszahlen();
+    for (let i = 0; i < zufallszahlen.length; i++) {
+        selectedGameIds.push(zufallszahlen[i]); // HIER wird das Spiel hinzugefügt
+    }
+    if(!selectedGameIds.length) return;
+    const params = selectedGameIds.map(id => `spielid[]=${id}`).join("&");
+    try {
+        const res = await fetch(`https://kk-backend.vercel.app/changeNaechstesSpiel?lobby=${pin}&${params}`); // Zufallsmodus-Setzen-Endpoint aufrufen
+        if (res.ok) { // Wenn die Anfrage erfolgreich war
+            zufallStatus.textContent = "Spiele zufällig ausgewählt!"; // Meldung anzeigen
+            popupOverlayZufall.style.display = "none"; // Zufalls-Popup schließen
+            modusWählenBtn.style.display = "none"; // Modus-Wählen-Button ausblenden
+            resetBtn.style.display = "flex"; // Reset-Button anzeigen
+            startBtn.style.display = "flex"; // Start-Button anzeigen
+            ladeWarteschlange(); // Warteschlange neu laden
+        } else {
+            zufallStatus.textContent = "Fehler beim zufälligen Auswählen der Spiele."; // Fehlermeldung anzeigen
+        }
+    } catch (e) {
+        zufallStatus.textContent = "Fehler beim zufälligen Auswählen der Spiele."; // Fehlermeldung anzeigen
+    }
+});
+
+// Zurück-Buttons
+// Diese Buttons schließen die jeweiligen Popups und öffnen das vorherige Popup wieder
+// Zurück zum Mainscreen
+zurückBtn1.addEventListener("click", () => {
+    popupOverlayRunden.style.display = "none";
+});
+
+//Zurück zu Runden
+zurückBtn2.addEventListener("click", () => {
+    popupOverlayModus.style.display = "none";
+    popupOverlayRunden.style.display = "flex";
+});
+
+// Zurück zu Modus
+zurückBtn3.addEventListener("click", () => {
+    popupOverlayAuswahl.style.display = "none";
+    popupOverlayModus.style.display = "flex";
+});
+
+// Zurück zu Modus)
+zurückBtn4.addEventListener("click", () => { 
+    popupOverlayZufall.style.display = "none";
+    popupOverlayModus.style.display = "flex";
+});
+
+// Funktion um die Spieler in der Lobby anzuzeigen
 async function ladeSpieler() {
     try {
         // Neuer Sammel-Endpoint für Lobbydaten
@@ -49,59 +219,49 @@ async function ladeSpieler() {
     }
 }
 
+// Warteschlange anzeigen
+async function ladeWarteschlange() {
+    try {
+        const response = await fetch(`https://kk-backend.vercel.app/naechstesSpiel?lobby=${pin}`);
+        const queue = await response.json();
+        const content = document.getElementById("warteschlangeContent");
+        if (Array.isArray(queue) && queue.length > 0) {
+            // Mapping für Namen (optional)
+            const spieleNamen = {
+                1: "Pizza-Clicker",
+                2: "Schere Stein Papier",
+                3: "Memory+",
+                4: "Asteroids",
+                5: "Imposter"
+                // ...weitere Spiele nach Bedarf...
+            };
+            content.innerHTML = queue.map((id, idx) =>
+                `<span style="display:inline-block;margin:0 8px;padding:4px 10px;border-radius:8px;background:#333;font-weight:${idx===0?'bold':'normal'};color:${idx===0?'#ff6ec4':'#fff'};">
+                    ${spieleNamen[id] || 'Spiel ' + id}
+                </span>`
+            ).join('');
+        } else {
+            content.textContent = "Keine Spiele ausgewählt.";
+        }
+    } catch (e) {
+        document.getElementById("warteschlangeContent").textContent = "Fehler beim Laden der Spielauswahl.";
+    }
+}
+
+// Funktion zur Überprüfung des Spielstatus
 async function pruefeSpielGestartet() {
     try {
         // Neuer Sammel-Endpoint für Lobbydaten
         const response = await fetch(`https://kk-backend.vercel.app/lobbyInfo?lobby=${pin}`);
         const data = await response.json();
         if (data.gehtslos) {
-            document.getElementById("startButton").disabled = true;
-            document.getElementById("startButton").textContent = "Spiel läuft bereits";
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("startBtn").textContent = "Spiel läuft bereits";
         }
     } catch (err) {}
 }
 
-// --- Popup-Logik für Spielauswahl ---
-const startButton = document.getElementById("startButton");
-const popupOverlayRunden = document.getElementById("popupOverlayRunden");
-const gameGrid = document.getElementById("gameGrid");
-const spielSetzenBtn = document.getElementById("spielSetzenBtn");
-const auswahlStatus = document.getElementById("auswahlStatus");
-const gameAuswahlBtn = document.getElementById("gameAuswahlBtn");
-const modusWählenBtn = document.getElementById("modusWählenBtn");
-const weiter = document.getElementById("weiter");
-const spieleAuswählenModus = document.getElementById("spieleAuswählenModus");
-const zufälligModus = document.getElementById("zufälligModus");
-const zurückBtn = document.getElementById("zurückBtn");
-const resetBtn = document.getElementById("resetBtn");
-const spielBeendenBtn = document.getElementById("spielBeendenBtn");
-
-// Spiele-Daten (Name + Dummy-Logo)
-const spiele = [
-    { id: 1, name: "Pizza-Clicker", img: "https://dummyimage.com/64x64/ffb300/fff.png&text=Pizza" },
-    { id: 2, name: "Schere Stein Papier", img: "https://dummyimage.com/64x64/90caf9/fff.png&text=SSP" },
-    { id: 3, name: "Memory+", img: "https://dummyimage.com/64x64/ce93d8/fff.png&text=Memory+" },
-    { id: 4, name: "Asteroids", img: "https://dummyimage.com/64x64/d95e0d/fff.png&text=Asteroids"},
-    { id: 5, name: "Imposter", img: "https://dummyimage.com/64x64/1976d2/fff.png&text=Imposter" }
-    //{ id: 6, name: "Game 6", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=6" },
-    //{ id: 7, name: "Game 7", img: "https://dummyimage.com/64x64/4fc3f7/fff.png&text=7" },
-    //{ id: 8, name: "Game 8", img: "https://dummyimage.com/64x64/ba68c8/fff.png&text=8" },
-    //{ id: 9, name: "Game 9", img: "https://dummyimage.com/64x64/ffb74d/fff.png&text=9" },
-    //{ id: 10, name: "Game 10", img: "https://dummyimage.com/64x64/81c784/fff.png&text=10" },
-    //{ id: 11, name: "Game 11", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=11" },
-    //{ id: 12, name: "Game 12", img: "https://dummyimage.com/64x64/4fc3f7/fff.png&text=12" },
-    //{ id: 13, name: "Game 13", img: "https://dummyimage.com/64x64/ba68c8/fff.png&text=13" },
-    //{ id: 14, name: "Game 14", img: "https://dummyimage.com/64x64/ffb74d/fff.png&text=14" },
-    //{ id: 15, name: "Game 15", img: "https://dummyimage.com/64x64/81c784/fff.png&text=15" },
-    //{ id: 16, name: "Game 16", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=16" },
-    //{ id: 17, name: "Game 17", img: "https://dummyimage.com/64x64/4fc3f7/fff.png&text=17" },
-    //{ id: 18, name: "Game 18", img: "https://dummyimage.com/64x64/ba68c8/fff.png&text=18" },
-    //{ id: 19, name: "Game 19", img: "https://dummyimage.com/64x64/ffb74d/fff.png&text=19" },
-    //{ id: 20, name: "Game 20", img: "https://dummyimage.com/64x64/81c784/fff.png&text=20" }
-];
-
 // Dynamisch Spielkarten erzeugen
-let selectedGameIds = []
 function renderGameGrid() {
     gameGrid.innerHTML = "";
     spiele.forEach(spiel => {
@@ -120,112 +280,63 @@ function renderGameGrid() {
             }
             // Button aktivieren/deaktivieren, je nachdem ob so viele Spiele wie Runden ausgewählt sind oder nicht
             const rundenAnzahl = parseInt(runden.value, 10);
-            if(!isNaN(rundenAnzahl) &&selectedGameIds.length == rundenAnzahl) {
-                spielSetzenBtn.disabled = false;
+            if(!isNaN(rundenAnzahl) && selectedGameIds.length == rundenAnzahl) {
+                spieleSetzenBtn.disabled = false;
             } else {
-                spielSetzenBtn.disabled = true;
+                spieleSetzenBtn.disabled = true;
                 auswahlStatus.textContent = "Bitte wähle genau " + rundenAnzahl + " Spiele aus.";
             }
         };
         gameGrid.appendChild(card);
     });
 }
-renderGameGrid();
 
-//Popup-Overlays nur öffnen, wenn Button gedrückt wird
-// Popup (Runden)
-modusWählenBtn.addEventListener("click", () => {
-    popupOverlayRunden.style.display = "flex";
-});
-
-// Popup (Modus)
-weiter.addEventListener("click", () => {
-        popupOverlayRunden.style.display = "none";
-        popupOverlayModus.style.display = "flex";
-});
-
-// Popup (Auswahlmodus)
-spieleAuswählenModus.addEventListener("click", () => {
-    popupOverlayModus.style.display = "none";
-    popupOverlayAuswahl.style.display = "flex";
-    auswahlStatus.textContent = "";
-    selectedGameIds = [];
-    spielSetzenBtn.disabled = true;
-    renderGameGrid();
-});
-
-//Popup (Zufallsmodus)
-zufälligModus.addEventListener("click", async () => {
-    popupOverlayModus.style.display = "none";
-    popupOverlayZufall.style.display = "flex";
-});
-
-//Popup (Zurück)
-zurückBtn.addEventListener("click", () => { 
-    popupOverlayZufall.style.display = "none";
-    popupOverlayModus.style.display = "flex";
-});
-
-
-
-
+// Funktion zum Starten des Spiels (Aufruf des Los-Gehts-Endpoints)
 async function starteSpiel() {
     try {
-        await fetch(`https://kk-backend.vercel.app/losGehts?lobby=${pin}`);
+        await fetch(`https://kk-backend.vercel.app/losGehts?lobby=${pin}`); // Los-Gehts-Endpoint aufrufen
     } catch (e) {}
-    startButton.style.display = "none";
+    startBtn.style.display = "none"; // Start-Button ausblenden
+    resetBtn.style.display = "none"; // Reset-Button ausblenden
 }
 
-spielSetzenBtn.addEventListener("click", async () => {
-    if (!selectedGameIds.length) return;
-    const params = selectedGameIds.map(id => `spielid[]=${id}`).join("&");
-    try {
-        const res = await fetch(`https://kk-backend.vercel.app/changeNaechstesSpiel?lobby=${pin}&${params}`);
-        if (res.ok) {
-            auswahlStatus.textContent = "Spiele ausgesucht!";
-            spielSetzenBtn.disabled = true;
-            popupOverlayAuswahl.style.display = "none";
-            modusWählenBtn.style.display = "none";
-            resetBtn.style.display = "flex";
-            modusWählenBtn.disabled = true;
-            ladeWarteschlange();
-        } else {
-            auswahlStatus.textContent = "Fehler beim Setzen des Spiels.";
-        }
-    } catch (e) {
-        auswahlStatus.textContent = "Fehler beim Setzen des Spiels.";
-    }
-});
-
-spielBeendenBtn.addEventListener("click", async () => {
-    fetch("https://kk-backend.vercel.app/reset?lobby=" + pin);
-    window.location.replace("../index.html");
-    return;
-});
-
-resetBtn.addEventListener("click", () => {
-    fetch(`https://kk-backend.vercel.app/changeNaechstesSpiel?lobby=${pin}&spielid[]=false`);
-    resetBtn.style.display = "none";
-    modusWählenBtn.style.display = "flex";
-    modusWählenBtn.disabled = false;
-    ladeWarteschlange();
-});
-
-startButton.addEventListener("click", starteSpiel);
-
+// Die Funktionen müssen hier unten stehen, nicht an den Anfang des Codes packen, da die functions sonst auf Buttons zugreifen, die noch nicht initialisiert sind
+renderGameGrid();
 ladeSpieler();
 pruefeSpielGestartet();
-
+ladeWarteschlange();
+// Initial laden und jede Sekunde aktualisieren
 setInterval(() => {
     ladeSpieler();
     pruefeSpielGestartet();
+    ladeWarteschlange();
 }, 1000);
 
+// Hilfsfunktionen
 // Funktion zum Abrufen der PIN (ausgelager, da sie mehrfach benötigt wird)
 function getPin() {
         const match = pinAnzeige.textContent.match(/\d+/);
         return match ? match[0] : "";
 }
+
+// Funktion zum Generieren einer Zufallszahl zwischen min und max
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min; // Zufallszahl zwischen min und max generieren
+}
+
+// Funktion zum Generieren einer Liste von Zufallszahlen für den Zufallsmodus
+function getZufallszahlen(){
+    const rundenAnzahl = parseInt(runden.value, 10);
+    const zufallszahlen = [];
+    while (zufallszahlen.length < rundenAnzahl) {
+        const zufallszahl = getRandomInt(1, spiele.length); // Zufallszahl zwischen 1 und der Anzahl der Spiele generieren
+        if (!zufallszahlen.includes(zufallszahl)) { // Prüfen, ob die Zahl bereits ausgewählt wurde
+            zufallszahlen.push(zufallszahl); // Wenn nicht, zur Liste hinzufügen
+        }
+    }
+    return zufallszahlen; // Zufallszahlen zurückgeben
+}
+
 
 // Copy-Button Funktionalität für die PIN (Material Icon)
 document.addEventListener("DOMContentLoaded", function() {
@@ -278,45 +389,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
 });
-// Button-Logik für "Nächstes Spiel auswählen" anpassen:
-// Der Button soll IMMER sichtbar sein, daher alles entfernen:
-// Prüfe, ob das Spiel gestartet wurde und blende den Button ein/aus
-// let spielGestartetGlobal = false;
-// async function pruefeObGameGestartetUndButton() { ... }
-// setInterval(pruefeObGameGestartetUndButton, 1000);
-
-// Warteschlange anzeigen
-async function ladeWarteschlange() {
-    try {
-        const response = await fetch(`https://kk-backend.vercel.app/naechstesSpiel?lobby=${pin}`);
-        const queue = await response.json();
-        const content = document.getElementById("warteschlangeContent");
-        if (Array.isArray(queue) && queue.length > 0) {
-            // Mapping für Namen (optional)
-            const spieleNamen = {
-                1: "Pizza-Clicker",
-                2: "Schere Stein Papier",
-                3: "Memory+",
-                4: "Asteroids",
-                5: "Imposter"
-                // ...weitere Spiele nach Bedarf...
-            };
-            content.innerHTML = queue.map((id, idx) =>
-                `<span style="display:inline-block;margin:0 8px;padding:4px 10px;border-radius:8px;background:#333;font-weight:${idx===0?'bold':'normal'};color:${idx===0?'#ff6ec4':'#fff'};">
-                    ${spieleNamen[id] || 'Spiel ' + id}
-                </span>`
-            ).join('');
-        } else {
-            content.textContent = "Keine Spiele in der Warteschlange.";
-        }
-    } catch (e) {
-        document.getElementById("warteschlangeContent").textContent = "Fehler beim Laden der Warteschlange.";
-    }
-}
-
-// Initial laden und alle 3 Sekunden aktualisieren
-ladeWarteschlange();
-setInterval(ladeWarteschlange, 3000);
 
 // Darkmode Toggle
 document.addEventListener("DOMContentLoaded", function() {
@@ -340,6 +412,9 @@ document.addEventListener("DOMContentLoaded", function() {
     toggle.onclick = () => setMode(!body.classList.contains(darkClass));
 });
 
-// Initial laden und alle 3 Sekunden aktualisieren
-ladeWarteschlange();
-setInterval(ladeWarteschlange, 3000);
+// Button-Logik für "Nächstes Spiel auswählen" anpassen:
+// Der Button soll IMMER sichtbar sein, daher alles entfernen:
+// Prüfe, ob das Spiel gestartet wurde und blende den Button ein/aus
+// let spielGestartetGlobal = false;
+// async function pruefeObGameGestartetUndButton() { ... }
+// setInterval(pruefeObGameGestartetUndButton, 1000);

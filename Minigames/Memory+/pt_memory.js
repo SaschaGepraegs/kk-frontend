@@ -8,26 +8,15 @@ const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch f
 var LobbyStatus;
 let timerInterval; // NEU: Intervall-ID speichern
 let spielBeendet = false; // NEU: Flag für Spielende
-<<<<<<< HEAD
-const resetbutton = document.getElementById("resetbutton");
 
+window.onload = spielStarten; // Beim Laden der Seite das Spiel starten
 
-window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
-
-
-=======
-let lobbystatusvar
-
-window.onload = spielStarten; // Funktion wird beim Laden der Seite aufgerufen
- 
->>>>>>> 81b18a4c823aa4b978e05cc47dcbd607ad8633cb
 // Funktion, um verschiedene Variablen zurückzusetzen
 function reset(){
     punkte = 0; // Punkte zurücksetzen
     timer = 25; // Timer zurücksetzen
     if(localStorage.getItem("uic_status")== "test"){ //Testoberfläche
         timer = 99999999;
-        resetbutton.style.visibility = "visible";
     }
     streak = 0; // Streak zurücksetzen
     aufgedeckteKarten = 0; // Aufgedeckte Karten zurücksetzen
@@ -74,6 +63,7 @@ async function spielStarten(){ // Funktion, die das Spiel startet
 // Funktion, um die Karte aufzudecken
 function KarteAufdecken(){
     this.aufgedeckt = true; // Karte ist aufgedeckt
+    KartenGeräusch.currentTime = 0.2; // Geräusch zurücksetzen
     aktuellAufgedeckteKarten.push(this); // Karte in das Array der aktuell aufgedeckten Karten hinzufügen
     this.classList.toggle("clicked"); // Animation für das Aufdecken
     setTimeout(() => {this.src = this.KartenBild; // Bild der Karte anzeigen
@@ -84,6 +74,7 @@ function KarteAufdecken(){
 
 // Funktion, um die Karte zuzudecken
 function KarteZudecken(){
+    this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite der Karte anzeigen
     this.aufgedeckt = false; // Karte ist zugedeckt
     this.classList.toggle("clicked"); // Animation für das Zudecken
     setTimeout(() => {this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite anzeigen
@@ -121,6 +112,8 @@ function kartenVergleichen(){
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]);
             KarteZudecken.call(aktuellAufgedeckteKarten[1]);
+            aktuellAufgedeckteKarten[0].classList.toggle("clicked"); // Animation für das Zudecken
+            aktuellAufgedeckteKarten[1].classList.toggle("clicked"); // Animation für das Zudecken
             streak = 0;
             setTimeout(() => {
                 aktuellAufgedeckteKarten = [];

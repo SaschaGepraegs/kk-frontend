@@ -15,6 +15,17 @@ let pizzaImg;
 let clickEffectContainer;
 let timerElem;
 
+// Spielstart nach Laden der Seite
+window.onload = startGame();
+
+function reset(){
+    clicks = 0;
+    timer = 30;
+    if(localStorage.getItem("uic_status") == "test"){
+        timer = 99999999;
+    }
+}
+
 function updateClickCounter() {
     clickCounter.textContent = `🍕 ${clicks}`;
 }
@@ -62,6 +73,7 @@ function geklickt(e) {
 }
 
 function startGame() {
+    reset();
     meter = document.querySelector("meter");
     clickCounter = document.getElementById("click-counter");
     pizzaImg = document.getElementById("pizza");
@@ -109,12 +121,4 @@ async function spielBeenden() {
         alert("Fehler beim Übertragen der Punkte!");
         setTimeout(() => {window.location.assign("/System/pause.html");}, 3000);
     }
-}
-
-// Spielstart nach Laden der Seite
-if(localStorage.getItem("uic_status") != "test"){
-    window.onload = startGame;
-}else{
-    alert("Testoberfläche");
-    timer = 999999;
 }
