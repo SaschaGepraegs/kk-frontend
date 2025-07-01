@@ -1,3 +1,4 @@
+![Banner_Anfang](Bilder/v1/banner_anfang.jpg)
 # 🎉 KlickKrawall – Das ultimative Online-Multiplayer-Partygame! 🎮
 
 **KlickKrawall** ist ein rasantes, browserbasiertes Online-Partyspiel, bei dem schnelle Reaktionen und Teamplay aufeinandertreffen! Ob mit Freunden oder gegen Fremde – hier geht's nicht um Strategie, sondern um Klicks und Krawall.
@@ -28,3 +29,13 @@ Unser **Team** besteht aktuell aus [Alpay](https://github.com/nillenia), [Felix]
 ![Pause](Bilder/v2/pause.jpg)
 ![Los](Bilder/v2/los.jpg)
 ![Pizza](Bilder/v3/pizza.jpg)
+
+## 💪 Einbringen
+
+Wenn du Ideen hast, inwieweit du dich im Projekt einbringen kannst oder falls dir Fehler aufgefallen sind, eröffne gerne einen Issue oder stelle einen Pull-Request.
+
+## 🫶 Danke
+
+Danke, dass du KlickKrawall verwendest. Euer Team ♥️
+
+![Banner_Ende](Bilder/v1/banner_ende.jpg)
