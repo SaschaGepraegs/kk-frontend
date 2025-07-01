@@ -4,7 +4,7 @@ function fortfahren() {
 }
 let clicks = 0;
 let timer = 30;
-/*if(localStorage.getItem("uic_status")!= "test"){
+/*if(localStorage.getItem("uic_status") == "test"){
     timer = 99999999;
 }*/
 let intervalId = null;
