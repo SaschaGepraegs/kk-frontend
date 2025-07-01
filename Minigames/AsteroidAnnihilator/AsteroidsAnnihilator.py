@@ -36,10 +36,10 @@ ALIEN_FIRE_FREQUENCY = FPS * 1  # An alien can fire every 1 seconds (on average)
 # All damages count as points as well (e.g.: it's a damage if the ship was hit, or it's a point if the ship's bullet
 # has hit any object.
 DEFAULT_DAMAGE = 5
-SMALL_DAMANGE = 10
-MEDIUM_DAMANGE = 20
-BIG_DAMANGE = 30
-ALIEN_DAMANGE = 50
+SMALL_DAMAGE = 10
+MEDIUM_DAMAGE = 20
+BIG_DAMAGE = 30
+ALIEN_DAMAGE = 50
 MEDIUM_SPLIT_ANGLE = ANGLE_STEP * 12  # The two smaller asteroids will turn 60° each when a medium asteroid has been hit.
 BIG_SPLIT_ANGLE = ANGLE_STEP * 9  # The two medium asteroids will turn 45° each when a big asteroid has been hit.
 GAME_OVER_TIME = 5
