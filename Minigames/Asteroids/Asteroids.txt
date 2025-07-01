@@ -1,21 +1,20 @@
 $ Asteroids-Minigame
 
 $$ Features / Regeln
-- 8 Spieler Multiplayer mit Raumshiffe
-- Letzter Spieler gewinnt
-- Gewinner bekommt Punkte
+- 1-8 Spieler Singleplayer oder Multiplayer mit Raumshiffe
+- Spieler machen Punkte, wenn sie Dinge zerstören
 
 $$ Spielstart
-- Alle 8 Spieler spawnen in der Nähe der Mitte des Bildschirms
-- Nach 5 Sekunden fangen an Asteroiden zufällig auf sie zu kommen
+- Alle Spieler spawnen in der Nähe der Mitte des Bildschirms
+- Asteroiden kommen zufällig auf sie zu
 - Spieler können sich mit Laser verteidigen
 
 $$ Spielprinzip
 - Spieler muss ausweichen und sich verteidigen können
 - Größere Asteroiden zerbrechen sich in kleinere
-- Umso länger das Spiel verläuft, umso mehr Asteroiden werden kommen
 
 $$ Spielumfang
 - Kleine Raumschiffe mit verschiedenen Farben zur Rekognition 
 - Asteroiden mit unterschiedlicher Größe
-- Laserschüße
+- Alien Raumschiffe, die gegen dich schießen
+- Laserschüße für Alien und Raumschiffe
