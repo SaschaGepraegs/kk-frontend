@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 let punkte;
 window.onload = reset();
 function reset() {
@@ -25,3 +26,6 @@ async function spielBeenden() {
         setTimeout(() => {window.location.assign("/System/pause.html");}, 3000);
     }
 }
+=======
+let punkte;
+>>>>>>> Stashed changes
