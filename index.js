@@ -132,6 +132,7 @@ async function checkLobby() {
         // Lobby existiert, Umschalten auf Namenseingabe
         document.getElementById("lobbySection").style.display = "none";
         document.getElementById("nameSection").style.display = "flex";
+        document.getElementById("hostSection").style.display = "none";
         localStorage.setItem("uic_gamepin", lobbycode);
         setTimeout(() => {
             document.getElementById("namenseingabe").focus();
