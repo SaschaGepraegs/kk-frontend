@@ -98,6 +98,21 @@ async function checkLobby() {
             window.localStorage.setItem("uic_status", "test")
             window.location.assign("./Minigames/Schere_Stein_Papier/game3.html")
             }
+            break;
+            case "4":{
+                window.localStorage.setItem("uic_status", "test")
+                window.location.assign("./Minigames/Asteroids/Asteroids.html")
+            }
+            break;
+            case "5":{
+                window.localStorage.setItem("uic_status", "test")
+                window.location.assign("./Minigames/Imposter/imposter.html")
+            }
+            break;
+            case "6":{
+                window.localStorage.setItem("uic_status", "test")
+                window.location.assign("./Minigames/don/don.html")
+            }
         }
         showLoader(false);
         disableAllInputs(false);
@@ -117,6 +132,7 @@ async function checkLobby() {
         // Lobby existiert, Umschalten auf Namenseingabe
         document.getElementById("lobbySection").style.display = "none";
         document.getElementById("nameSection").style.display = "flex";
+        document.getElementById("hostSection").style.display = "none";
         localStorage.setItem("uic_gamepin", lobbycode);
         setTimeout(() => {
             document.getElementById("namenseingabe").focus();
