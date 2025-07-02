@@ -28,16 +28,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         // 50/50 Entscheidung
         const gewonnen = Math.random() < 0.5;
-        let neuerPunktestand;
+        let punkteDiff = gewonnen ? einsatz : -einsatz;
+        let neuerPunktestand = punkte + punkteDiff;
         if (gewonnen) {
-            neuerPunktestand = punkte + einsatz;
             alert(`Gewonnen! Neuer Punktestand: ${neuerPunktestand}`);
         } else {
-            neuerPunktestand = punkte - einsatz;
             alert(`Verloren! Neuer Punktestand: ${neuerPunktestand}`);
         }
-        // Optional: Punkte lokal aktualisieren
-        punkte = neuerPunktestand;
-        document.getElementById("punkteStand").textContent = `Punkte: ${punkte}`;
+        // Punkte im Backend aktualisieren
+        await fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${lobby}&spieler=${spieler}&punkte=${punkteDiff}`);
+        // Punktestand neu laden
+        await ladeSpielerInfo();
     });
 });
