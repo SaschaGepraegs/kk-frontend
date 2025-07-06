@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="GP.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <title>KlickKrawall</title>
+</head>
+<body>
+    <section class="game-container">
+        <div id="Werkzeuge">
+            <h1>Malen.</h1>
+            <label for="Stift">Stift:</label>
+            <input id="Stift" name="Stift" type="color">   
+            <label for="Dicke">Dicke:</label>
+            <input id="Dicke" name="Dicke" type="number" min="1" max="10" value="5">
+            <button id="Loeschen">Löschen</button>
+            <button id="Zuruecksetzen">Zurücksetzen</button>
+        </div>
+        <div id="canvas">
+            <canvas id="canvas"></canvas>
+        </div>
+        </section> 
+
+    <script src="GP.js"></script>
+    </body>
+</html>
