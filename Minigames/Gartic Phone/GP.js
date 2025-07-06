@@ -29,3 +29,34 @@ Werkzeuge.addEventListener("change", (e) => {
         lineWidth = e.target.value;
     }
 });
+
+const draw = (e) => {
+    if (!isPainting) return;
+
+    ctx.lineWidth = lastlineWidth;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - canvasOffsetY);
+    ctx.stroke();
+
+    startX = e.clientX - canvasOffsetX;
+    startY = e.clientY - canvasOffsetY;
+};
+
+canvas.addEventListener("mousedown", (e) => {
+    isPainting = true;
+    startX = e.clientX;
+    startY = e.clientY;
+
+});
+
+canvas.addEventListener("mouseup", (e) => {
+    isPainting = false;
+    ctx.beginPath();
+    ctx.stroke();
+});
+
+canvas.addEventListener("mousemove", draw);
