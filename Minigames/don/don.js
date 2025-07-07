@@ -27,9 +27,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
         // 50/50 Entscheidung
-        const gewonnen = Math.random() < 0.5;
-        let punkteDiff = gewonnen ? einsatz : -einsatz;
-        let neuerPunktestand = punkte + punkteDiff;
+        const gewonnen = Math.random() < 0.5; // 50% Chance zu gewinnen
+        let punkteDiff = gewonnen ? einsatz : -einsatz; // Punkte anpassen: wenn gewonnen, dann +Einsatz, wenn verloren, dann -Einsatz
+        let neuerPunktestand = punkte + punkteDiff; // neuen Punktestand berechnen
         if (gewonnen) {
             alert(`Gewonnen! Neuer Punktestand: ${neuerPunktestand}`);
         } else {
