@@ -32,9 +32,9 @@ BULLET_LIFE_SPAN = FPS * 10  # A bullet lasts 10 seconds on screen.
 WAIT_TIME_FOR_NEXT_FIRE = int(FPS * 0.5)  # Waits half a second before the ship can fire again.
 INITIAL_ASTEROIDS = 10
 ENEMY_SPAWN_FREQUENCY = FPS * 10  # A new asteroid should appear on screen every 10 seconds (on average).
-ALIEN_FIRE_FREQUENCY = FPS * 1  # An alien can fire every 1 seconds (on average).
-# All damages count as points as well (e.g.: it's a damage if the ship was hit, or it's a point if the ship's bullet)
-# has hit any object.
+ALIEN_FIRE_FREQUENCY = FPS * 1  # An alien can fire every 1 second (on average).
+# All damages count as points as well (e.g.: it's a damage if the ship was hit, or it's a point if the ship's bullet
+# has hit any object.)
 DEFAULT_DAMAGE = 5
 SMALL_DAMAGE = 10
 MEDIUM_DAMAGE = 20
@@ -80,11 +80,12 @@ class Character:  # The base class for all characters.
         else:
             image = self.image
         
-        # When the image has to be printed we should take into account that x and y represent their centre, and that
+        # When the image has to be drawn we should take into account that x and y represent their centre, and that
         # y starts from top as zero and goes "down" (increasing values) until the bottom of the screen on a computer
-        # (so, it has to be "corrected" by mirroring the value)
-        screen.blit(image, (HALF_WIDTH + self.x - image.get_width() / 2,
-                                HALF_HEIGHT - self.y - image.get_height() / 2))
+        # (so, it has to be "corrected" by mirroring the value).
+        x = HALF_WIDTH + self.x - image.get_width() / 2  # Converts x from cartesian to computer coordinate.
+        y = HALF_HEIGHT - self.y - image.get_height() / 2  # Converts y from cartesian to computer coordinate.
+        screen.blit(image, (x, y))
 
     def rotate(self, step):
         self.angle += step
