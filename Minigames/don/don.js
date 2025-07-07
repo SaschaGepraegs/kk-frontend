@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("spielerName").textContent = `Spieler: ${name}`;
         document.getElementById("punkteStand").textContent = `Punkte: ${punkte}`;
     }
-
     await ladeSpielerInfo();
 
     document.getElementById("donForm").addEventListener("submit", async (e) => {
