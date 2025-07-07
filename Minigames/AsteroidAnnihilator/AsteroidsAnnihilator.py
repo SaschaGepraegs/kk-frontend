@@ -25,7 +25,7 @@ FPS = 60
 SHIP_ACCELERATION = 0.1
 DEFAULT_ACCELERATION = 2.5
 BULLET_ACCELERATION = 3
-FRICTION = 0.99
+FRICTION = 0.99  # Defines the inertia (1% less velocity per frame)
 ANGLE_STEP = 5  # The increase or decrease in degrees when the user has pressed left or right to rotate the ship.
 INITIAL_LIFE_POINTS = 200
 BULLET_LIFE_SPAN = FPS * 10  # A bullet lasts 10 seconds on screen.
@@ -107,7 +107,7 @@ class Character:  # The base class for all characters.
             self.velocity_x *= FRICTION
             self.velocity_y *= FRICTION
 
-        # Manage screen borders.
+        # Manage screen borders. Objects wraps around the screen borders.
         half_width = self.image.get_width() / 2
         if self.x < -half_width + MIN_X:
             self.x += SCREEN_WIDTH
@@ -161,7 +161,7 @@ class Bullet(Character):
 
     def update_and_inside_screen(self):
         super().update_and_inside_screen()
-        self.life_points -= 1
+        self.life_points -= 1  # Decrease the bullet's life span every frame. The bullet will last 10 seconds.
 
         return self.life_points > 0
 
@@ -208,6 +208,11 @@ class Enemy(Character):
 
 
 class Asteroid(Enemy):
+    def __init__(self, x, y, angle, image, hit_sound=None):
+        super().__init__(x, y, angle, image, hit_sound)
+        self.split_class = None
+        self.split_angle = 0
+
     def collided(self, other):
         if isinstance(other, Asteroid):  # Asteroids don't collide with each others.
             return False
