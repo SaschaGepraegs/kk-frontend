@@ -102,7 +102,7 @@ function kartenVergleichen(){
             Streak(); // Streak erhöhen (und eventuell Bonuspunkte vergeben)
             document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
             timer += 1; // Timer um 1 Sekunde erhöhen
-            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer; // Timer anzeigen
+            document.getElementById("meter").value = timer; // Meter aktualisieren
             document.getElementById("timerPlus").textContent = "+1s"; // "+1s" anzeigen
             setTimeout(() => {timerPlus.textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
             aufgedeckteKarten += 2; // Zähler für aufgedeckte Karten erhöhen
@@ -159,15 +159,19 @@ function shuffleArray(array) {
 
 // Funktion für den Timer
 function Timer(){
+    const meter = document.getElementById("meter");
+    const timerSpan = document.getElementById("timer");
     timerInterval = setInterval(function(){ // NEU: Intervall-ID speichern
         if(timer > 0){
             timer--;
-            document.getElementById("timer").innerHTML = "00:" +(timer < 10? "0" : "") + timer;
+            if(meter) meter.value = timer; // Meter aktualisieren
+            if(timerSpan) timerSpan.textContent = timer;
         }else{
             clearInterval(timerInterval); // NEU: Intervall korrekt stoppen
             KartenSperren();
             spielBeenden();
-            document.getElementById("timer").innerHTML = "Zeit abgelaufen";
+            if(meter) meter.value = 0; // Meter auf 0 setzen
+            if(timerSpan) timerSpan.textContent = "0";
         }
     }, 1000);
 }
