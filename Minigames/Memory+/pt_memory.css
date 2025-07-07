@@ -90,6 +90,8 @@ p {
     border-spacing: 0; /* Entfernt den Abstand zwischen den Zellen */
     border-collapse: collapse; /* Sorgt dafür, dass keine Lücken zwischen den Zellrändern entstehen */
     margin: 0 auto; /* Zentriert die Tabelle */
+    width: 100vw; /* Füllt die gesamte Breite des Viewports */
+    max-width: 60vh; /* Maximale Breite der Tabelle = 60% der Bildschirmhöhe */
 }
 
 td {
@@ -143,5 +145,13 @@ td {
     to {
         opacity: 0;
         transform: scale(1.2) rotateZ(10deg);
+    }
+}
+
+/* Für Smartphonebildschirme */
+@media (max-width: 600px) {
+    #gameTable {
+        width: 98vw;
+        max-width: 98vw;
     }
 }
