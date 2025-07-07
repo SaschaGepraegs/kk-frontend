@@ -210,8 +210,8 @@ class Enemy(Character):
 class Asteroid(Enemy):
     def __init__(self, x, y, angle, image, hit_sound=None):
         super().__init__(x, y, angle, image, hit_sound)
-        self.split_class = None
-        self.split_angle = 0
+        self.split_class = None  # The class used for generating 2 small asteroids after being hit.
+        self.split_angle = 0  # The deviation to be applied to the smaller asteroids from the current angle
 
     def collided(self, other):
         if isinstance(other, Asteroid):  # Asteroids don't collide with each others.
@@ -268,7 +268,7 @@ class Alien(Enemy):
         self.fire_image = alien_fire_image
         self.damage = ALIEN_DAMAGE
         self.accelerate()
-        alien_sound.play()
+        alien_sound.play()  # The alien spaceship makes a sound when it appears.
 
     def update_and_inside_screen(self):
         super().update_and_inside_screen()
@@ -291,7 +291,7 @@ class Alien(Enemy):
 
             # Positions the bullet to the border of the alien cannon end, at the calculated angle.
             bullet = Bullet(self.x + x1, self.y + y1, angle, self)
-            characters.append(bullet)
+            characters.append(bullet)  # Adds the bullet to the end of all objects currently displayed.
             alien_fire_sound.play()
 
         return True  # Alien ships wrap around the screen, so they are always visible.
@@ -406,7 +406,7 @@ class Game:  # The class that handles the game main loop.
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     ship.stops_rotation()
                 elif event.key == pygame.K_UP:
-                    ship.stops_acceleration()
+                    ship.stops_acceleration()  # Friction makes the ship slow down.
 
 
     @staticmethod
@@ -431,25 +431,34 @@ class Game:  # The class that handles the game main loop.
 
     @staticmethod
     def check_and_handle_collisions():
-        i = 0
-        while i < len(characters) - 1:
-            first = characters[i]
-            j = i + 1
-            while j < len(characters):
-                second = characters[j]
-                if first.collided(second):
+        """This method checks for collision between the displayed objects.
+        It picks the fist object on the list, and then it checks if it
+        collides with one of subsequent objects on the list.
+        If a collision is detected then the two collided objects are updated.
+        For example: By decreasing the life points, by increasing the highscore and / or by destroying an object.
+        This process is repeated for every single displayed object, but the last one.
+        That is the reason why we have two while loops in the code."""
+        i = 0  # We start with the first objects of the list.
+        while i < len(characters) - 1:  # We scroll through all objects, but the last one.
+            first = characters[i]  # Picks the first object.
+            j = i + 1  # Starts from the next one.
+            while j < len(characters):  # We scroll through all objects.
+                second = characters[j]  # Picks the second object.
+                if first.collided(second):  # Checks if there is a collision between the two objects.
+                    # Informs the first object, that it has been hit to take the proper actions
+                    # and adds the new spawned objects to the list of characters, if any.
                     for new_character in first.hit(second.damage):
+                        characters.append(new_character)  # Adds the new spawned object to the characters.
+                    for new_character in second.hit(first.damage):  # Do the same to the second object.
                         characters.append(new_character)
-                    for new_character in second.hit(first.damage):
-                        characters.append(new_character)
-                    if second.life_points <= 0:
-                        del characters[j]
-                        break
-                j += 1
-            if first.life_points <= 0:
-                del characters[i]
+                    if second.life_points <= 0:  # Checks if the second object has no life points.
+                        del characters[j]  # Deletes it from the list of characters.
+                        break  # Skips all subsequent objects, because we already had a hit
+                j += 1  # Goes to the next, second object.
+            if first.life_points <= 0:  # Checks if the first object has no life points.
+                del characters[i]  # Deletes it from the list of characters.
             else:
-                i += 1
+                i += 1  # Goes to the next, first object.
 
     @staticmethod
     def draw_graphic():
