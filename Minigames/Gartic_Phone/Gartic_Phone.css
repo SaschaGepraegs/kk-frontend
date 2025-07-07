@@ -7,13 +7,30 @@ body {
 }
 
 
-h1 {
+/*h1 {
     background: #7F7FD5;
     background: -webkit-linear-gradient(to right, #7F7FD5, #86A8E7, #91EAE4);
     background: linear-gradient(to right, #7F7FD5, #86A8E7, #91EAE4);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}*/
+h1{
+    color: #ffffff; /* Weißer Text */
+    text-align: center; /* Zentrierter Text */
+    font-size: 2.5em;
+    margin-top: 20px;
+    font-family: 'Georgia', serif; /* Schriftart */
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: royalblue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .container {
@@ -60,4 +77,13 @@ h1 {
 
 #Werkzeuge input {
     width: 100%;
+}
+
+
+#timer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); 
+    font-size: 1.5em;
+    color: #eb0d0d;
 }
