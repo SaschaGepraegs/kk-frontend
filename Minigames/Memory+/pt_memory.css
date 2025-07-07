@@ -1,7 +1,7 @@
 body {
     background-color: #1c1c1c; /* Dunkler Hintergrund */
     color: #ffffff; /* Weißer Text */
-    font-family: 'Arial', sans-serif; /* Schriftart */
+    font-family: "Roboto", sans-serif;
 }
 
 button {
@@ -19,7 +19,11 @@ h1{
     text-align: center; /* Zentrierter Text */
     font-size: 2.5em;
     margin-top: 20px;
-    font-family: 'Georgia', serif; /* Schriftart */
+}
+
+p {
+    font-size: 1.2em;
+    text-align: center;
 }
 
 #punkteUndstreak {
@@ -27,7 +31,7 @@ h1{
     align-items: center; /* Zentriert die Elemente */
     justify-content: space-between; 
     gap: 16px; /* Abstand zwischen den Elementen */
-    margin: 20px 32px 20px 32px; /* Abstand um das Element */
+    margin: 32px 32px 20px 32px; /* Abstand um das Element */
 }
 
 #punkte {
@@ -48,38 +52,38 @@ h1{
 
 #streak {
     font-size: 1.5em; /* Schriftgröße */
-    color:darkorange; /* Textfarbe */
+    color:rgb(223, 155, 88); /* Textfarbe */
 }
 
 #timerUndtimerPlus {
     position: relative;
-    background: #ffffff;
-    border-radius: 5px;
-    margin: 20px 0 0 0;
-    padding: 12px 32px;
-    width: 100%;
-    box-sizing: border-box;
-    height: 48px; 
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 24px;
+    margin: 40px 0 40px 0;
 }
 
-#timer {
+#meter {
     position: absolute;
     left: 50%;
     transform: translateX(-50%); 
     font-size: 1.5em;
-    color: #eb0d0d;
+    width: 60vw;
+    height: 5vh;
+    display: block;
 }
 
 #timerPlus {
     position: absolute;
-    left: calc(50% + 60px); /* Abstand rechts vom Timer */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     font-size: 1.2em;
-    color: green;
+    color: black;
     font-weight: bold;
     min-width: 40px;
+    text-align: center;
 }
 
 #gameTable {
