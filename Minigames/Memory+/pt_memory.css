@@ -139,7 +139,6 @@ td {
     animation: fadeOut 0.3s forwards;
 }
 
-
 /* Animation für das Verschwinden der Karten */
 @keyframes fadeOut {
     to {
@@ -154,4 +153,36 @@ td {
         width: 98vw;
         max-width: 98vw;
     }
+}
+
+.overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* halbtransparent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* über allem */
+}
+
+.overlayContent {
+    background: #ffffff;
+    padding: 32px 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    min-width: 240px;
+}
+
+#h2-warten {
+    color: #000000;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+#p-warten {
+    color: #000000;
+    font-size: 1.2em;
 }

@@ -8,6 +8,7 @@ const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch f
 var LobbyStatus;
 let timerInterval; // NEU: Intervall-ID speichern
 let spielBeendet = false; // NEU: Flag für Spielende
+const popupOverlayWarten = document.getElementById("popupOverlayWarten"); // Popup-Overlay für Warten
 
 window.onload = spielStarten; // Beim Laden der Seite das Spiel starten
 
@@ -107,7 +108,12 @@ function kartenVergleichen(){
             setTimeout(() => {timerPlus.textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
             aufgedeckteKarten += 2; // Zähler für aufgedeckte Karten erhöhen
             if(aufgedeckteKarten == cards.length){ // Wenn alle Karten aufgedeckt sind
-                spielBeenden(); // Spiel beenden
+                /*spielBeenden(); // Spiel beenden
+                spielBeenden wird hier nicht mehr aufgerufen, sondern nur noch in der Timer-Funktion
+                stattdessen wird hier das Popup-Overlay angezeigt
+                damit müssen alle Spieler warten, bis der Timer abeglaufen ist, auch wenn sie schon alle Karten aufgedeckt haben
+                Ziel: alle Spieler werden gleichzeitig auf die Pause-Seite weitergeleitet*/
+                popupOverlayWarten.style.display = "flex"; // Popup-Overlay für Warten anzeigen
             }
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]);
