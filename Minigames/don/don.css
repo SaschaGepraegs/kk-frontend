@@ -78,3 +78,10 @@ button:hover {
     width: 100%;
     transition: width 0.3s linear;
 }
+#nachrichtFeld {
+    margin-top: 1rem;
+    min-height: 2em;
+    color: #21005d;
+    font-size: 1.1rem;
+    text-align: center;
+}
