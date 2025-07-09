@@ -62,7 +62,7 @@
 
 </html>
 <script>
-    document.getElementById("überschrift").innerHTML = "AUFGABEN FÜR " + (localStorage.getItem("uic_username")).toUpperCase();
+    document.getElementById("überschrift").textContent = "AUFGABEN FÜR " + (localStorage.getItem("uic_username")).toUpperCase();
 
     if (localStorage.getItem("uic_task1done") == "true") {
         document.getElementById("btn_t1").style.backgroundColor = "#C3D900"
