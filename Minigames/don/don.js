@@ -12,6 +12,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("spielerName").textContent = `Spieler: ${name}`;
         document.getElementById("punkteStand").textContent = `Punkte: ${punkte}`;
     }
+
+    // Timer-Logik
+    const timerDuration = 30; // Sekunden
+    let timeLeft = timerDuration;
+    const timerBar = document.getElementById("timerBar");
+    const timerText = document.getElementById("timerText");
+
+    function updateTimerUI() {
+        timerText.textContent = `Zeit: ${timeLeft}s`;
+        timerBar.style.width = `${(timeLeft / timerDuration) * 100}%`;
+    }
+
+    updateTimerUI();
+
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerUI();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            window.location.href = "/System/pause.html";
+        }
+    }, 1000);
+
     await ladeSpielerInfo();
 
     document.getElementById("donForm").addEventListener("submit", async (e) => {
