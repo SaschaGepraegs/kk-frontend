@@ -8,7 +8,18 @@
     <title>KlickKrawall</title>
 </head>
 <body>
-    <div id="timer">00:30</div> <!-- Eindeutige ID -->
+    <div id="timerText">Zeit: 60s</div>
+        <div id="timerBarContainer">
+            <div id="timerBar" style="height: 10px; background: red; width: 100%;"></div>
+        </div>
+    <div id="vorschlagContainer" style="text-align: center; margin-top: 20px;">
+    <h2>Was soll gezeichnet werden?</h2>
+    <input type="text" id="vorschlag" placeholder="z. B. Katze, Haus..." />
+    <button id="vorschlagAbsenden">Vorschlag senden</button>
+    <p id="vorschlagStatus" style="color: lightgreen;"></p>
+    </div>
+
+    <div id="anzeigeThema" style="display:none; font-size:1.5em; text-align:center; margin-top:20px;"></div>
 
     <section class="container">
         <div id="Werkzeuge">
@@ -22,7 +33,7 @@
         </div>
 
         <div class="canvas">
-            <canvas id="canvas" width="800" height="600"></canvas>
+            <canvas id="canvas"></canvas>
         </div>
     </section> 
 

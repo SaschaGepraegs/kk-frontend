@@ -97,4 +97,20 @@ button {
 canvas {
     background: white;
     border: 1px solid #ccc;
+    width: 800px;
+    height: 600px;
+}
+
+#timerBarContainer {
+    width: 80%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: auto;
+}
+
+#timerBar {
+    height: 10px;
+    background: red;
+    width: 100%;
+    transition: width 1s linear;
 }
