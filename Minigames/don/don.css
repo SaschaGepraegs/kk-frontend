@@ -55,3 +55,33 @@ button {
 button:hover {
     background: #4f378b;
 }
+#timerContainer {
+    width: 320px;
+    margin-bottom: 1.2rem;
+    text-align: center;
+}
+#timerText {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+    color: #21005d;
+}
+#timerBarWrapper {
+    width: 100%;
+    background: #e0e0e0;
+    border-radius: 8px;
+    height: 18px;
+    overflow: hidden;
+}
+#timerBar {
+    height: 100%;
+    background: #6750a4;
+    width: 100%;
+    transition: width 0.3s linear;
+}
+#nachrichtFeld {
+    margin-top: 1rem;
+    min-height: 2em;
+    color: #21005d;
+    font-size: 1.1rem;
+    text-align: center;
+}

@@ -1,7 +1,7 @@
 body {
     background-color: #1c1c1c; /* Dunkler Hintergrund */
     color: #ffffff; /* Weißer Text */
-    font-family: 'Arial', sans-serif; /* Schriftart */
+    font-family: "Roboto", sans-serif;
 }
 
 button {
@@ -19,7 +19,11 @@ h1{
     text-align: center; /* Zentrierter Text */
     font-size: 2.5em;
     margin-top: 20px;
-    font-family: 'Georgia', serif; /* Schriftart */
+}
+
+p {
+    font-size: 1.2em;
+    text-align: center;
 }
 
 #punkteUndstreak {
@@ -27,7 +31,7 @@ h1{
     align-items: center; /* Zentriert die Elemente */
     justify-content: space-between; 
     gap: 16px; /* Abstand zwischen den Elementen */
-    margin: 20px 32px 20px 32px; /* Abstand um das Element */
+    margin: 32px 32px 20px 32px; /* Abstand um das Element */
 }
 
 #punkte {
@@ -48,44 +52,46 @@ h1{
 
 #streak {
     font-size: 1.5em; /* Schriftgröße */
-    color:darkorange; /* Textfarbe */
+    color:rgb(223, 155, 88); /* Textfarbe */
 }
 
 #timerUndtimerPlus {
     position: relative;
-    background: #ffffff;
-    border-radius: 5px;
-    margin: 20px 0 0 0;
-    padding: 12px 32px;
-    width: 100%;
-    box-sizing: border-box;
-    height: 48px; 
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 24px;
+    margin: 40px 0 40px 0;
 }
 
-#timer {
+#meter {
     position: absolute;
     left: 50%;
     transform: translateX(-50%); 
     font-size: 1.5em;
-    color: #eb0d0d;
+    width: 60vw;
+    height: 5vh;
+    display: block;
 }
 
 #timerPlus {
     position: absolute;
-    left: calc(50% + 60px); /* Abstand rechts vom Timer */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     font-size: 1.2em;
-    color: green;
+    color: black;
     font-weight: bold;
     min-width: 40px;
+    text-align: center;
 }
 
 #gameTable {
     border-spacing: 0; /* Entfernt den Abstand zwischen den Zellen */
     border-collapse: collapse; /* Sorgt dafür, dass keine Lücken zwischen den Zellrändern entstehen */
     margin: 0 auto; /* Zentriert die Tabelle */
+    width: 100vw; /* Füllt die gesamte Breite des Viewports */
+    max-width: 60vh; /* Maximale Breite der Tabelle = 60% der Bildschirmhöhe */
 }
 
 td {
@@ -133,11 +139,50 @@ td {
     animation: fadeOut 0.3s forwards;
 }
 
-
 /* Animation für das Verschwinden der Karten */
 @keyframes fadeOut {
     to {
         opacity: 0;
         transform: scale(1.2) rotateZ(10deg);
     }
+}
+
+/* Für Smartphonebildschirme */
+@media (max-width: 600px) {
+    #gameTable {
+        width: 98vw;
+        max-width: 98vw;
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* halbtransparent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* über allem */
+}
+
+.overlayContent {
+    background: #ffffff;
+    padding: 32px 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    min-width: 240px;
+}
+
+#h2-warten {
+    color: #000000;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+#p-warten {
+    color: #000000;
+    font-size: 1.2em;
 }
