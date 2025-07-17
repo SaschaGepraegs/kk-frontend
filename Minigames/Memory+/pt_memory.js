@@ -31,28 +31,28 @@ async function spielStarten(){ // Funktion, die das Spiel startet
     reset(); // Reset-Funktion aufrufen
     Timer(); // Timer starten
     const KartenInfos = [ // Array mit Karteninformationen
-        {wert: 1, bild: "Prototyp_Images/Karte_Eule.jpg"},
-        {wert: 1, bild: "Prototyp_Images/Karte_Eule.jpg"},
-        {wert: 2, bild: "Prototyp_Images/Karte_Fisch.jpg"},
-        {wert: 2, bild: "Prototyp_Images/Karte_Fisch.jpg"},
-        {wert: 3, bild: "Prototyp_Images/Karte_Hase.jpg"},
-        {wert: 3, bild: "Prototyp_Images/Karte_Hase.jpg"},
-        {wert: 4, bild: "Prototyp_Images/Karte_Koala.jpg"},
-        {wert: 4, bild: "Prototyp_Images/Karte_Koala.jpg"},
-        {wert: 5, bild: "Prototyp_Images/Karte_Panda.jpg"},
-        {wert: 5, bild: "Prototyp_Images/Karte_Panda.jpg"},
-        {wert: 6, bild: "Prototyp_Images/Karte_Papagei.jpg"},
-        {wert: 6, bild: "Prototyp_Images/Karte_Papagei.jpg"},
-        {wert: 7, bild: "Prototyp_Images/Karte_Pinguin.jpg"},
-        {wert: 7, bild: "Prototyp_Images/Karte_Pinguin.jpg"},
-        {wert: 8, bild: "Prototyp_Images/Karte_Schildkröte.jpg"},
-        {wert: 8, bild: "Prototyp_Images/Karte_Schildkröte.jpg"},
+        {wert: 1, bild: "Prototyp_Images/Karte_Antivirus.png"},
+        {wert: 1, bild: "Prototyp_Images/Karte_Antivirus.png"},
+        {wert: 2, bild: "Prototyp_Images/Karte_Auge.png"},
+        {wert: 2, bild: "Prototyp_Images/Karte_Auge.png"},
+        {wert: 3, bild: "Prototyp_Images/Karte_Batterien.png"},
+        {wert: 3, bild: "Prototyp_Images/Karte_Batterien.png"},
+        {wert: 4, bild: "Prototyp_Images/Karte_Flügel.png"},
+        {wert: 4, bild: "Prototyp_Images/Karte_Flügel.png"},
+        {wert: 5, bild: "Prototyp_Images/Karte_Gesicht.png"},
+        {wert: 5, bild: "Prototyp_Images/Karte_Gesicht.png"},
+        {wert: 6, bild: "Prototyp_Images/Karte_Öl.png"},
+        {wert: 6, bild: "Prototyp_Images/Karte_Öl.png"},
+        {wert: 7, bild: "Prototyp_Images/Karte_Roboter.png"},
+        {wert: 7, bild: "Prototyp_Images/Karte_Roboter.png"},
+        {wert: 8, bild: "Prototyp_Images/Karte_Zielscheibe.png"},
+        {wert: 8, bild: "Prototyp_Images/Karte_Zielscheibe.png"},
     ];
     shuffleArray(KartenInfos); // Karten Mischen
     for (let i = 0; i < cards.length; i++) {
         cards[i].KartenWert = KartenInfos[i].wert; // Wert der Karte zuweisen
         cards[i].KartenBild = KartenInfos[i].bild; // Bild der Karte zuweisen
-        cards[i].src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Karte wird umgedreht (Rückseite)
+        cards[i].src = "Prototyp_Images/Karte_Rückseite2.png"; // Karte wird umgedreht (Rückseite)
         cards[i].aufgedeckt = false; // Karte ist nicht aufgedeckt
     }
     KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
@@ -75,10 +75,10 @@ function KarteAufdecken(){
 
 // Funktion, um die Karte zuzudecken
 function KarteZudecken(){
-    this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite der Karte anzeigen
+    this.src = "Prototyp_Images/Karte_Rückseite2.png"; // Rückseite der Karte anzeigen
     this.aufgedeckt = false; // Karte ist zugedeckt
     this.classList.toggle("clicked"); // Animation für das Zudecken
-    setTimeout(() => {this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite anzeigen
+    setTimeout(() => {this.src = "Prototyp_Images/Karte_Rückseite2.png"; // Rückseite anzeigen
     }, 100); // aber erst nach einem Drittel der css-Animation (0,1s)
     KartenGeräusch.currentTime = 0.4; // Geräusch auf 0,35s setzen
     KartenGeräusch.play(); // Geräusch abspielen
@@ -118,8 +118,6 @@ function kartenVergleichen(){
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]);
             KarteZudecken.call(aktuellAufgedeckteKarten[1]);
-            aktuellAufgedeckteKarten[0].classList.toggle("clicked"); // Animation für das Zudecken
-            aktuellAufgedeckteKarten[1].classList.toggle("clicked"); // Animation für das Zudecken
             streak = 0;
             setTimeout(() => {
                 aktuellAufgedeckteKarten = [];
