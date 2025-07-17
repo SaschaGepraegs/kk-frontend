@@ -282,6 +282,16 @@
                 6: "/Minigames/don/don.html",
                 7: "/Minigames/Gartic_Phone/Gartic_Phone.html",
             };
+            // Mapping Spiel-IDs zu Bild-URLs (hier kannst du die Links selbst festlegen)
+            const gameImages = {
+                1: "/Bilder/icons/pizza.png",
+                2: "/Bilder/icons/ssp.png",
+                3: "/Bilder/icons/memory.png",
+                4: "/Bilder/icons/asteroids.png",
+                5: "/Bilder/icons/imposter.png",
+                6: "/Bilder/icons/don.png",
+                7: "/Bilder/icons/gartic.png",
+            };
             // Hinweise zu den Spielen
             const gameHints = {
                 1: "Klicke so schnell wie möglich auf die Pizza, um Punkte zu sammeln!",
@@ -295,11 +305,12 @@
             const spielName = gameNames[spielId] || `Spiel ${spielId}`;
             const spielUrl = gameUrls[spielId] || `spiel${spielId}.html`;
             const spielHint = gameHints[spielId] || "Viel Erfolg beim nächsten Spiel!";
+            const spielImg = gameImages[spielId] || "https://dummyimage.com/120x120/7873f5/fff.png&text=Game";
 
             document.getElementById("mainContent").style.display = "none";
             const overlay = document.getElementById("nextgame");
             document.getElementById("spielid").textContent = spielId;
-            document.getElementById("nextgame-img").src = `https://dummyimage.com/120x120/7873f5/fff.png&text=Game+${spielId}`;
+            document.getElementById("nextgame-img").src = spielImg;
             document.getElementById("nextgame-title").innerHTML = `Es geht weiter mit <b>${spielName}</b>!`;
             document.getElementById("nextgame-hint").textContent = spielHint;
             overlay.style.display = "flex";
