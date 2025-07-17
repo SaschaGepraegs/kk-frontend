@@ -101,6 +101,9 @@ async function checkLobby() {
             break;
             case "4":{
                 window.localStorage.setItem("uic_status", "test")
+<<<<<<< HEAD
+                window.location.assign("./Minigames/Button/game4.html")
+=======
                 window.location.assign("./Minigames/Asteroids/Asteroids.html")
             }
             break;
@@ -112,6 +115,7 @@ async function checkLobby() {
             case "6":{
                 window.localStorage.setItem("uic_status", "test")
                 window.location.assign("./Minigames/don/don.html")
+>>>>>>> 085c58dedcb7ca6834ad222f356f171b6fd90a0a
             }
         }
         showLoader(false);
