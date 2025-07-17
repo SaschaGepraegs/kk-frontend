@@ -1,0 +1,40 @@
+body {
+  background-color: #f0f4f8;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding-top: 100px;
+  cursor: none;
+}
+
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+button {
+  font-size: 20px;
+  padding: 20px 40px;
+  border: none;
+  border-radius: 10px;
+  margin: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#reactionButton {
+  background-color: gray;
+  color: white;
+}
+
+#reactionButton.active {
+  background-color: green;
+}
+
+#reactionButton.tooSoon {
+  background-color: red;
+}
+
+#startButton {
+  background-color: #007bff;
+  color: white;
+}

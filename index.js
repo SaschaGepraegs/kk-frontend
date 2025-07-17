@@ -98,6 +98,11 @@ async function checkLobby() {
             window.localStorage.setItem("uic_status", "test")
             window.location.assign("./Minigames/Schere_Stein_Papier/game3.html")
             }
+            break;
+            case "4":{
+                window.localStorage.setItem("uic_status", "test")
+                window.location.assign("./Minigames/Button/game4.html")
+            }
         }
         showLoader(false);
         disableAllInputs(false);
