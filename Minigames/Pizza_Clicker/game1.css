@@ -122,6 +122,7 @@ meter::-ms-fill-upper {
 }
 
 #click-counter {
+    position: relative;
     font-size: 2.2rem;
     font-weight: bold;
     color: #ff9800;
@@ -129,6 +130,11 @@ meter::-ms-fill-upper {
     text-shadow: 0 2px 8px #fffbe6, 0 0px 2px #ff9800;
     letter-spacing: 2px;
     user-select: none;
+    padding: 0.2em 1em;
+    margin: 0;
+    padding-top: 13%;
+    left: 50%;
+    transform: translateX(-50%); /* Warum funktioniert das NICHT? */
 }
 
 #click-effect-container {

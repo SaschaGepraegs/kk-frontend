@@ -8,6 +8,7 @@ const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch f
 var LobbyStatus;
 let timerInterval; // NEU: Intervall-ID speichern
 let spielBeendet = false; // NEU: Flag für Spielende
+const popupOverlayWarten = document.getElementById("popupOverlayWarten"); // Popup-Overlay für Warten
 
 window.onload = spielStarten; // Beim Laden der Seite das Spiel starten
 
@@ -102,12 +103,17 @@ function kartenVergleichen(){
             Streak(); // Streak erhöhen (und eventuell Bonuspunkte vergeben)
             document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
             timer += 1; // Timer um 1 Sekunde erhöhen
-            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer; // Timer anzeigen
+            document.getElementById("meter").value = timer; // Meter aktualisieren
             document.getElementById("timerPlus").textContent = "+1s"; // "+1s" anzeigen
             setTimeout(() => {timerPlus.textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
             aufgedeckteKarten += 2; // Zähler für aufgedeckte Karten erhöhen
             if(aufgedeckteKarten == cards.length){ // Wenn alle Karten aufgedeckt sind
-                spielBeenden(); // Spiel beenden
+                /*spielBeenden(); // Spiel beenden
+                spielBeenden wird hier nicht mehr aufgerufen, sondern nur noch in der Timer-Funktion
+                stattdessen wird hier das Popup-Overlay angezeigt
+                damit müssen alle Spieler warten, bis der Timer abeglaufen ist, auch wenn sie schon alle Karten aufgedeckt haben
+                Ziel: alle Spieler werden gleichzeitig auf die Pause-Seite weitergeleitet*/
+                popupOverlayWarten.style.display = "flex"; // Popup-Overlay für Warten anzeigen
             }
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]);
@@ -159,15 +165,19 @@ function shuffleArray(array) {
 
 // Funktion für den Timer
 function Timer(){
+    const meter = document.getElementById("meter");
+    const timerSpan = document.getElementById("timer");
     timerInterval = setInterval(function(){ // NEU: Intervall-ID speichern
         if(timer > 0){
             timer--;
-            document.getElementById("timer").innerHTML = "00:" +(timer < 10? "0" : "") + timer;
+            if(meter) meter.value = timer; // Meter aktualisieren
+            if(timerSpan) timerSpan.textContent = timer;
         }else{
             clearInterval(timerInterval); // NEU: Intervall korrekt stoppen
             KartenSperren();
             spielBeenden();
-            document.getElementById("timer").innerHTML = "Zeit abgelaufen";
+            if(meter) meter.value = 0; // Meter auf 0 setzen
+            if(timerSpan) timerSpan.textContent = "0";
         }
     }, 1000);
 }
@@ -192,7 +202,7 @@ async function spielBeenden() {
     const lobby = localStorage.getItem("uic_gamepin") || "1111";
     const player = localStorage.getItem("uic_name") || "Name";
     try {
-        await fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${localStorage.getItem("uic_gamepin")}&spieler=${localStorage.getItem("uic_username")}&punkte=${punkte}`,);
+        await fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${lobby}&spieler=${player}&punkte=${punkte}`,);
         setTimeout(() => {window.location.replace("/System/pause.html");}, 3000); // Nach 3 Sekunden auf die Pause-Seite weiterleiten
     } catch (e) {
         alert("Fehler beim Übertragen der Punkte!");

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KlickKrawall</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="icon" type="image/x-icon" href="/Bilder/favicons/normal.png">
     <style>
         html { box-sizing: border-box; }
         *, *:before, *:after { box-sizing: inherit; }
@@ -216,7 +216,8 @@
         <div class="nextgame-content">
             <img id="nextgame-img" src="https://dummyimage.com/120x120/7873f5/fff.png&text=Game" alt="Nächstes Spiel">
             <h2 id="nextgame-title">Es geht weiter mit Spiel <span id="spielid">?</span>!</h2>
-            <div class="counter" id="nextgame-counter">5</div>
+            <div class="nextgame-hint" id="nextgame-hint" style="color:#ffd700; margin-bottom:1rem; min-height:2.2em;"></div>
+            <div class="counter" id="nextgame-counter">10</div>
             <p style="color:#bdbdbd; margin-top:0.5rem;">Mach dich bereit!</p>
         </div>
     </div>
@@ -268,8 +269,8 @@
                 3: "Memory+",
                 4: "Asteroids",
                 5: "Imposter",
-                6: "Game 6",
-                7: "Game 7",
+                6: "Double or Nothing",
+                7: "Gartic Phone",
             };
             // Mapping Spiel-IDs zu URLs
             const gameUrls = {
@@ -278,21 +279,42 @@
                 3: "/Minigames/Memory+/pt_memory.html",
                 4: "/Minigames/Asteroids/asteroids.html",
                 5: "/Minigames/Imposter/imposter.html",
-                6: "game6.html",
-                7: "game7.html",
+                6: "/Minigames/don/don.html",
+                7: "/Minigames/Gartic_Phone/Gartic_Phone.html",
+            };
+            // Mapping Spiel-IDs zu Bild-URLs (hier kannst du die Links selbst festlegen)
+            const gameImages = {
+                1: "/Bilder/icons/pizza.png",
+                2: "/Bilder/icons/ssp.png",
+                3: "/Bilder/icons/memory.png",
+                4: "/Bilder/icons/asteroids.png",
+                5: "/Bilder/icons/imposter.png",
+                6: "/Bilder/icons/don.png",
+                7: "/Bilder/icons/gartic.png",
+            };
+            // Hinweise zu den Spielen
+            const gameHints = {
+                1: "Klicke so schnell wie möglich auf die Pizza, um Punkte zu sammeln!",
+                2: "Wähle Schere, Stein oder Papier. Versuche, deinen Gegner (Bot) zu schlagen!",
+                3: "Finde die passenden Kartenpaare. Merke dir die Positionen!",
+                4: "[BETA] Weiche Asteroiden aus und schieße sie ab, um zu überleben!",
+                5: "Finde den Imposter oder täusche die anderen!",
+                6: "Setze deine Punkte aufs Spiel – traust du dich? Du kannst innerhalb der Zeit so oft setzen, wie du willst!",
+                7: "[BETA] Zeichne und errate Begriffe. Kreativität ist gefragt!",
             };
             const spielName = gameNames[spielId] || `Spiel ${spielId}`;
             const spielUrl = gameUrls[spielId] || `spiel${spielId}.html`;
+            const spielHint = gameHints[spielId] || "Viel Erfolg beim nächsten Spiel!";
+            const spielImg = gameImages[spielId] || "https://dummyimage.com/120x120/7873f5/fff.png&text=Game";
 
             document.getElementById("mainContent").style.display = "none";
             const overlay = document.getElementById("nextgame");
             document.getElementById("spielid").textContent = spielId;
-            // Dummy-Bild und Dummy-Link, kann angepasst werden
-            document.getElementById("nextgame-img").src = `https://dummyimage.com/120x120/7873f5/fff.png&text=Game+${spielId}`;
-            // Spielname im Titel anzeigen
+            document.getElementById("nextgame-img").src = spielImg;
             document.getElementById("nextgame-title").innerHTML = `Es geht weiter mit <b>${spielName}</b>!`;
+            document.getElementById("nextgame-hint").textContent = spielHint;
             overlay.style.display = "flex";
-            let counter = 5;
+            let counter = 10; // Timer auf 10 Sekunden verlängert
             document.getElementById("nextgame-counter").textContent = counter;
             countdownInterval = setInterval(() => {
                 counter--;

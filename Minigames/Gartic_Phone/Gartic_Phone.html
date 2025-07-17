@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Gartic_Phone.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <title>KlickKrawall</title>
+</head>
+<body>
+    <div id="timerText">Zeit: 60s</div>
+        <div id="timerBarContainer">
+            <div id="timerBar" style="height: 10px; background: red; width: 100%;"></div>
+        </div>
+    <div id="vorschlagContainer" style="text-align: center; margin-top: 20px;">
+    <h2>Was soll gezeichnet werden?</h2>
+    <input type="text" id="vorschlag" placeholder="z. B. Katze, Haus..." />
+    <button id="vorschlagAbsenden">Vorschlag senden</button>
+    <p id="vorschlagStatus" style="color: lightgreen;"></p>
+    </div>
+
+    <div id="anzeigeThema" style="display:none; font-size:1.5em; text-align:center; margin-top:20px;"></div>
+
+    <section class="container">
+        <div id="Werkzeuge">
+            <h1>Malen.</h1>
+            <label for="Stift">Stift:</label>
+            <input id="Stift" name="Stift" type="color">   
+            <label for="Dicke">Dicke:</label>
+            <input id="Dicke" name="Dicke" type="number" min="1" max="10" value="5">
+            <button id="Loeschen">Löschen</button>
+            <button id="Zuruecksetzen">Zurücksetzen</button>
+        </div>
+
+        <div class="canvas">
+            <canvas id="canvas"></canvas>
+        </div>
+    </section> 
+
+    <script src="Gartic_Phone.js"></script>
+</body>
+</html>

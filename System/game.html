@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/Bilder/favicons/normal.png">
     <title>Document</title>
     <style>
         body {
@@ -54,13 +55,14 @@
     <button id="btn_t3" onclick="window.location.assign('/Minigames/Memory+/pt_memory.html')">Memory+</button><br>
     <button id="btn_t4" onclick="window.location.assign('/Minigames/Asteroids/asteroids.html')">Asteroids</button><br>
     <button id="btn_t5" onclick="window.location.assign('/Minigames/Imposter/Imposter.html')">Imposter</button><br>
-    <button id="btn_t6" onclick="window.location.assign('/ToDo_Games/game6.html')">Game 6</button><br>
-    <button id="btn_t7" onclick="window.location.assign('/ToDo_Games/game7.html')">Game 7</button>
+    <button id="btn_t6" onclick="window.location.assign('/ToDo_Games/game6.html')">Game 6</button>
+    <button id="btn_t7" onclick="window.location.assign('/Minigames/Gartic_Phone/Gartic_Phone.html')">Gartic Phone</button><br>
+    
 </body>
 
 </html>
 <script>
-    document.getElementById("überschrift").innerHTML = "AUFGABEN FÜR " + (localStorage.getItem("uic_username")).toUpperCase();
+    document.getElementById("überschrift").textContent = "AUFGABEN FÜR " + (localStorage.getItem("uic_username")).toUpperCase();
 
     if (localStorage.getItem("uic_task1done") == "true") {
         document.getElementById("btn_t1").style.backgroundColor = "#C3D900"

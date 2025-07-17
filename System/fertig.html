@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fertig | KlickKrawall</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="icon" type="image/x-icon" href="/Bilder/favicons/normal.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Honk:SHLN@59.8&display=swap" rel="stylesheet">
@@ -150,6 +150,40 @@
             color: var(--md3-on-primary-container);
         }
 
+        .md3-dark {
+            --md3-primary: #d0bcff;
+            --md3-on-primary: #381e72;
+            --md3-primary-container: #4f378b;
+            --md3-on-primary-container: #eaddff;
+            --md3-surface: #1c1b1f;
+            --md3-on-surface: #e6e1e5;
+            --md3-bg: radial-gradient(circle, rgba(62, 36, 71, 1) 0%, rgba(37, 48, 61, 1) 100%);
+            --md3-shadow: 0 1.5px 8px 0 rgba(0,0,0,0.25);
+        }
+
+        .md3-dark mark {
+            background-color: var(--md3-primary);
+            color: var(--md3-on-primary);
+        }
+
+        .md3-icon-btn {
+            background: none;
+            border: none;
+            border-radius: 50%;
+            padding: 0.4rem;
+            cursor: pointer;
+            color: var(--md3-primary);
+            transition: background 0.2s;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .md3-icon-btn:hover {
+            background: var(--md3-primary-container);
+        }
+
         @media (max-width: 600px) {
             .md3-main-container {
                 padding: 1rem 0.2rem 1rem 0.2rem;
@@ -170,8 +204,11 @@
     </style>
 </head>
 
-<body class="md3-bg">
+<body class="md3-bg" id="bodyRoot">
     <main class="md3-main-container">
+        <button id="darkModeToggle" class="md3-icon-btn" title="Darkmode umschalten" style="position:absolute;top:1.5rem;right:2.5rem;">
+            <span class="material-symbols-outlined" id="darkModeIcon">dark_mode</span>
+        </button>
         <section class="md3-pin-card md3-finish-card">
             <h1 class="md3-pin-heading">Fertig!</h1>
             <p class="md3-pin-text">Du hast es geschafft!</p>
@@ -197,11 +234,40 @@
         </section>
     </main>
     <script>
+        // Darkmode Switching wie in index.html
+        const bodyRoot = document.getElementById("bodyRoot");
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        const darkModeIcon = document.getElementById("darkModeIcon");
+
+        function setDarkMode(active) {
+            if (active) {
+                bodyRoot.classList.add("md3-dark");
+                darkModeIcon.textContent = "light_mode";
+            } else {
+                bodyRoot.classList.remove("md3-dark");
+                darkModeIcon.textContent = "dark_mode";
+            }
+        }
+        // Darkmode-Status merken
+        function getDarkModePref() {
+            return localStorage.getItem("md3_darkmode") === "true";
+        }
+        function setDarkModePref(val) {
+            localStorage.setItem("md3_darkmode", val ? "true" : "false");
+        }
+        // Initial setzen
+        setDarkMode(getDarkModePref());
+        darkModeToggle.addEventListener("click", () => {
+            const isDark = bodyRoot.classList.contains("md3-dark");
+            setDarkMode(!isDark);
+            setDarkModePref(!isDark);
+        });
+
         document.getElementById("thecoolbtn").style.visibility = "visible";
 
         async function updatePunkteTabelle() {
             try {
-                const antwort = await fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + localStorage.getItem("uic_lobby"));
+                const antwort = await fetch('https://kk-backend.vercel.app/lobbyInfo?lobby=' + localStorage.getItem("uic_gamepin"));
                 const data = await antwort.json();
                 const players = data.players || [];
                 const punkte = data.punkte || {};
