@@ -3,6 +3,11 @@ const pin = urlParams.get('pin');
 document.getElementById("pinAnzeige").textContent = pin;
 let selectedGameIds = []
 const runden = document.getElementById("runden");
+const soundtrack = new Audio("Sumoldshi.mp3");
+soundtrack.loop = true;
+soundtrack.volume = 0.5;
+
+window.onload = soundtrack.play();
 
 // Spiele-Daten (Name + Dummy-Logo)
 const spiele = [
