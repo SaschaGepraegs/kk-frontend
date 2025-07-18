@@ -52,7 +52,9 @@ async function spielStarten(){ // Funktion, die das Spiel startet
     for (let i = 0; i < cards.length; i++) {
         cards[i].KartenWert = KartenInfos[i].wert; // Wert der Karte zuweisen
         cards[i].KartenBild = KartenInfos[i].bild; // Bild der Karte zuweisen
-        cards[i].src = "Prototyp_Images/Karte_Rückseite2.png"; // Karte wird umgedreht (Rückseite)
+        cards[i].src = cards[i].KartenBild; // Bild der Karte setzen
+        setTimeout(() => {cards[i].src = "Prototyp_Images/Karte_Rückseite2.png"; // Karte wird umgedreht (Rückseite)
+        }, 500);
         cards[i].aufgedeckt = false; // Karte ist nicht aufgedeckt
     }
     KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
