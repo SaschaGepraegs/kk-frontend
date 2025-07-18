@@ -73,14 +73,26 @@ meter::-ms-fill-upper {
 
 #pizza-container {
     position: relative;
-    width: 60vw;
-    max-width: 400px;
     margin: 0 auto;
-    height: 60vw;
-    max-height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Größe des pizza-container abhängig von Hoch- bzw. Querformat */
+/* Querformat*/
+@media(orientation: landscape) {
+    #pizza-container {
+        max-width: 55vh;
+        max-height: 55vh;
+    }
+}
+/* Hochformat */
+@media(orientation: portrait) {
+    #pizza-container {
+        max-width: 90vw;
+        max-height: 90vw;
+    }
 }
 
 #pizza {
@@ -122,7 +134,6 @@ meter::-ms-fill-upper {
 }
 
 #click-counter {
-    position: relative;
     font-size: 2.2rem;
     font-weight: bold;
     color: #ff9800;
@@ -130,11 +141,6 @@ meter::-ms-fill-upper {
     text-shadow: 0 2px 8px #fffbe6, 0 0px 2px #ff9800;
     letter-spacing: 2px;
     user-select: none;
-    padding: 0.2em 1em;
-    margin: 0;
-    padding-top: 13%;
-    left: 50%;
-    transform: translateX(-50%); /* Warum funktioniert das NICHT? */
 }
 
 #click-effect-container {
