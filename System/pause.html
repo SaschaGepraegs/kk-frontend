@@ -255,6 +255,10 @@
                         setGameQueueIndex(idx + 1);
                         polling = false;
                     }
+                    // Wenn wir am Ende der Queue sind (also alle Spiele gespielt wurden)
+                    else{
+                        window.location.replace("/System/fertig.html"); // dann wird zur Fertig-Seite weitergeleitet
+                    }
                 }
             } catch (e) {
                 // Fehler ignorieren, einfach weiterpolling
