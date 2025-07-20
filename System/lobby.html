@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KlickKrawall</title>
-    <link rel="icon" type="image/x-icon" href="Bilder/favicons/normal.png">
+    <link rel="icon" type="image/x-icon" href="/Bilder/favicons/normal.png">
     <!-- Material Symbols (Google Fonts) -->
     <link rel="icon" type="image/x-icon" href="/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Material+Symbols+Outlined" rel="stylesheet" />
@@ -439,7 +439,7 @@ body.md3-dark {
         let endergebnis = data;
         console.log(endergebnis)
     }
-    document.getElementById("usernameangabe").innerHTML = "Nutzername: " + localStorage.getItem("uic_username")
+    document.getElementById("usernameangabe").textContent = "Nutzername: " + localStorage.getItem("uic_username")
 
     var t = setInterval(runFunction, 1500);
 
@@ -458,7 +458,7 @@ body.md3-dark {
     function losgehts() {
         document.getElementById("button1").style.visibility = "hidden"
         document.getElementById("usernameangabe").style.color = "green"
-        document.getElementById("usernameangabe").innerHTML = "Die Runde startet demnächst!"
+        document.getElementById("usernameangabe").textContent = "Die Runde startet demnächst!"
         fetch("https://kk-backend.vercel.app/losGehts?lobby=" + localStorage.getItem("uic_gamepin"));
     }
 

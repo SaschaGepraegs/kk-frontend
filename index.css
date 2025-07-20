@@ -34,13 +34,15 @@ mark {
     color: var(--md3-on-primary);
 }
 
-body.md3-bg {
+body.md3-bg,
+body.md3-dark {
     background: var(--md3-bg);
     color: var(--md3-on-surface);
     font-family: var(--md3-font);
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    transition: background 0.5s cubic-bezier(0.4,0,0.2,1), color 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 
 .md3-main-container {
@@ -330,6 +332,15 @@ body.md3-bg {
 body.md3-dark {
     background: var(--md3-bg);
     color: var(--md3-on-surface);
+}
+
+.md3-main-container,
+.md3-card,
+.md3-pin-card,
+.md3-popup-card,
+.md3-list,
+.game-card {
+    transition: background 0.5s cubic-bezier(0.4,0,0.2,1), color 0.5s cubic-bezier(0.4,0,0.2,1), box-shadow 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 
 @media (max-width: 1100px) {

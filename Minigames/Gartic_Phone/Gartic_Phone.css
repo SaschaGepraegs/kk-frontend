@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
     color: whitesmoke;
 }
 
@@ -86,4 +86,31 @@ button {
     transform: translateX(-50%); 
     font-size: 1.5em;
     color: #eb0d0d;
+}
+
+.canvas {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+canvas {
+    background: white;
+    border: 1px solid #ccc;
+    width: 800px;
+    height: 600px;
+}
+
+#timerBarContainer {
+    width: 80%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: auto;
+}
+
+#timerBar {
+    height: 10px;
+    background: red;
+    width: 100%;
+    transition: width 1s linear;
 }

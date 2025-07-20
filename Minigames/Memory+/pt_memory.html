@@ -4,14 +4,16 @@
         <title>KlickKrawall</title>
         <link rel="stylesheet" href="pt_memory.css"> <!--  CSS-Datei für das Memory Spiel -->
         <script src="pt_memory.js" defer></script> <!--JavaScript-Datei für das Memory Spiel-->
-        <link rel="icon" type="image/x-icon" href="Bilder/favicons/normal.png">
+        <link rel="icon" type="image/x-icon" href="/Bilder/favicons/normal.png">
+        <meta name ="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <h1>Memory+</h1>   
+        <h1>Memory+</h1> 
+        <p>Finde so viele Paare wie möglich in <span id="timer">25</span> Sekunden!</p>
         <div id="timerUndtimerPlus">
-            <div id="timer">00:25</div> <!-- Zeit -->
-            <div id="timerPlus"></div> <!-- Zeitbonus -->
-        </div>
+            <meter id="meter" value="25" max="25"></meter>
+            <div id="timerPlus"> <!-- Zeitbonus --> </div>
+        </div> 
         <div id="punkteUndstreak">
             <div id="punkte">Punkte: 0</div> <!-- Punktestand --> 
             <div id="bonuspunkte"></div> <!-- Bonuspunkte -->
@@ -19,30 +21,36 @@
         </div>
         <table id="gameTable"> <!--Tabelle für das Memory Spiel-->
             <tr>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
             </tr>
             <tr>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
             </tr>
             <tr>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
             </tr>
             <tr>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
-                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite_Memory.jpg"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
+                <td><img class="cards" src="Prototyp_Images/Karte_Rückseite2.png"></td>
             </tr>
         </table>
+        <div id="popupOverlayWarten" class="overlay" style="display: none;">
+            <div id="popupMenu" class="overlayContent">
+                <h2 id="h2-warten">Du hast es geschafft!</h2>
+                <p id="p-warten">Warte kurz, bis die anderen Spieler auch fertig sind</p>
+            </div>
+        </div>
         <audio id ="KartenGeräusch" src="Sounds/Karten_Geräusch.mp3"></audio> <!-- Geräusch beim Umdrehen der Karten -->
     </body>
 </html>

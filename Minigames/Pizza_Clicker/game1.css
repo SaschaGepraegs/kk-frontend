@@ -73,14 +73,26 @@ meter::-ms-fill-upper {
 
 #pizza-container {
     position: relative;
-    width: 60vw;
-    max-width: 400px;
     margin: 0 auto;
-    height: 60vw;
-    max-height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Größe des pizza-container abhängig von Hoch- bzw. Querformat */
+/* Querformat*/
+@media(orientation: landscape) {
+    #pizza-container {
+        max-width: 55vh;
+        max-height: 55vh;
+    }
+}
+/* Hochformat */
+@media(orientation: portrait) {
+    #pizza-container {
+        max-width: 90vw;
+        max-height: 90vw;
+    }
 }
 
 #pizza {

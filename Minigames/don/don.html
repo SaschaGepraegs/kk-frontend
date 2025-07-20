@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Don</title>
     <link rel="stylesheet" href="don.css">
-    <link rel="icon" type="image/x-icon" href="Bilder/favicons/normal.png">
+    <link rel="icon" type="image/x-icon" href="/Bilder/favicons/normal.png">
 </head>
 <body>
     <h1>Double or Nothing</h1>
+    <div id="timerContainer">
+        <div id="timerText"></div>
+        <div id="timerBarWrapper">
+            <div id="timerBar"></div>
+        </div>
+    </div>
     <div id="infoBereich">
         <p id="spielerName"></p>
         <p id="punkteStand"></p>
@@ -18,6 +24,7 @@
         <input type="number" id="einsatz" min="1" step="1" required>
         <button type="submit">Gamble!</button>
     </form>
+    <div id="nachrichtFeld"></div>
     <script src="don.js"></script>
 </body>
 </html>

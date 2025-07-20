@@ -112,6 +112,7 @@ async function checkLobby() {
             case "6":{
                 window.localStorage.setItem("uic_status", "test")
                 window.location.assign("./Minigames/don/don.html")
+
             }
         }
         showLoader(false);

@@ -5,8 +5,12 @@ const ctx = canvas.getContext("2d");
 const canvasOffsetX = canvas.offsetLeft;
 const canvasOffsetY = canvas.offsetTop;
 
-canvas.width = window.innerWidth - canvasOffsetX;
-canvas.height = window.innerHeight - canvasOffsetY;
+function resizeCanvas() {
+    canvas.width = window.innerWidth - Werkzeuge.offsetWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener("load", resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
 
 
 let isPainting = false;
@@ -16,6 +20,7 @@ let startY = 0;
 
 Werkzeuge.addEventListener("click", (e) => {
     if (e.target.id === "Loeschen") {
+        ctx.save(); // Aktuellen Zustand speichern
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     } else if (e.target.id === "Zuruecksetzen") {
         ctx.restore();
@@ -26,7 +31,7 @@ Werkzeuge.addEventListener("change", (e) => {
     if (e.target.id === "Stift") {
         ctx.strokeStyle = e.target.value;
     } else if (e.target.id === "Dicke") {
-        lineWidth = e.target.value;
+        lastlineWidth = e.target.value;
     }
 });
 
@@ -36,14 +41,17 @@ const draw = (e) => {
     ctx.lineWidth = lastlineWidth;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    startX = x;
+    startY = y;
 
     ctx.beginPath();
     ctx.moveTo(startX, startY);
-    ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - canvasOffsetY);
     ctx.stroke();
+    ctx.lineTo(x, y);
 
-    startX = e.clientX - canvasOffsetX;
-    startY = e.clientY - canvasOffsetY;
 };
 
 canvas.addEventListener("mousedown", (e) => {
@@ -73,7 +81,7 @@ let timer;
 
 
 function reset(){
-    timer = 25; // Timer zurücksetzen
+    timer = 60; // Timer zurücksetzen
     if(localStorage.getItem("uic_status")== "test"){ //Testoberfläche
         timer = 99999999;
     }
@@ -82,18 +90,27 @@ function reset(){
 
 
 // Funktion für den Timer
-function Timer(){
-    timerInterval = setInterval(function(){ // NEU: Intervall-ID speichern
-        if(timer > 0){
-            timer--;
-            document.getElementById("timer").innerHTML = "00:" +(timer < 10? "0" : "") + timer;
-        }else{
-            clearInterval(timerInterval); // NEU: Intervall korrekt stoppen
-            spielBeenden();
-            document.getElementById("timer").innerHTML = "Zeit abgelaufen";
+    const timerDuration = 60; // Sekunden
+    let timeLeft = timerDuration;
+    const timerBar = document.getElementById("timerBar");
+    const timerText = document.getElementById("timerText");
+
+    function updateTimerUI() {
+        timerText.textContent = `Zeit: ${timeLeft}s`;
+        timerBar.style.width = `${(timeLeft / timerDuration) * 100}%`;
+    }
+
+    updateTimerUI();
+
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerUI();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            window.location.href = "/System/pause.html";
         }
     }, 1000);
-}
+
 
 
 //Funktion, die nach Ende des Spiels aufgerufen wird
@@ -135,3 +152,87 @@ async function LobbyStatus() {
         return "off";
     }
 }
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const lobby = localStorage.getItem("uic_gamepin");
+    const spieler = localStorage.getItem("uic_username");
+
+    // Vorschlag absenden
+    const vorschlagButton = document.getElementById("vorschlagAbsenden");
+    const vorschlagInput = document.getElementById("vorschlag");
+    const statusText = document.getElementById("vorschlagStatus");
+
+    vorschlagButton.addEventListener("click", async () => {
+        const vorschlag = vorschlagInput.value.trim();
+        if (vorschlag.length === 0) {
+            statusText.textContent = "Bitte gib einen Vorschlag ein.";
+            statusText.style.color = "red";
+            return;
+        }
+
+        // ➤ SENDEN an Server
+        const res = await fetch(..., {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                lobby: lobby,
+                spieler: spieler,
+                thema: vorschlag
+            })
+        });
+
+        if (res.ok) {
+            statusText.textContent = "Vorschlag gesendet! Warte auf Auswahl…";
+            statusText.style.color = "lightgreen";
+            vorschlagInput.disabled = true;
+            vorschlagButton.disabled = true;
+
+            // ➤ WARTE auf Server-Auswahl (Polling oder WS)
+            warteAufThema(); // Funktion weiter unten
+        } else {
+            statusText.textContent = "Fehler beim Senden!";
+            statusText.style.color = "red";
+        }
+    });
+
+    // Thema vom Server abrufen (POLLING ALLE 3 SEKUNDEN)
+
+async function warteAufThema() {
+    const themaAnzeige = document.getElementById("anzeigeThema");
+
+    const checkInterval = setInterval(async () => {
+        const res = await fetch(``);
+        const data = await res.json();
+
+        if (data.thema) {
+            clearInterval(checkInterval);
+
+            // Thema anzeigen
+            document.getElementById("themenEingabeFenster").style.display = "none";
+            themaAnzeige.textContent = `Gezeichnet wird: ${data.thema}`;
+            themaAnzeige.style.display = "block";
+
+            // Thema kurz anzeigen lassen, dann Timer starten
+            setTimeout(() => {
+                themaAnzeige.style.display = "none";
+                startTimer(); // <--- Automatischer Spielstart
+            }, 3000); // Thema 3 Sekunden anzeigen
+        }
+    }, 3000); // alle 3 Sekunden prüfen
+}
+
+    // Beispiel-Timer
+    function startTimer() {
+        let zeit = 60;
+        const timerEl = document.getElementById("timer");
+        const interval = setInterval(() => {
+            timerEl.textContent = `${zeit < 10 ? "0" : ""}${zeit}`;
+            if (zeit <= 0) {
+                clearInterval(interval);
+                alert("Zeit vorbei!");
+            }
+            zeit--;
+        }, 1000);
+    }
+});

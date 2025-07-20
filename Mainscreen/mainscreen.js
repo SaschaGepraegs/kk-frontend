@@ -3,16 +3,21 @@ const pin = urlParams.get('pin');
 document.getElementById("pinAnzeige").textContent = pin;
 let selectedGameIds = []
 const runden = document.getElementById("runden");
+const soundtrack = new Audio("Sumoldshi.mp3");
+soundtrack.loop = true;
+soundtrack.volume = 0.5;
+
+window.onload = soundtrack.play();
 
 // Spiele-Daten (Name + Dummy-Logo)
 const spiele = [
-    { id: 1, name: "Pizza-Clicker", img: "https://dummyimage.com/64x64/ffb300/fff.png&text=Pizza" },
-    { id: 2, name: "Schere Stein Papier", img: "https://dummyimage.com/64x64/90caf9/fff.png&text=SSP" },
-    { id: 3, name: "Memory+", img: "https://dummyimage.com/64x64/ce93d8/fff.png&text=Memory+" },
-    { id: 4, name: "Asteroids", img: "https://dummyimage.com/64x64/d95e0d/fff.png&text=Asteroids"},
-    { id: 5, name: "Imposter", img: "https://dummyimage.com/64x64/1976d2/fff.png&text=Imposter" },
-    { id: 6, name: "Double or Nothing", img: "https://dummyimage.com/64x64/ffd54f/fff.png&text=DON" },
-    { id: 7, name: "Gartic Phone V1", img: "https://dummyimage.com/64x64/4fc3f7/fff.png&text=Gartic Phone" },
+    { id: 1, name: "Pizza-Clicker", img: "/Bilder/icons/pizza.png" },
+    { id: 2, name: "Schere Stein Papier", img: "/Bilder/icons/ssp.png" },
+    { id: 3, name: "Memory+", img: "/Bilder/icons/memory.png" },
+    { id: 4, name: "Asteroids", img: "/Bilder/icons/asteroids.png" },
+    { id: 5, name: "Imposter", img: "/Bilder/icons/imposter.png" },
+    { id: 6, name: "Double or Nothing", img: "/Bilder/icons/don.png" },
+    { id: 7, name: "Gartic Phone V1", img: "/Bilder/icons/gartic.png" },
     //{ id: 8, name: "Game 8", img: "https://dummyimage.com/64x64/ba68c8/fff.png&text=8" },
     //{ id: 9, name: "Game 9", img: "https://dummyimage.com/64x64/ffb74d/fff.png&text=9" },
     //{ id: 10, name: "Game 10", img: "https://dummyimage.com/64x64/81c784/fff.png&text=10" },

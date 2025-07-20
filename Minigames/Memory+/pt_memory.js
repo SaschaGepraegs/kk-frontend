@@ -8,6 +8,7 @@ const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch f
 var LobbyStatus;
 let timerInterval; // NEU: Intervall-ID speichern
 let spielBeendet = false; // NEU: Flag für Spielende
+const popupOverlayWarten = document.getElementById("popupOverlayWarten"); // Popup-Overlay für Warten
 
 window.onload = spielStarten; // Beim Laden der Seite das Spiel starten
 
@@ -30,28 +31,30 @@ async function spielStarten(){ // Funktion, die das Spiel startet
     reset(); // Reset-Funktion aufrufen
     Timer(); // Timer starten
     const KartenInfos = [ // Array mit Karteninformationen
-        {wert: 1, bild: "Prototyp_Images/Karte_Eule.jpg"},
-        {wert: 1, bild: "Prototyp_Images/Karte_Eule.jpg"},
-        {wert: 2, bild: "Prototyp_Images/Karte_Fisch.jpg"},
-        {wert: 2, bild: "Prototyp_Images/Karte_Fisch.jpg"},
-        {wert: 3, bild: "Prototyp_Images/Karte_Hase.jpg"},
-        {wert: 3, bild: "Prototyp_Images/Karte_Hase.jpg"},
-        {wert: 4, bild: "Prototyp_Images/Karte_Koala.jpg"},
-        {wert: 4, bild: "Prototyp_Images/Karte_Koala.jpg"},
-        {wert: 5, bild: "Prototyp_Images/Karte_Panda.jpg"},
-        {wert: 5, bild: "Prototyp_Images/Karte_Panda.jpg"},
-        {wert: 6, bild: "Prototyp_Images/Karte_Papagei.jpg"},
-        {wert: 6, bild: "Prototyp_Images/Karte_Papagei.jpg"},
-        {wert: 7, bild: "Prototyp_Images/Karte_Pinguin.jpg"},
-        {wert: 7, bild: "Prototyp_Images/Karte_Pinguin.jpg"},
-        {wert: 8, bild: "Prototyp_Images/Karte_Schildkröte.jpg"},
-        {wert: 8, bild: "Prototyp_Images/Karte_Schildkröte.jpg"},
+        {wert: 1, bild: "Prototyp_Images/Karte_Antivirus.png"},
+        {wert: 1, bild: "Prototyp_Images/Karte_Antivirus.png"},
+        {wert: 2, bild: "Prototyp_Images/Karte_Auge.png"},
+        {wert: 2, bild: "Prototyp_Images/Karte_Auge.png"},
+        {wert: 3, bild: "Prototyp_Images/Karte_Batterien.png"},
+        {wert: 3, bild: "Prototyp_Images/Karte_Batterien.png"},
+        {wert: 4, bild: "Prototyp_Images/Karte_Flügel.png"},
+        {wert: 4, bild: "Prototyp_Images/Karte_Flügel.png"},
+        {wert: 5, bild: "Prototyp_Images/Karte_Gesicht.png"},
+        {wert: 5, bild: "Prototyp_Images/Karte_Gesicht.png"},
+        {wert: 6, bild: "Prototyp_Images/Karte_Öl.png"},
+        {wert: 6, bild: "Prototyp_Images/Karte_Öl.png"},
+        {wert: 7, bild: "Prototyp_Images/Karte_Roboter.png"},
+        {wert: 7, bild: "Prototyp_Images/Karte_Roboter.png"},
+        {wert: 8, bild: "Prototyp_Images/Karte_Zielscheibe.png"},
+        {wert: 8, bild: "Prototyp_Images/Karte_Zielscheibe.png"},
     ];
     shuffleArray(KartenInfos); // Karten Mischen
     for (let i = 0; i < cards.length; i++) {
         cards[i].KartenWert = KartenInfos[i].wert; // Wert der Karte zuweisen
         cards[i].KartenBild = KartenInfos[i].bild; // Bild der Karte zuweisen
-        cards[i].src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Karte wird umgedreht (Rückseite)
+        cards[i].src = cards[i].KartenBild; // Bild der Karte setzen
+        setTimeout(() => {cards[i].src = "Prototyp_Images/Karte_Rückseite2.png"; // Karte wird umgedreht (Rückseite)
+        }, 500);
         cards[i].aufgedeckt = false; // Karte ist nicht aufgedeckt
     }
     KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
@@ -74,10 +77,10 @@ function KarteAufdecken(){
 
 // Funktion, um die Karte zuzudecken
 function KarteZudecken(){
-    this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite der Karte anzeigen
+    this.src = "Prototyp_Images/Karte_Rückseite2.png"; // Rückseite der Karte anzeigen
     this.aufgedeckt = false; // Karte ist zugedeckt
     this.classList.toggle("clicked"); // Animation für das Zudecken
-    setTimeout(() => {this.src = "Prototyp_Images/Karte_Rückseite_Memory.jpg"; // Rückseite anzeigen
+    setTimeout(() => {this.src = "Prototyp_Images/Karte_Rückseite2.png"; // Rückseite anzeigen
     }, 100); // aber erst nach einem Drittel der css-Animation (0,1s)
     KartenGeräusch.currentTime = 0.4; // Geräusch auf 0,35s setzen
     KartenGeräusch.play(); // Geräusch abspielen
@@ -102,18 +105,21 @@ function kartenVergleichen(){
             Streak(); // Streak erhöhen (und eventuell Bonuspunkte vergeben)
             document.getElementById("punkte").textContent = "Punkte: " + punkte; // Punkte anzeigen
             timer += 1; // Timer um 1 Sekunde erhöhen
-            document.getElementById("timer").textContent = "00:" + (timer < 10 ? "0" : "") + timer; // Timer anzeigen
+            document.getElementById("meter").value = timer; // Meter aktualisieren
             document.getElementById("timerPlus").textContent = "+1s"; // "+1s" anzeigen
             setTimeout(() => {timerPlus.textContent = "";}, 800); // Nach 0,8 Sekunden wieder ausblenden
             aufgedeckteKarten += 2; // Zähler für aufgedeckte Karten erhöhen
             if(aufgedeckteKarten == cards.length){ // Wenn alle Karten aufgedeckt sind
-                spielBeenden(); // Spiel beenden
+                /*spielBeenden(); // Spiel beenden
+                spielBeenden wird hier nicht mehr aufgerufen, sondern nur noch in der Timer-Funktion
+                stattdessen wird hier das Popup-Overlay angezeigt
+                damit müssen alle Spieler warten, bis der Timer abeglaufen ist, auch wenn sie schon alle Karten aufgedeckt haben
+                Ziel: alle Spieler werden gleichzeitig auf die Pause-Seite weitergeleitet*/
+                popupOverlayWarten.style.display = "flex"; // Popup-Overlay für Warten anzeigen
             }
         }else{
             KarteZudecken.call(aktuellAufgedeckteKarten[0]);
             KarteZudecken.call(aktuellAufgedeckteKarten[1]);
-            aktuellAufgedeckteKarten[0].classList.toggle("clicked"); // Animation für das Zudecken
-            aktuellAufgedeckteKarten[1].classList.toggle("clicked"); // Animation für das Zudecken
             streak = 0;
             setTimeout(() => {
                 aktuellAufgedeckteKarten = [];
@@ -159,15 +165,19 @@ function shuffleArray(array) {
 
 // Funktion für den Timer
 function Timer(){
+    const meter = document.getElementById("meter");
+    const timerSpan = document.getElementById("timer");
     timerInterval = setInterval(function(){ // NEU: Intervall-ID speichern
         if(timer > 0){
             timer--;
-            document.getElementById("timer").innerHTML = "00:" +(timer < 10? "0" : "") + timer;
+            if(meter) meter.value = timer; // Meter aktualisieren
+            if(timerSpan) timerSpan.textContent = timer;
         }else{
             clearInterval(timerInterval); // NEU: Intervall korrekt stoppen
             KartenSperren();
             spielBeenden();
-            document.getElementById("timer").innerHTML = "Zeit abgelaufen";
+            if(meter) meter.value = 0; // Meter auf 0 setzen
+            if(timerSpan) timerSpan.textContent = "0";
         }
     }, 1000);
 }
@@ -192,7 +202,7 @@ async function spielBeenden() {
     const lobby = localStorage.getItem("uic_gamepin") || "1111";
     const player = localStorage.getItem("uic_name") || "Name";
     try {
-        await fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${localStorage.getItem("uic_gamepin")}&spieler=${localStorage.getItem("uic_username")}&punkte=${punkte}`,);
+        await fetch(`https://kk-backend.vercel.app/addPointsToPlayer?lobby=${lobby}&spieler=${player}&punkte=${punkte}`,);
         setTimeout(() => {window.location.replace("/System/pause.html");}, 3000); // Nach 3 Sekunden auf die Pause-Seite weiterleiten
     } catch (e) {
         alert("Fehler beim Übertragen der Punkte!");
