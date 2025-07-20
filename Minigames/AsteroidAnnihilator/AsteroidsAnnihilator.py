@@ -6,10 +6,13 @@ Disclaimer: I do not own any sound present in this game.
             implemented in the game.
 Note: this game needs Python 3.12 and pygame (the most common library for implementing video games in Python).
 """
-
 import math
+import os
 import random
+import sys
+
 import time
+import urllib.request
 
 import pygame
 import pygame.freetype  # Imports the library for drawing texts using some font.
@@ -43,6 +46,11 @@ ALIEN_DAMAGE = 50
 MEDIUM_SPLIT_ANGLE = ANGLE_STEP * 12  # The two smaller asteroids will turn 60° each when a medium asteroid has been hit.
 BIG_SPLIT_ANGLE = ANGLE_STEP * 9  # The two medium asteroids will turn 45° each when a big asteroid has been hit.
 GAME_OVER_TIME = 5  # 5 seconds
+
+# https://pyinstaller.org/en/stable/runtime-information.html
+if pyinstaller_path := getattr(sys, '_MEIPASS', None):  # Checks if the game was bundled using PyInstaller.
+    # We need to set the current directory to the temporary folder where the game was unpacked.
+    os.chdir(pyinstaller_path)
 
 
 def get_ships():
@@ -168,7 +176,11 @@ class Bullet(Character):
 
     def hit(self, damage):
         super().hit(damage)
-        self.ship.high_score += damage
+
+        if isinstance(self.ship, Ship):  # If the ship that has fired the bullet is our Ship, we update its highscore.
+            self.ship.high_score += damage
+            game.high_score = self.ship.high_score
+
         self.life_points = 0
 
         return []
@@ -373,6 +385,7 @@ class Ship(Character):
 class Game:  # The class that handles the game main loop.
     def __init__(self):
         self.running = False
+        self.high_score = 0
 
     @staticmethod
     def init_characters():
@@ -477,6 +490,12 @@ class Game:  # The class that handles the game main loop.
         music_sound = pygame.mixer.Sound("Music.mp3")  # Loads the game's music.
         music_sound.play(-1)  # Plays the music, repeating it forever.
 
+        # Checks which players are on the lobby.
+        # urllib.request.urlopen("https://kk-backend.vercel.app/getAllPlayersOfLobby?lobby=9959").read()
+
+        # Starts the game in our lobby.
+        urllib.request.urlopen("https://kk-backend.vercel.app/losGehts?lobby=9959").read()
+
         self.init_characters()
         self.running = True
         while self.running:
@@ -493,6 +512,14 @@ class Game:  # The class that handles the game main loop.
                 game_over = pygame.image.load("Game Over.png")
                 screen.blit(game_over, (0, 0))  # Shows the game over picture.
                 pygame.display.flip()  # Displays the generated graphic.
+
+                # Sends the high score to the server.
+                urllib.request.urlopen(
+                    "https://kk-backend.vercel.app/addPointsToPlayer?lobby=9959&spieler=Francesco&punkte="
+                    + str(self.high_score)).read()
+                # Gets the high scores of all players in the lobby.
+                # urllib.request.urlopen("https://kk-backend.vercel.app/getPointsOfPlayer?lobby=9959").read()
+
                 time.sleep(GAME_OVER_TIME)  # Waits some time before closing the application.
 
 
