@@ -59,8 +59,6 @@ async function spielStarten(){ // Funktion, die das Spiel startet
     }
     KartenEntsperren(); // Karten werden zu Spielbeginn entsperrt
     displayName(); // Namen der Spieler anzeigen
-    checkLobby(); // Erster Check sofort
-    setInterval(checkLobby, 5000); // Alle 5 Sekunden erneut prüfen
 }
 
 // Funktion, um die Karte aufzudecken
@@ -207,35 +205,5 @@ async function spielBeenden() {
     } catch (e) {
         alert("Fehler beim Übertragen der Punkte!");
         setTimeout(() => {window.location.replace("/System/pause.html");}, 3000); // Nach 3 Sekunden auf die Pause-Seite weiterleiten
-    }
-}
-
-async function checkLobby() {
-    const status = await LobbyStatus();
-    if (status == "off") {
-        console.log("Lobby ist geschlossen oder nicht gefunden");
-        window.location.assign("./index.html");
-    }
-}
-
-async function LobbyStatus() {
-    let lobby = localStorage.getItem("uic_gamepin");
-    if (!lobby) return "off";
-    lobby = String(lobby);
-    try {
-        const response = await fetch(`https://kk-backend.vercel.app/getOpenLobbyList`);
-        const data = await response.json();
-        if (Array.isArray(data) && data.map(String).map(s => s.trim()).includes(lobby)) {
-            console.log("Lobby ist offen");
-            lobbystatusvar = "on";
-            return "on";
-        } else {
-            console.log("Lobby ist geschlossen oder nicht gefunden");
-            lobbystatusvar = "off";
-            return "off";
-        }
-    } catch {
-        console.log("Lobby ist geschlossen oder nicht gefunden");
-        return "off";
     }
 }
