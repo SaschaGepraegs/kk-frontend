@@ -4,7 +4,7 @@ let punkte; // Punktezähler
 let timer; // Timer für die Spielzeit
 let streak; // Zählt richtige Paare in Folge
 let aufgedeckteKarten; // Zählt die aufgedeckten Karten
-const KartenGeräusch = new Audio("Sounds/Karten_Geräusch.mp3"); // Geräusch für das Aufdecken der Karten
+const KartenGeräusch = new Audio("Karten_Geräusch.mp3"); // Geräusch für das Aufdecken der Karten
 var LobbyStatus;
 let timerInterval; // NEU: Intervall-ID speichern
 let spielBeendet = false; // NEU: Flag für Spielende
