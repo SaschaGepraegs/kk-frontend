@@ -469,3 +469,14 @@ body.md3-dark {
     0% { opacity: 1; }
     100% { opacity: 0.15; }
 }
+
+#darkModeToggle, #soundToggle {
+    position: absolute;
+    top: 1.5rem;
+}
+#darkModeToggle {
+    right: 2.5rem;
+}
+#soundToggle {
+    right: 5.5rem;
+}
