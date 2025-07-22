@@ -424,3 +424,10 @@ body.md3-dark .md3-select {
   .md3-select { font-size: 1.01rem; padding: .7em 1.7em .7em .8em; border-radius: 14px; min-height: 40px; }
   .md3-select-group label { font-size: .97rem; }
 }
+
+.sticky-pin-card {
+    position: sticky;
+    top: 0.7rem;
+    z-index: 100;
+    background: transparent;
+}
