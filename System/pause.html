@@ -362,14 +362,8 @@
             const response = await fetch(`https://kk-backend.vercel.app/getOpenLobbyList`);
             const data = await response.json();
             const lobby = localStorage.getItem("uic_gamepin");
-            const lobbyExists = Array.isArray(data) && data.map(String).map(s => s.trim()).includes(String(lobby).trim());
-            if (lobbyExists) {
-                // Lobby ist enthalten
-                console.log("Lobby ist offen");
-            } else {
-                // Lobby ist nicht enthalten
-                console.log("Lobby ist geschlossen oder nicht gefunden");
-                window.location.replace('/lobbyGeschlossen.html'); // Weiterleitung zur Seite "Lobby geschlossen"
+            if(!lobby || lobby === null){
+                window.location.replace('/lobbyGeschlossen.html');
             }
         }
 
