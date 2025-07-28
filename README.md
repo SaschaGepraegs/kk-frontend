@@ -13,7 +13,7 @@
 
 ## 🎮 So spielst du
 
-1. **Spiel starten:** Gehe auf [klickkrawall.de](https://klickkrawall.netlify.app) *(URL komm noch)*  
+1. **Spiel starten:** Gehe auf [klickkrawall.de](https://klickkrawall.netlify.app)  
 2. **Lobby erstellen oder beitreten**  
 3. **Minispiele zocken & Punkte sammeln**
 4. **Spaß haben 😉**

@@ -403,6 +403,9 @@ body.md3-dark {
             <button id="darkModeToggle" class="md3-icon-btn" title="Darkmode umschalten" style="position:absolute;top:1.5rem;right:2.5rem;">
                 <span class="material-symbols-outlined" id="darkModeIcon">dark_mode</span>
             </button>
+            <button id="soundToggle" class="md3-icon-btn" title="Sound an/aus" style="position:absolute;top:1.5rem;right:5.5rem;">
+                <span class="material-symbols-outlined" id="soundIcon">volume_up</span>
+            </button>
             <p class="md3-pin-text" id="usernameangabe">Nutzername: username</p>
             <div class="md3-pin-card md3-elevated-card">
                 <div class="md3-pin-content">
@@ -487,26 +490,50 @@ body.md3-dark {
     }
 
     // Darkmode Toggle
-        document.addEventListener("DOMContentLoaded", function() {
-            const body = document.getElementById("bodyRoot");
-            const toggle = document.getElementById("darkModeToggle");
-            const icon = document.getElementById("darkModeIcon");
-            const darkClass = "md3-dark";
-            function setMode(dark) {
-                if (dark) {
-                    body.classList.add(darkClass);
-                    icon.textContent = "light_mode";
-                    localStorage.setItem("md3_darkmode", "1");
-                } else {
-                    body.classList.remove(darkClass);
-                    icon.textContent = "dark_mode";
-                    localStorage.setItem("md3_darkmode", "0");
-                }
+    document.addEventListener("DOMContentLoaded", function() {
+        const body = document.getElementById("bodyRoot");
+        const toggle = document.getElementById("darkModeToggle");
+        const icon = document.getElementById("darkModeIcon");
+        const darkClass = "md3-dark";
+        function setMode(dark) {
+            if (dark) {
+                body.classList.add(darkClass);
+                icon.textContent = "light_mode";
+                localStorage.setItem("md3_darkmode", "1");
+            } else {
+                body.classList.remove(darkClass);
+                icon.textContent = "dark_mode";
+                localStorage.setItem("md3_darkmode", "0");
             }
-            // Initial
-            setMode(localStorage.getItem("md3_darkmode") === "1");
-            toggle.onclick = () => setMode(!body.classList.contains(darkClass));
-        });
+        }
+        // Initial
+        setMode(localStorage.getItem("md3_darkmode") === "1");
+        toggle.onclick = () => setMode(!body.classList.contains(darkClass));
+    });
+
+    // Sound Toggle
+    document.addEventListener("DOMContentLoaded", function() {
+        const soundToggle = document.getElementById("soundToggle");
+        const soundIcon = document.getElementById("soundIcon");
+        let soundOn = localStorage.getItem("md3_soundon") !== "0";
+        function setSound(on) {
+            soundOn = on;
+            if (on) {
+                soundIcon.textContent = "volume_up";
+                localStorage.setItem("md3_soundon", "1");
+                // Dummy Sound abspielen
+                const audio = new Audio("/Musik/W_cookup.mp3");
+                audio.volume = 0.1;
+                audio.play();
+            } else {
+                soundIcon.textContent = "volume_off";
+                localStorage.setItem("md3_soundon", "0");
+            }
+        }
+        // Initial
+        setSound(soundOn);
+        soundToggle.onclick = () => setSound(!soundOn);
+    });
 
     // Copy-Button Funktionalität für den Lobby-Link (Material Icon)
     document.addEventListener("DOMContentLoaded", function() {

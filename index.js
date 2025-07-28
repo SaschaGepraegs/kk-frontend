@@ -249,3 +249,27 @@ document.addEventListener("DOMContentLoaded", function() {
     setMode(localStorage.getItem("md3_darkmode") === "1");
     toggle.onclick = () => setMode(!body.classList.contains(darkClass));
 });
+
+// Sound Toggle
+document.addEventListener("DOMContentLoaded", function() {
+    const soundToggle = document.getElementById("soundToggle");
+    const soundIcon = document.getElementById("soundIcon");
+    let soundOn = localStorage.getItem("md3_soundon") !== "0";
+    function setSound(on) {
+        soundOn = on;
+        if (on) {
+            soundIcon.textContent = "volume_up";
+            localStorage.setItem("md3_soundon", "1");
+            // Dummy Sound abspielen
+            const audio = new Audio("/Musik/Leohatdenloopgefunden.mp3");
+            audio.volume = 0.1;
+            audio.play();
+        } else {
+            soundIcon.textContent = "volume_off";
+            localStorage.setItem("md3_soundon", "0");
+        }
+    }
+    // Initial
+    setSound(soundOn);
+    soundToggle.onclick = () => setSound(!soundOn);
+});

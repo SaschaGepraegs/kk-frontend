@@ -6,6 +6,9 @@ const runden = document.getElementById("runden");
 const soundtrack = new Audio("Sumoldshi.mp3");
 soundtrack.loop = true;
 soundtrack.volume = 0.5;
+// Double or Nothing soll nicht im Grid angezeigt werden
+//in diesem Array stehen die IDs der Spiele, die nicht angezeigt werden sollen:
+const ausgeblendeteSpiele = [6];
 
 window.onload = soundtrack.play();
 
@@ -108,6 +111,7 @@ zufälligModusBtn.addEventListener("click", async () => {
 
 // Spiele-Setzen-Button
 spieleSetzenBtn.addEventListener("click", async () => {
+    addDoubleOrNothing(); // Double or Nothing als letztes Spiel hinzufügen (Extra-Gamble-Runde)
     if (!selectedGameIds.length) return;
     const params = selectedGameIds.map(id => `spielid[]=${id}`).join("&");
     try {
@@ -133,6 +137,7 @@ zufallSetzenBtn.addEventListener("click", async () => {
     for (let i = 0; i < zufallszahlen.length; i++) {
         selectedGameIds.push(zufallszahlen[i]); // HIER wird das Spiel hinzugefügt
     }
+    addDoubleOrNothing(); // Double or Nothing als letztes Spiel hinzufügen (Extra-Gamble-Runde)
     if(!selectedGameIds.length) return;
     const params = selectedGameIds.map(id => `spielid[]=${id}`).join("&");
     try {
@@ -241,7 +246,9 @@ async function ladeWarteschlange() {
                 6: "Double or Nothing",
                 7: "Gartic Phone V1",
             };
-            content.innerHTML = queue.map((id, idx) =>
+            content.innerHTML = queue
+            .filter(id => !ausgeblendeteSpiele.includes(id)) // Filtert die ausgeblendeten Spiele heraus; diese sollen nicht in der Warteschlange angezeigt werden
+            .map((id, idx) =>
                 `<span style="display:inline-block;margin:0 8px;padding:4px 10px;border-radius:8px;background:#333;font-weight:${idx===0?'bold':'normal'};color:${idx===0?'#ff6ec4':'#fff'};">
                     ${spieleNamen[id] || 'Spiel ' + id}
                 </span>`
@@ -270,31 +277,33 @@ async function pruefeSpielGestartet() {
 // Dynamisch Spielkarten erzeugen
 function renderGameGrid() {
     gameGrid.innerHTML = "";
-    spiele.forEach(spiel => {
-        const card = document.createElement("div");
-        card.className = "game-card";
-        card.dataset.id = spiel.id;
-        card.innerHTML = `<img src="${spiel.img}" alt="${spiel.name}"><span>${spiel.name}</span>`;
-        card.onclick = () => {
-            const idx = selectedGameIds.indexOf(spiel.id); // Prüfen, ob das Spiel bereits ausgewählt ist
-            if(idx === -1) { // Wenn nicht ausgewählt
-                card.classList.add('selected'); // optisch hinzufügen
-                selectedGameIds.push(spiel.id); // und ins Array einfügen
-            } else { // Wenn bereits ausgewählt
-                card.classList.remove('selected'); // optisch entfernen
-                selectedGameIds.splice(idx, 1); // und aus dem Array entfernen
-            }
-            // Button aktivieren/deaktivieren, je nachdem ob so viele Spiele wie Runden ausgewählt sind oder nicht
-            const rundenAnzahl = parseInt(runden.value, 10);
-            if(!isNaN(rundenAnzahl) && selectedGameIds.length == rundenAnzahl) {
-                spieleSetzenBtn.disabled = false;
-            } else {
-                spieleSetzenBtn.disabled = true;
-                auswahlStatus.textContent = "Bitte wähle genau " + rundenAnzahl + " Spiele aus.";
-            }
-        };
-        gameGrid.appendChild(card);
-    });
+    spiele
+    .filter(spiel => !ausgeblendeteSpiele.includes(spiel.id)) // Alle Spiele, die nicht im ausgeblendeteSpiele-Array stehen, sollen angezeigt werden
+    .forEach(spiel => {
+            const card = document.createElement("div");
+            card.className = "game-card";
+            card.dataset.id = spiel.id;
+            card.innerHTML = `<img src="${spiel.img}" alt="${spiel.name}"><span>${spiel.name}</span>`;
+            card.onclick = () => {
+                const idx = selectedGameIds.indexOf(spiel.id); // Prüfen, ob das Spiel bereits ausgewählt ist
+                if(idx === -1) { // Wenn nicht ausgewählt
+                    card.classList.add('selected'); // optisch hinzufügen
+                    selectedGameIds.push(spiel.id); // und ins Array einfügen
+                } else { // Wenn bereits ausgewählt
+                    card.classList.remove('selected'); // optisch entfernen
+                    selectedGameIds.splice(idx, 1); // und aus dem Array entfernen
+                }
+                // Button aktivieren/deaktivieren, je nachdem ob so viele Spiele wie Runden ausgewählt sind oder nicht
+                const rundenAnzahl = parseInt(runden.value, 10);
+                if(!isNaN(rundenAnzahl) && selectedGameIds.length == rundenAnzahl) {
+                    spieleSetzenBtn.disabled = false;
+                } else {
+                    spieleSetzenBtn.disabled = true;
+                    auswahlStatus.textContent = "Bitte wähle genau " + rundenAnzahl + " Spiele aus.";
+                }
+            };
+            gameGrid.appendChild(card);
+        });
 }
 
 // Funktion zum Starten des Spiels (Aufruf des Los-Gehts-Endpoints)
@@ -325,17 +334,21 @@ function getPin() {
         return match ? match[0] : "";
 }
 
-// Funktion zum Generieren einer Zufallszahl zwischen min und max
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min; // Zufallszahl zwischen min und max generieren
-}
-
 // Funktion zum Generieren einer Liste von Zufallszahlen für den Zufallsmodus
 function getZufallszahlen(){
     const rundenAnzahl = parseInt(runden.value, 10);
+    const erlaubteIDs = spiele
+        .map(spiel => spiel.id) // Array soll nur IDs enthalten (--> IDs werden extrahiert)
+        .filter(id => !ausgeblendeteSpiele.includes(id)); // IDs, die nicht im ausgeblendeteSpiele-Array stehen, sollen im erlaubteIDs-Array stehen
     const zufallszahlen = [];
     while (zufallszahlen.length < rundenAnzahl) {
-        const zufallszahl = getRandomInt(1, spiele.length); // Zufallszahl zwischen 1 und der Anzahl der Spiele generieren
+        const zufallszahl = erlaubteIDs[Math.floor(Math.random()*erlaubteIDs.length)];
+        /*
+        "Math.random() * erlaubteIDs.length" erzeugt eine Zufallszahl zwischen 0 (inklusive) und der Länge des Arrays erlaubteIDs (exklusive).
+        Beispiel: Wenn erlaubteIDs.length 5 ist, ergibt das eine Zufallszahl zwischen 0 und 4,999...
+        "Math.floor" rundet die Zufallszahl ab auf die nächste ganze Zahl.
+        Im Array erlaubteIDs stehen die IDs der Spiele (außer Double or Nothing), von diesen wird dann zufällig eins ausgewählt.
+        */
         if (!zufallszahlen.includes(zufallszahl)) { // Prüfen, ob die Zahl bereits ausgewählt wurde
             zufallszahlen.push(zufallszahl); // Wenn nicht, zur Liste hinzufügen
         }
@@ -343,6 +356,10 @@ function getZufallszahlen(){
     return zufallszahlen; // Zufallszahlen zurückgeben
 }
 
+// Funktion zum Hinzufügen von "Double or Nothing" zur Warteschlange
+async function addDoubleOrNothing() {
+    selectedGameIds.push(6); 
+}
 
 // Copy-Button Funktionalität für die PIN (Material Icon)
 document.addEventListener("DOMContentLoaded", function() {
